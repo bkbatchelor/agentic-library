@@ -254,21 +254,6 @@ Pull the latest version of all installed items:
 | `/library sync`             | Re-pull all installed items from source                    | All users   |
 | `/library search <keyword>` | Find entries by name or description                        | All users   |
 
-### Justfile Shortcuts
-
-The included `justfile` lets you run library commands from your terminal without an interactive Claude session.
-
-```bash
-just list                  # List catalog
-just use my-skill          # Pull a skill
-just push my-skill         # Push changes back
-just add "name: foo, description: bar, source: /path/to/SKILL.md"
-just sync                  # Re-pull all installed items
-just search "keyword"
-```
-
-> **Note:** Justfile recipes use `--dangerously-skip-permissions` because the agent needs filesystem and git access to clone, copy, and push. Review the `justfile` if you want to modify this behavior.
-
 ## Architecture
 
 ```
@@ -284,7 +269,6 @@ just search "keyword"
         list.md
         sync.md
         search.md
-    justfile                  # CLI shorthand for all commands
     README.md                 # This file
 ```
 
@@ -305,7 +289,6 @@ just search "keyword"
 | **Skills**      | Raw capabilities — what an agent can do        |
 | **Agents**      | Scale + parallelism + specialization           |
 | **Prompts**     | Orchestration — coordinate skills and agents   |
-| **Justfile**    | Terminal access without an interactive session |
 | **Agentic Library** | Distribution across devices, teams, and agents |
 
 ## Master Agentic Coding
