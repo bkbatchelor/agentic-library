@@ -228,7 +228,7 @@
 
   <!-- ========== TITLE ========== -->
   <text x="400" y="35" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#E0E0E0" opacity="0">
-    The Library Meta-Skill
+    Agentic Library Meta-Skill
     <animate attributeName="opacity" from="0" to="1" begin="7s" dur="0.6s" fill="freeze"/>
   </text>
 

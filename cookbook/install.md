@@ -1,7 +1,7 @@
-# Install The Library
+# Install Agentic Library
 
 ## Context
-First-time setup of The Library on a new device. The user either has the template repo cloned directly, or has already forked it to their own private repo.
+First-time setup of Agentic Library on a new device. The user either has the template repo cloned directly, or has already forked it to their own private repo.
 
 ## Steps
 
@@ -49,7 +49,7 @@ If already cloned (e.g., user cloned the template first), just update the remote
 
 ### 6. Done
 Tell the user:
-- The Library is now globally available
+- Agentic Library is now globally available
 - `/library list` will show the catalog (empty by default)
 - `/library add` to start adding skills, agents, and prompts
 - The `justfile` in the library directory has shorthand commands

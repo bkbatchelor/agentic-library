@@ -4,7 +4,7 @@ description: Private skill distribution system. Use when the user wants to insta
 argument-hint: [command or prompt] [name or details]
 ---
 
-# The Library
+# Agentic Library
 
 A meta-skill for private-first distribution of agentics (skills, agents, and prompts) across agents, devices, and teams.
 
@@ -18,7 +18,7 @@ A meta-skill for private-first distribution of agentics (skills, agents, and pro
 
 ## How It Works
 
-The Library is a catalog of references to your agentics. The `library.yaml` file points to where skills, agents, and prompts live (local filesystem or GitHub repos). Nothing is fetched until you ask for it.
+Agentic Library is a catalog of references to your agentics. The `library.yaml` file points to where skills, agents, and prompts live (local filesystem or GitHub repos). Nothing is fetched until you ask for it.
 
 **The `library.yaml` is a catalog, not a manifest.** Entries define what's *available* — not what gets installed. You pull specific items on demand with `/library use <name>`.
 
