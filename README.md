@@ -1,8 +1,8 @@
-# The Library
+# Agentic Library
 
 A meta-skill for private-first distribution of agentics (skills, agents, and prompts) across agents, devices, and teams.
 
-![The Library](images/10_meta_skill.svg)
+![Agentic Library](images/10_meta_skill.svg)
 
 ## Who This Is For
 
@@ -10,11 +10,11 @@ If you're an engineer working on 10+ codebases with agents and you're building s
 
 If you work in one or two repos, you don't need this. If you install skills from the public internet without reviewing them, this isn't for you either.
 
-The Library solves a specific problem: you've built powerful agentics scattered across repos, devices, and teams. They're duplicated, out of sync, and hard to coordinate. This gives you a single reference catalog to distribute them privately.
+Agentic Library solves a specific problem: you've built powerful agentics scattered across repos, devices, and teams. They're duplicated, out of sync, and hard to coordinate. This gives you a single reference catalog to distribute them privately.
 
 ## What It Is
 
-The Library is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
+Agentic Library is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
 
 Think of it as a `package.json` for agent capabilities — but instead of packages, you're managing skills, agents, and prompts. Instead of a registry, you're pointing at your own private GitHub repos and local paths.
 
@@ -47,7 +47,7 @@ Existing solutions don't fit:
 
 ```mermaid
 ---
-title: "The Solution: The Library"
+title: "The Solution: Agentic Library"
 ---
 flowchart LR
     classDef actor fill:#0F172A,stroke:#8B5CF6,color:#E0E0E0,rx:10
@@ -281,7 +281,7 @@ just search "keyword"
 ## Architecture
 
 ```
-~/.claude/skills/library/     # The Library skill (globally installed)
+~/.claude/skills/library/     # Agentic Library skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
     library.yaml              # Your catalog of references
     cookbook/                  # Step-by-step guides for each command
@@ -315,7 +315,7 @@ just search "keyword"
 | **Agents**      | Scale + parallelism + specialization           |
 | **Prompts**     | Orchestration — coordinate skills and agents   |
 | **Justfile**    | Terminal access without an interactive session |
-| **The Library** | Distribution across devices, teams, and agents |
+| **Agentic Library** | Distribution across devices, teams, and agents |
 
 ## Master Agentic Coding
 > Prepare for the future of software engineering
