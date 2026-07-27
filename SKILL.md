@@ -13,8 +13,8 @@ A meta-skill for private-first distribution of agentics (skills, agents, and pro
 > Update these after forking and cloning the library repo.
 
 - **LIBRARY_REPO_URL**: `<your forked repo url>`
-- **LIBRARY_YAML_PATH**: `~/.claude/skills/library/library.yaml`
-- **LIBRARY_SKILL_DIR**: `~/.claude/skills/library/`
+- **LIBRARY_YAML_PATH**: `~/.agents/skills/library/library.yaml`
+- **LIBRARY_SKILL_DIR**: `~/.agents/skills/library/`
 
 ## How It Works
 
@@ -27,10 +27,10 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 | Command                     | Purpose                                  |
 | --------------------------- | ---------------------------------------- |
 | `/library install`          | First-time setup: fork, clone, configure |
-| `/library add <details>`    | Register a new entry in the catalog      |
+| `/library add <details>`    | (require permission) Register a new entry in the catalog      |
 | `/library use <name>`       | Pull from source (install or refresh)    |
-| `/library push <name>`      | Push local changes back to source        |
-| `/library remove <name>`    | Remove from catalog and optionally local |
+| `/library push <name>`      | (require permission) Push local changes back to source        |
+| `/library remove <name>`    | (require permission) Remove from catalog and optionally local |
 | `/library list`             | Show full catalog with install status    |
 | `/library sync`             | Re-pull all installed items from source   |
 | `/library search <keyword>` | Find entries by keyword                  |
@@ -58,7 +58,6 @@ The `source` field in `library.yaml` supports these formats (auto-detected):
 
 - `/absolute/path/to/SKILL.md` — local filesystem
 - `https://github.com/org/repo/blob/main/path/to/SKILL.md` — GitHub browser URL
-- `https://raw.githubusercontent.com/org/repo/main/path/to/SKILL.md` — GitHub raw URL
 
 Both GitHub URL formats are supported. Parse org, repo, branch, and file path from the URL structure. For private repos, use SSH or `GITHUB_TOKEN` for auth automatically.
 
@@ -79,9 +78,6 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 - Clone URL: `https://github.com/<org>/<repo>.git`
 - File location within repo: `<path>`
 
-## GitHub Workflow
-
-When working with GitHub sources, prefer `gh api` for accessing single files (e.g., reading a SKILL.md to check metadata). For pulling entire skill directories, clone into a temp dir per the steps below.
 
 **Fetching (use):**
 1. Clone the repo with `git clone --depth 1 <clone_url>` into a temporary directory
@@ -113,14 +109,14 @@ By default, items are installed to the **default** directory from `library.yaml`
 ```yaml
 default_dirs:
     skills:
-        - default: .claude/skills/
-        - global: ~/.claude/skills/
+        - default: .agents/skills/
+        - global: ~/.agents/skills/
     agents:
-        - default: .claude/agents/
-        - global: ~/.claude/agents/
+        - default: .agents/agents/
+        - global: ~/.agents/agents/
     prompts:
-        - default: .claude/commands/
-        - global: ~/.claude/commands/
+        - default: .agents/commands/
+        - global: ~/.agents/commands/
 ```
 
 - If the user says "global" or "globally", use the `global` directory.
@@ -141,14 +137,14 @@ This keeps the catalog in sync across devices.
 ```yaml
 default_dirs:
   skills:
-    - default: .claude/skills/
-    - global: ~/.claude/skills/
+    - default: .agents/skills/
+    - global: ~/.agents/skills/
   agents:
-    - default: .claude/agents/
-    - global: ~/.claude/agents/
+    - default: .agents/agents/
+    - global: ~/.agents/agents/
   prompts:
-    - default: .claude/prompts/
-    - global: ~/.claude/prompts/
+    - default: .agents/prompts/
+    - global: ~/.agents/prompts/
 
 library:
   skills:
@@ -162,12 +158,12 @@ library:
 
     - name: diagram-kroki
       description: Generate diagrams via Kroki HTTP API supporting 28+ languages
-      source: https://github.com/myorg/private-skills/blob/main/skills/diagram-kroki/SKILL.md
+      source: https://github.com/someones-org/private-skills/blob/main/skills/diagram-kroki/SKILL.md
       requires: [skill:firecrawl]
 
     - name: green-screen-captions
       description: Generate and burn AI-powered captions onto green screen videos
-      source: https://raw.githubusercontent.com/myorg/video-tools/main/skills/green-screen-captions/SKILL.md
+      source: https://raw.githubusercontent.com/someones-org/video-tools/main/skills/green-screen-captions/SKILL.md
       requires: [agent:video-processor, prompt:caption-style]
 
   agents:
@@ -177,7 +173,7 @@ library:
 
     - name: code-reviewer
       description: Reviews code for quality, security, and performance
-      source: https://github.com/myorg/agent-configs/blob/main/agents/code-reviewer/AGENT.md
+      source: https://github.com/someones-org/agent-configs/blob/main/agents/code-reviewer/AGENT.md
 
   prompts:
     - name: caption-style
@@ -186,5 +182,5 @@ library:
 
     - name: commit-message
       description: Standardized commit message format for all projects
-      source: https://github.com/myorg/team-prompts/blob/main/prompts/commit-message.md
+      source: https://github.com/someones-org/team-prompts/blob/main/prompts/commit-message.md
 ```
