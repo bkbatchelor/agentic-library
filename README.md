@@ -100,14 +100,14 @@ flowchart LR
 ```yaml
 default_dirs:
   skills:
-    - default: .claude/skills/
-    - global: ~/.claude/skills/
+    - default: .agents/skills/
+    - global: ~/.agents/skills/
   agents:
-    - default: .claude/agents/
-    - global: ~/.claude/agents/
+    - default: .agents/agents/
+    - global: ~/.agents/agents/
   prompts:
-    - default: .claude/commands/
-    - global: ~/.claude/commands/
+    - default: .agents/commands/
+    - global: ~/.agents/commands/
 
 library:
   skills:
@@ -148,57 +148,46 @@ Dependencies are resolved and pulled first, recursively.
 
 ## Prerequisites
 
-- **Claude Code** (or a compatible agent harness that reads `.claude/skills/` — e.g., Pi)
+- **Coding Agents** (or a compatible agent harness that reads `.agents/skills/` — e.g., Pi)
 - **git** — for cloning sources and syncing the catalog
 - **gh** (optional) — GitHub CLI for forking, cloning, and private repo access. Install: `brew install gh` or see [gh docs](https://cli.github.com)
 - **GitHub SSH key or `GITHUB_TOKEN`** — for accessing private repos (not needed if using `gh auth login`)
-- **just** (optional) — for justfile shortcuts. Install: `brew install just` or see [just docs](https://github.com/casey/just)
 
 ## Installation
 
-This is a template repo. You fork it, clone it into your global skills directory, and it becomes a `/library` slash command available in every Claude Code session.
+Clone **Agentic Library** into your global skills directory, and it becomes a `/library` slash command available in every coding agent session.
 
-### 1. Fork This Repo
 
-Fork to your own GitHub account (private repo recommended). This fork is your personal library catalog — you'll push catalog updates to it.
+### 1. Clone to Global Skills Directory
 
-```bash
-# Using GitHub CLI
-gh repo fork disler/the-library --private --clone=false
-```
-
-Or fork manually via the GitHub UI.
-
-### 2. Clone to Global Skills Directory
-
-Clone your fork into `~/.claude/skills/library`. This path is what makes `/library` available as a global slash command in Claude Code.
+Clone into `~/.agents/skills/agentic-library`. This path is what makes `/agentic-library` available as a global slash command in Claude Code.
 
 ```bash
 # Using git
-mkdir -p ~/.claude/skills/library
-git clone <your-fork-url> ~/.claude/skills/library
+mkdir -p ~/.agents/skills/agentic-library
+git clone <your-fork-url> ~/.agents/skills/agentic-library
 
 # Or using GitHub CLI
-gh repo clone <yourname>/the-library ~/.claude/skills/library
+gh repo clone <yourname>/agentic-library ~/.agents/skills/agentic-library
 ```
 
 ### 3. Configure
 
-Open `~/.claude/skills/library/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
+Open `~/.agents/skills/agentic-library/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
 
 ```markdown
 # Before (template defaults)
 - **LIBRARY_REPO_URL**: `<your forked repo url>`
 
 # After (your values)
-- **LIBRARY_REPO_URL**: `https://github.com/yourname/the-library.git`
+- **LIBRARY_REPO_URL**: `https://github.com/yourname/agentic-library.git`
 ```
 
-The other two variables (`LIBRARY_YAML_PATH` and `LIBRARY_SKILL_DIR`) are correct by default if you cloned to `~/.claude/skills/library/`.
+The other two variables (`LIBRARY_YAML_PATH` and `LIBRARY_SKILL_DIR`) are correct by default if you cloned to `~/.agents/skills/agentic-library/`.
 
 ### 4. Verify
 
-Start a new Claude Code session anywhere. `/library list` should work and show an empty catalog.
+Start a new Claude Code session anywhere. `/agentic-library list` should work and show an empty catalog.
 
 ## Quick Start
 
@@ -224,7 +213,7 @@ On another device, repo, or agent:
 /library use deploy
 ```
 
-This pulls the skill from the source repo into `.claude/skills/deploy/`.
+This pulls the skill from the source repo into `.agents/skills/deploy/`.
 
 Want it globally available on this machine?
 
@@ -281,7 +270,7 @@ just search "keyword"
 ## Architecture
 
 ```
-~/.claude/skills/library/     # Agentic Library skill (globally installed)
+~/.agents/skills/agentic-library/     # Agentic Library skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
     library.yaml              # Your catalog of references
     cookbook/                  # Step-by-step guides for each command
@@ -302,7 +291,7 @@ just search "keyword"
 - **Private-first**: Built for your specialized, competitive-edge agentics. Not a public marketplace.
 - **Reference-based**: The catalog stores pointers, not copies. Skills live in their source repos.
 - **Pure agent**: No scripts, no build tools. The SKILL.md teaches the agent everything it needs to know.
-- **Agent-agnostic**: Default target is `.claude/skills/` but supports any directory for any agent harness.
+- **Agent-agnostic**: Default target is `.agents/skills/` but supports any directory for any agent harness.
 - **Catalog, not manifest**: Entries define what's available, not what's installed. Pull on demand.
 
 ## The Agentic Stack
