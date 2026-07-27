@@ -1,13 +1,13 @@
 default_dirs:
   skills:
-    - default: .claude/skills/
-    - global: ~/.claude/skills/
+    - default: .agents/skills/
+    - global: ~/.agents/skills/
   agents:
-    - default: .claude/agents/
-    - global: ~/.claude/agents/
+    - default: .agents/agents/
+    - global: ~/.agents/agents/
   prompts:
-    - default: .claude/commands/
-    - global: ~/.claude/commands/
+    - default: .agents/commands/
+    - global: ~/.agents/commands/
 
 library:
   skills:
