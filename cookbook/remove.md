@@ -3,6 +3,9 @@
 ## Context
 The user wants to remove a skill, agent, or prompt from the library catalog and optionally delete the local copy.
 
+## Permissions & Requirements
+> **Note:** Only owners and maintainers of the Git repository are allowed to execute `remove` commands directly on the catalog repository. Contributors without direct write access must submit a pull request / merge request.
+
 ## Input
 The user provides a skill name or description.
 
@@ -39,13 +42,16 @@ If the user confirmed local deletion:
   rm -rf <target_directory>/<name>
   ```
 
-### 6. Commit and Push
+### 6. Commit and Push (or Submit Merge Request)
+If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
 git commit -m "library: removed <type> <name>"
 git push
 ```
+If you do not have direct push permissions:
+- Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
 
 ### 7. Confirm
 Tell the user:

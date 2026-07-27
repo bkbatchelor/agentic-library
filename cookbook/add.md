@@ -3,6 +3,9 @@
 ## Context
 Register a new skill, agent, or prompt in the library catalog.
 
+## Permissions & Requirements
+> **Note:** Only owners and maintainers of the Git repository are allowed to execute `add` commands directly to the catalog repository. Contributors without direct write permissions must submit a pull request / merge request with proposed changes.
+
 ## Input
 The user provides: name, description, source, and optionally type and dependencies.
 
@@ -55,13 +58,16 @@ Read `library.yaml`, add the new entry under the correct section:
 - For prompts reference the `.../<prompt name>.md` file (installed to `.claude/commands/`),
 - Remember we'll be adding a absolute path or a github url (https or ssh)
 
-### 6. Commit and Push
+### 6. Commit and Push (or Submit Merge Request)
+If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
 git commit -m "library: added <type> <name>"
 git push
 ```
+If you do not have direct push permissions:
+- Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
 
 ### 7. Confirm
 Tell the user the entry has been added and is now available for others to use via `/library use <name>`.

@@ -3,6 +3,9 @@
 ## Context
 The user has improved a skill locally and wants to push changes back to the source.
 
+## Permissions & Requirements
+> **Note:** Only owners and maintainers with direct write permissions are allowed to push changes directly to the source repository. Contributors without direct write access must submit a pull request / merge request to the source repository.
+
 ## Input
 The user provides a skill name or description.
 
@@ -68,10 +71,12 @@ The user provides a skill name or description.
   ```bash
   git commit -m "library: updated <name> <brief description of what changed>"
   ```
-- Push:
+- Push (if owner/maintainer with write access):
   ```bash
   git push
   ```
+- If you do not have direct push access:
+  - Push to a new branch and open a pull request / merge request against the source repository.
 - Clean up:
   ```bash
   rm -rf "$tmp_dir"
