@@ -46,7 +46,55 @@ Existing solutions don't fit:
 
 ## How It Works
 
-![The Solution: The Library](images/27_solution_library_workflow.svg)
+```mermaid
+---
+title: "The Solution: The Library"
+---
+flowchart LR
+    classDef actor fill:#0F172A,stroke:#8B5CF6,color:#E0E0E0,rx:10
+    classDef agent fill:#0F172A,stroke:#06B6D4,color:#E0E0E0,rx:10
+    classDef coworker fill:#0F172A,stroke:#10B981,color:#E0E0E0,rx:10
+    classDef cmd fill:#1E293B,stroke:#6366F1,color:#A5B4FC,rx:6
+    classDef catalog fill:#0F172A,stroke:#6366F1,color:#E0E0E0,rx:10
+    classDef src fill:#0F172A,stroke:#10B981,color:#E0E0E0,rx:10
+    classDef src2 fill:#0F172A,stroke:#F59E0B,color:#E0E0E0,rx:10
+    classDef src3 fill:#0F172A,stroke:#8B5CF6,color:#E0E0E0,rx:10
+    classDef ref fill:#111827,stroke:#10B981,color:#10B981,rx:4
+    classDef check fill:none,stroke:#10B981,color:#10B981
+
+    D["👤 Developer"] --> DC["`/library use`"]
+    A["🤖 Agent"] --> AC["`/library use`"]
+    C["👤 Coworker"] --> CC["`/library use`"]
+
+    DC-->Lib
+    AC --> Lib 
+    CC --> Lib
+    Lib --> LP
+ 
+
+    Lib["📋 library.yaml"]
+
+    LP["📁 Local Path<br/><span style='font-size:10px'>~/skills/tts.md</span>"]
+
+    subgraph GitHub
+    direction LR
+        PG["🔒 Private GitHub<br/><span style='font-size:10px'>org/skills (private)</span>"]
+        PubG["🌐 Public GitHub<br/><span style='font-size:10px'>community/skills</span>"]
+
+    end    
+    
+    Lib --> GitHub
+
+    class D actor
+    class A agent
+    class C coworker
+    class DC,AC,CC cmd
+    class Lib,GH catalog
+    class PG src
+    class PubG src2
+    class LP src3
+    class Result,GitHub check
+```
 
 ### The Catalog (`library.yaml`)
 
