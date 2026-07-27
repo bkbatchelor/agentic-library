@@ -24,13 +24,15 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 
 ## Commands
 
+> **Permissions Note:** Only owners and maintainers of the Git repository are allowed to execute `add`, `push`, or `remove` commands directly. All other contributors must submit a merge request (pull request) to propose changes to the catalog or source repositories.
+
 | Command                     | Purpose                                  |
 | --------------------------- | ---------------------------------------- |
 | `/library install`          | First-time setup: fork, clone, configure |
-| `/library add <details>`    | (require permission) Register a new entry in the catalog      |
+| `/library add <details>`    | Register a new entry in the catalog (Owner/Maintainer or Merge Request) |
 | `/library use <name>`       | Pull from source (install or refresh)    |
-| `/library push <name>`      | (require permission) Push local changes back to source        |
-| `/library remove <name>`    | (require permission) Remove from catalog and optionally local |
+| `/library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
+| `/library remove <name>`    | Remove from catalog and optionally local (Owner/Maintainer or Merge Request) |
 | `/library list`             | Show full catalog with install status    |
 | `/library sync`             | Re-pull all installed items from source   |
 | `/library search <keyword>` | Find entries by keyword                  |
@@ -86,12 +88,13 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 4. The temporary directory is cleaned up automatically
 
 **Pushing (push):**
+> **Note:** Only owners and maintainers with direct write access may push directly to the source repository. Non-maintainers must submit a pull request / merge request.
 1. Clone the repo with `git clone --depth 1 <clone_url>` into a temporary directory
 2. Overwrite the skill directory in the clone with the local version
 3. Stage only the relevant changes: `git add <skill_directory_path>`
 4. Commit with message: `library: updated <skill name> <what changed>`
 5. **Ask for permission before pushing:** Always show the commit diff/summary and explicitly ask the user for permission before running `git push`.
-6. Push to remote (once permission is granted)
+6. Push to remote (or create a feature branch and submit a merge request if lacking write access)
 7. The temporary directory is cleaned up automatically
 
 ## Typed Dependencies
@@ -127,11 +130,12 @@ default_dirs:
 ## Library Repo Sync
 
 The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. When running `add` or `remove` (which modifies `library.yaml`), always:
+> **Note:** Only owners and maintainers of the library repo may push changes directly to `main`. Non-maintainers must create a branch and submit a merge request.
 1. `git pull` in the library directory first to get latest
 2. Make the changes
 3. Stage and commit: `git add library.yaml && git commit`
 4. **Ask for permission before pushing:** Always confirm with the user before executing `git push`.
-5. `git push` (once permission is granted)
+5. `git push` (or submit a merge request if lacking direct push permissions)
 
 This keeps the catalog in sync across devices.
 
