@@ -71,7 +71,9 @@ The user provides a skill name or description.
   ```bash
   git commit -m "library: updated <name> <brief description of what changed>"
   ```
-- Push (if owner/maintainer with write access):
+- **Ask for user permission before pushing:**
+  Display the commit summary, files changed, and destination repository/branch. Ask the user for explicit permission to proceed with `git push`.
+- Push (if owner/maintainer with write access and user permission granted):
   ```bash
   git push
   ```

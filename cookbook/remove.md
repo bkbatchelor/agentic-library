@@ -48,6 +48,9 @@ If you are an owner or maintainer with direct push permissions:
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
 git commit -m "library: removed <type> <name>"
+```
+**Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
+```bash
 git push
 ```
 If you do not have direct push permissions:

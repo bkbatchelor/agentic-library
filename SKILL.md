@@ -90,8 +90,9 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 2. Overwrite the skill directory in the clone with the local version
 3. Stage only the relevant changes: `git add <skill_directory_path>`
 4. Commit with message: `library: updated <skill name> <what changed>`
-5. Push to remote
-6. The temporary directory is cleaned up automatically
+5. **Ask for permission before pushing:** Always show the commit diff/summary and explicitly ask the user for permission before running `git push`.
+6. Push to remote (once permission is granted)
+7. The temporary directory is cleaned up automatically
 
 ## Typed Dependencies
 
@@ -125,10 +126,12 @@ default_dirs:
 
 ## Library Repo Sync
 
-The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. When running `add` (which modifies `library.yaml`), always:
+The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. When running `add` or `remove` (which modifies `library.yaml`), always:
 1. `git pull` in the library directory first to get latest
 2. Make the changes
-3. `git add library.yaml && git commit && git push`
+3. Stage and commit: `git add library.yaml && git commit`
+4. **Ask for permission before pushing:** Always confirm with the user before executing `git push`.
+5. `git push` (once permission is granted)
 
 This keeps the catalog in sync across devices.
 
