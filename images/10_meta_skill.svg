@@ -145,12 +145,12 @@
 
   <!-- ========== EXAMPLE CARDS ========== -->
 
-  <!-- Skills: deploy.md -->
+  <!-- Skills: commit-changes.md -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="5.2s" dur="0.4s" fill="freeze"/>
     <rect x="560" y="88" width="130" height="32" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1.5"/>
     <rect x="560" y="88" width="130" height="32" rx="8" fill="#10B981" opacity="0.08"/>
-    <text x="625" y="109" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">deploy.md</text>
+    <text x="625" y="109" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">commit-changes.md</text>
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0;0,2;0,0" dur="4s" begin="10s" repeatCount="indefinite"/>
   </g>
 
@@ -190,21 +190,21 @@
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0;0,2;0,0" dur="3.6s" begin="11.2s" repeatCount="indefinite"/>
   </g>
 
-  <!-- Agents: transcribe.md -->
+  <!-- Agents: create-readme.md -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="6.0s" dur="0.4s" fill="freeze"/>
     <rect x="560" y="328" width="130" height="32" rx="8" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.5"/>
     <rect x="560" y="328" width="130" height="32" rx="8" fill="#8B5CF6" opacity="0.08"/>
-    <text x="625" y="349" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">transcribe.md</text>
+    <text x="625" y="349" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">create-readme.md</text>
     <animateTransform attributeName="transform" type="translate" values="0,0;0,2;0,0;0,-2;0,0" dur="4.4s" begin="11.5s" repeatCount="indefinite"/>
   </g>
 
-  <!-- Prompts: tts-speak.md -->
+  <!-- Prompts: coverage-scan.md -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="5.6s" dur="0.4s" fill="freeze"/>
     <rect x="560" y="388" width="130" height="32" rx="8" fill="#0F172A" stroke="#F59E0B" stroke-width="1.5"/>
     <rect x="560" y="388" width="130" height="32" rx="8" fill="#F59E0B" opacity="0.08"/>
-    <text x="625" y="409" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">tts-speak.md</text>
+    <text x="625" y="409" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#E0E0E0">coverage-scan.md</text>
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0;0,2;0,0" dur="3.9s" begin="11.8s" repeatCount="indefinite"/>
   </g>
 

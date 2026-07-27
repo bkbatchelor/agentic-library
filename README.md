@@ -40,8 +40,7 @@ As you build with AI agents, you accumulate skills, custom agents, and prompts �
 ![The Problem: Siloed Teams](images/32_problem_team_sharing.svg)
 
 Existing solutions don't fit:
-- **Global `~/.claude/*`** — exposes everything to every agent. Global is the opposite of specialized.
-- **Claude Code plugins** — requires marketplace infrastructure, manifests, and locks you into one platform.
+- **Global `~/.agents/*`** — exposes everything to every agent. Global is the opposite of specialized.
 - **Single monorepo** — doesn't reflect reality. You build agentics in specific codebases for specific use cases.
 
 ## How It Works
@@ -62,9 +61,9 @@ flowchart LR
     classDef ref fill:#111827,stroke:#10B981,color:#10B981,rx:4
     classDef check fill:none,stroke:#10B981,color:#10B981
 
-    D["👤 Developer"] --> DC["`/library use`"]
-    A["🤖 Agent"] --> AC["`/library use`"]
-    C["👤 Coworker"] --> CC["`/library use`"]
+    D["👤 Developer"] --> DC["`/library use &ltskill&gt`"]
+    A["🤖 Agent"] --> AC["`/library use &ltskill&gt`"]
+    C["👤 Coworker"] --> CC["`/library use &ltskill&gt`"]
 
     DC-->Lib
     AC --> Lib 
@@ -72,7 +71,7 @@ flowchart LR
     Lib --> LP
  
 
-    Lib["📋 library.yaml"]
+    Lib["📋 library.yaml <br/><div style='text-align:left'><hr/> <b>skills:</b><br/>- commit-changes<br/>- create-readme<br/>- coverage-scan<br/>- vulnerability-scan </div>"]
 
     LP["📁 Local Path<br/><span style='font-size:10px'>~/skills/tts.md</span>"]
 
