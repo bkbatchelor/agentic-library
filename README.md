@@ -241,16 +241,18 @@ Pull the latest version of all installed items:
 
 ## Commands
 
-| Command                     | What It Does                                               |
-| --------------------------- | ---------------------------------------------------------- |
-| `/library install`          | First-time setup — fork, clone, configure                  |
-| `/library add <details>`    | Register a new entry in the catalog                        |
-| `/library use <name>`       | Pull from source into local directory (install or refresh) |
-| `/library push <name>`      | Push local changes back to the source                      |
-| `/library remove <name>`    | Remove from catalog and optionally delete local copy       |
-| `/library list`             | Show full catalog with install status                      |
-| `/library sync`             | Re-pull all installed items from source                    |
-| `/library search <keyword>` | Find entries by name or description                        |
+> **Permissions Note:** Only owners and maintainers of the Git repository are allowed to execute `add`, `push`, or `remove` commands directly. All other contributors must submit a merge request (pull request) to propose changes to the catalog or source repositories.
+
+| Command                     | What It Does                                               | Permissions |
+| --------------------------- | ---------------------------------------------------------- | ----------- |
+| `/library install`          | First-time setup — fork, clone, configure                  | All users   |
+| `/library add <details>`    | Register a new entry in the catalog                        | Owner / Maintainer (or Merge Request) |
+| `/library use <name>`       | Pull from source into local directory (install or refresh) | All users   |
+| `/library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
+| `/library remove <name>`    | Remove from catalog and optionally delete local copy       | Owner / Maintainer (or Merge Request) |
+| `/library list`             | Show full catalog with install status                      | All users   |
+| `/library sync`             | Re-pull all installed items from source                    | All users   |
+| `/library search <keyword>` | Find entries by name or description                        | All users   |
 
 ### Justfile Shortcuts
 
