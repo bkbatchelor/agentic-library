@@ -1,4 +1,4 @@
-# Add and Install Examples
+# Library Cookbook Examples
 
 Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, `/library search`, `/library list`, and `/library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
 
@@ -7,7 +7,10 @@ Each add example covers: type detection, source validation, dependency parsing, 
 ## Table of Contents
 
 - [Install on a New Device](#install-on-a-new-device)
+- [List the Catalog](#list-the-catalog)
+- [Search the Catalog](#search-the-catalog)
 - [Use an Item from the Catalog](#use-an-item-from-the-catalog)
+- [Sync All Installed Items](#sync-all-installed-items)
 - [Add a Skill](#add-a-skill)
 - [Add an Agent](#add-an-agent)
 - [Add a Prompt](#add-a-prompt)
@@ -15,9 +18,6 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [Combining Types in One Request](#combining-types-in-one-request)
 - [Remove an Entry from the Catalog](#remove-an-entry-from-the-catalog)
 - [Push Changes to the Source](#push-changes-to-the-source)
-- [Search the Catalog](#search-the-catalog)
-- [List the Catalog](#list-the-catalog)
-- [Sync All Installed Items](#sync-all-installed-items)
 
 ## Install on a New Device
 
@@ -71,6 +71,93 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
 - `/library list` shows the catalog, `/library use <name>` pulls entries on demand
 
+## List the Catalog
+
+### Example: Show the full catalog with install status
+
+**User says:**
+> List what's in the library
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Install status checked per entry: looked for the entry name in the default and global directories from `default_dirs`, marked `installed (default)`, `installed (global)`, or `not installed`
+
+**Displayed to the user (grouped by type):**
+
+```
+## Skills
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (default) |
+| diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | github.com/... | not installed |
+
+## Agents
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (default) |
+
+## Prompts
+No prompts in catalog.
+
+## MCP Servers
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (default) |
+| github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
+```
+
+**Summary:**
+- 5 total entries in catalog, 4 installed locally, 1 not installed
+
+## Search the Catalog
+
+### Example: Find entries by keyword
+
+**User says:**
+> Search for something to make diagrams
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Keyword `diagrams` matched case-insensitively against entry `name` and `description` fields (substring match)
+4. Matches collected across all types
+
+**Displayed to the user:**
+
+```
+## Search Results for "diagrams"
+
+| Type | Name | Description | Source |
+|------|------|-------------|--------|
+| skill | diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | https://github.com/... |
+| agent | diagram-architect | Designs architecture diagrams from requirements | https://github.com/... |
+```
+
+**Result:**
+- Suggested next step: `Run /library use diagram-kroki to install one of these.`
+
+### Example: No results
+
+**User says:**
+> Search the library for "quantum computing"
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed
+3. Keyword `quantum computing` matched no names or descriptions
+
+**Displayed to the user:**
+
+```
+No results found for "quantum computing".
+
+Tip: Try broader keywords or run /library list to see the full catalog.
+```
+
+**Result:**
+- No matches — user is pointed to `/library list` or broader keywords
+
 ## Use an Item from the Catalog
 
 ### Example: Pull a skill with a dependency
@@ -108,6 +195,69 @@ Each add example covers: type detection, source validation, dependency parsing, 
 **Result:**
 - Installed at `~/.agents/mcp/github/`
 - Server registered with opencode — restart the harness for it to load
+
+## Sync All Installed Items
+
+### Example: Refresh everything installed
+
+**User says:**
+> Sync everything
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the default/global directories — all four get re-pulled
+4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
+5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
+
+**Displayed to the user:**
+
+```
+## Sync Complete
+
+| Type | Name | Status |
+|------|------|--------|
+| skill | firecrawl | refreshed |
+| agent | video-processor | refreshed |
+| mcp | playwright | refreshed |
+| mcp | github | refreshed |
+
+Synced: 4 items
+Failed: 0 items
+```
+
+**Result:**
+- All 4 installed items refreshed
+- MCP note: re-pulling only refreshed `.agents/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
+
+### Example: Sync with a failure
+
+**User says:**
+> Sync the library
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Installed items collected: `firecrawl`, `diagram-kroki`, and `playwright`
+3. Re-pull attempted for each — `diagram-kroki` failed (source repo unreachable / network error)
+
+**Displayed to the user:**
+
+```
+## Sync Complete
+
+| Type | Name | Status |
+|------|------|--------|
+| skill | firecrawl | refreshed |
+| skill | diagram-kroki | failed: could not clone source repo |
+| mcp | playwright | refreshed |
+
+Synced: 2 items
+Failed: 1 item
+```
+
+**Result:**
+- `firecrawl` and `playwright` refreshed
+- `diagram-kroki` listed with the failure reason so the user can fix it individually
 
 ## Add a Skill
 
@@ -395,153 +545,3 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 **Result:**
 - Local copy pushed to `/Users/me/projects/tools/agents/video-processor/AGENT.md`
-
-## Search the Catalog
-
-### Example: Find entries by keyword
-
-**User says:**
-> Search for something to make diagrams
-
-**Steps:**
-1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
-3. Keyword `diagrams` matched case-insensitively against entry `name` and `description` fields (substring match)
-4. Matches collected across all types
-
-**Displayed to the user:**
-
-```
-## Search Results for "diagrams"
-
-| Type | Name | Description | Source |
-|------|------|-------------|--------|
-| skill | diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | https://github.com/... |
-| agent | diagram-architect | Designs architecture diagrams from requirements | https://github.com/... |
-```
-
-**Result:**
-- Suggested next step: `Run /library use diagram-kroki to install one of these.`
-
-### Example: No results
-
-**User says:**
-> Search the library for "quantum computing"
-
-**Steps:**
-1. Library repo synced: `git pull`
-2. Catalog parsed
-3. Keyword `quantum computing` matched no names or descriptions
-
-**Displayed to the user:**
-
-```
-No results found for "quantum computing".
-
-Tip: Try broader keywords or run /library list to see the full catalog.
-```
-
-**Result:**
-- No matches — user is pointed to `/library list` or broader keywords
-
-## List the Catalog
-
-### Example: Show the full catalog with install status
-
-**User says:**
-> List what's in the library
-
-**Steps:**
-1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
-3. Install status checked per entry: looked for the entry name in the default and global directories from `default_dirs`, marked `installed (default)`, `installed (global)`, or `not installed`
-
-**Displayed to the user (grouped by type):**
-
-```
-## Skills
-| Name | Description | Source | Status |
-|------|-------------|--------|--------|
-| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (default) |
-| diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | github.com/... | not installed |
-
-## Agents
-| Name | Description | Source | Status |
-|------|-------------|--------|--------|
-| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (default) |
-
-## Prompts
-No prompts in catalog.
-
-## MCP Servers
-| Name | Description | Source | Status |
-|------|-------------|--------|--------|
-| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (default) |
-| github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
-```
-
-**Summary:**
-- 5 total entries in catalog, 4 installed locally, 1 not installed
-
-## Sync All Installed Items
-
-### Example: Refresh everything installed
-
-**User says:**
-> Sync everything
-
-**Steps:**
-1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
-3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the default/global directories — all four get re-pulled
-4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
-5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
-
-**Displayed to the user:**
-
-```
-## Sync Complete
-
-| Type | Name | Status |
-|------|------|--------|
-| skill | firecrawl | refreshed |
-| agent | video-processor | refreshed |
-| mcp | playwright | refreshed |
-| mcp | github | refreshed |
-
-Synced: 4 items
-Failed: 0 items
-```
-
-**Result:**
-- All 4 installed items refreshed
-- MCP note: re-pulling only refreshed `.agents/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
-
-### Example: Sync with a failure
-
-**User says:**
-> Sync the library
-
-**Steps:**
-1. Library repo synced: `git pull`
-2. Installed items collected: `firecrawl`, `diagram-kroki`, and `playwright`
-3. Re-pull attempted for each — `diagram-kroki` failed (source repo unreachable / network error)
-
-**Displayed to the user:**
-
-```
-## Sync Complete
-
-| Type | Name | Status |
-|------|------|--------|
-| skill | firecrawl | refreshed |
-| skill | diagram-kroki | failed: could not clone source repo |
-| mcp | playwright | refreshed |
-
-Synced: 2 items
-Failed: 1 item
-```
-
-**Result:**
-- `firecrawl` and `playwright` refreshed
-- `diagram-kroki` listed with the failure reason so the user can fix it individually
