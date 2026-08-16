@@ -1,8 +1,8 @@
 # Add and Install Examples
 
-Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, `/library search`, and `/library list` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), and [cookbook/list.md](list.md) first — these examples follow them.
+Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, `/library search`, `/library list`, and `/library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, re-pulling from source, and the summary report.
 
 ## Table of Contents
 
@@ -17,6 +17,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [Push Changes to the Source](#push-changes-to-the-source)
 - [Search the Catalog](#search-the-catalog)
 - [List the Catalog](#list-the-catalog)
+- [Sync All Installed Items](#sync-all-installed-items)
 
 ## Install on a New Device
 
@@ -481,3 +482,66 @@ No prompts in catalog.
 
 **Summary:**
 - 5 total entries in catalog, 4 installed locally, 1 not installed
+
+## Sync All Installed Items
+
+### Example: Refresh everything installed
+
+**User says:**
+> Sync everything
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the default/global directories — all four get re-pulled
+4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
+5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
+
+**Displayed to the user:**
+
+```
+## Sync Complete
+
+| Type | Name | Status |
+|------|------|--------|
+| skill | firecrawl | refreshed |
+| agent | video-processor | refreshed |
+| mcp | playwright | refreshed |
+| mcp | github | refreshed |
+
+Synced: 4 items
+Failed: 0 items
+```
+
+**Result:**
+- All 4 installed items refreshed
+- MCP note: re-pulling only refreshed `.agents/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
+
+### Example: Sync with a failure
+
+**User says:**
+> Sync the library
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Installed items collected: `firecrawl`, `diagram-kroki`, and `playwright`
+3. Re-pull attempted for each — `diagram-kroki` failed (source repo unreachable / network error)
+
+**Displayed to the user:**
+
+```
+## Sync Complete
+
+| Type | Name | Status |
+|------|------|--------|
+| skill | firecrawl | refreshed |
+| skill | diagram-kroki | failed: could not clone source repo |
+| mcp | playwright | refreshed |
+
+Synced: 2 items
+Failed: 1 item
+```
+
+**Result:**
+- `firecrawl` and `playwright` refreshed
+- `diagram-kroki` listed with the failure reason so the user can fix it individually
