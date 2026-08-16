@@ -1,18 +1,20 @@
 # Add and Install Examples
 
-Worked examples for the `/library add`, `/library install`, and `/library remove` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/add.md](add.md), [cookbook/install.md](install.md), and [cookbook/remove.md](remove.md) first — these examples follow them.
+Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, and `/library push` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), and [cookbook/push.md](push.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing.
 
 ## Table of Contents
 
 - [Install on a New Device](#install-on-a-new-device)
+- [Use an Item from the Catalog](#use-an-item-from-the-catalog)
 - [Add a Skill](#add-a-skill)
 - [Add an Agent](#add-an-agent)
 - [Add a Prompt](#add-a-prompt)
 - [Add an MCP Server](#add-an-mcp-server)
 - [Combining Types in One Request](#combining-types-in-one-request)
 - [Remove an Entry from the Catalog](#remove-an-entry-from-the-catalog)
+- [Push Changes to the Source](#push-changes-to-the-source)
 
 ## Install on a New Device
 
@@ -65,6 +67,44 @@ Each add example covers: type detection, source validation, dependency parsing, 
 **Result:**
 - `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
 - `/library list` shows the catalog, `/library use <name>` pulls entries on demand
+
+## Use an Item from the Catalog
+
+### Example: Pull a skill with a dependency
+
+**User says:**
+> Use the diagram-kroki skill
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Entry found: `diagram-kroki` in `library.skills`
+3. Dependencies resolved: `requires: [skill:firecrawl]` — `firecrawl` found in the catalog, so the `use` workflow runs for it first
+4. Target directory: default → `~/.agents/skills/` for skills
+5. Fetched from GitHub source: temp clone of the repo, copied `skills/diagram-kroki/` → `~/.agents/skills/diagram-kroki/`, temp dir cleaned up
+6. Verified: `~/.agents/skills/diagram-kroki/SKILL.md` exists
+
+**Result:**
+- Installed `~/.agents/skills/diagram-kroki/` (SKILL.md)
+- Dependency `firecrawl` was installed first
+- If `diagram-kroki` was already installed, its local copy is overwritten with the latest from source (refresh)
+
+### Example: Use an MCP server globally (registers with the harness)
+
+**User says:**
+> Use the github MCP server globally
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Entry found: `github` in `library.mcp`
+3. Dependencies: none
+4. Target directory: "globally" → `~/.agents/mcp/` for MCP
+5. Fetched from GitHub source: temp clone, copied `mcp/github/` → `~/.agents/mcp/github/`, temp dir cleaned up
+6. Verified: `~/.agents/mcp/github/mcp.json` exists
+7. Registered with the harness: the installed `mcp.json` (`{"type": "local", "command": [...]}`) was merged into `~/.config/opencode/opencode.json` under `mcp.github`, preserving existing keys
+
+**Result:**
+- Installed at `~/.agents/mcp/github/`
+- Server registered with opencode — restart the harness for it to load
 
 ## Add a Skill
 
@@ -301,3 +341,54 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 **Result:**
 - Entry removed from the catalog
 - Server unregistered from the harness (restart required to take effect)
+
+## Push Changes to the Source
+
+> **Note:** Only owners and maintainers with direct write access can push directly to the source repository. Contributors must submit a pull request / merge request against the source.
+
+### Example: Push a locally improved skill to its GitHub source
+
+**User says:**
+> I improved the firecrawl skill locally. Push it back to the source.
+
+**Steps:**
+1. Entry found: `firecrawl` in `library.skills`
+2. Local copy located: `~/.agents/skills/firecrawl/` (only one copy — no need to ask which one)
+3. Conflict check: temp-cloned the source repo and compared `skills/firecrawl/` — the remote has no changes that aren't in the local copy, so no conflict
+4. Applied the changes to the temp clone:
+   ```bash
+   tmp_dir=$(mktemp -d)
+   git clone --depth 1 --branch main <clone_url> "$tmp_dir"
+   rm -rf "$tmp_dir/skills/firecrawl"
+   cp -R ~/.agents/skills/firecrawl/ "$tmp_dir/skills/firecrawl/"
+   ```
+5. Staged only the relevant path and committed:
+   ```bash
+   cd "$tmp_dir"
+   git add skills/firecrawl
+   git commit -m "library: updated firecrawl improved retry handling"
+   ```
+6. Permission asked: commit summary, files changed, and destination repo/branch shown to the user before pushing
+7. Pushed (with user permission) and cleaned up the temp dir
+
+**Result:**
+- Changes pushed to `someones-org/private-skills@main`
+- Commit message used: `library: updated firecrawl improved retry handling`
+
+### Example: Push to a local path source
+
+**User says:**
+> Push the video-processor agent changes back to `/Users/me/projects/tools/agents/video-processor/AGENT.md`
+
+**Steps:**
+1. Entry found: `video-processor` in `library.agents`
+2. Local copy located: `~/.agents/agents/video-processor/AGENT.md` (only one copy)
+3. Conflict check: source at `/Users/me/projects/tools/agents/video-processor/` compared — source unchanged since last pull, no conflict
+4. Overwrote the source:
+   ```bash
+   cp -R ~/.agents/agents/video-processor/ /Users/me/projects/tools/agents/video-processor/
+   ```
+5. Overwrite confirmed with the user
+
+**Result:**
+- Local copy pushed to `/Users/me/projects/tools/agents/video-processor/AGENT.md`
