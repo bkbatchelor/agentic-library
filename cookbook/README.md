@@ -85,7 +85,6 @@ Each add example covers: type detection, source validation, dependency parsing, 
 
 **Displayed to the user (grouped by type):**
 
-```
 ## Skills
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
@@ -105,7 +104,6 @@ No prompts in catalog.
 |------|-------------|--------|--------|
 | playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (default) |
 | github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
-```
 
 **Summary:**
 - 5 total entries in catalog, 4 installed locally, 1 not installed
@@ -125,14 +123,14 @@ No prompts in catalog.
 
 **Displayed to the user:**
 
-```
+
 ## Search Results for "diagrams"
 
 | Type | Name | Description | Source |
 |------|------|-------------|--------|
 | skill | diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | https://github.com/... |
 | agent | diagram-architect | Designs architecture diagrams from requirements | https://github.com/... |
-```
+
 
 **Result:**
 - Suggested next step: `Run /library use diagram-kroki to install one of these.`
@@ -212,7 +210,7 @@ Tip: Try broader keywords or run /library list to see the full catalog.
 
 **Displayed to the user:**
 
-```
+
 ## Sync Complete
 
 | Type | Name | Status |
@@ -224,7 +222,7 @@ Tip: Try broader keywords or run /library list to see the full catalog.
 
 Synced: 4 items
 Failed: 0 items
-```
+
 
 **Result:**
 - All 4 installed items refreshed
@@ -242,7 +240,7 @@ Failed: 0 items
 
 **Displayed to the user:**
 
-```
+
 ## Sync Complete
 
 | Type | Name | Status |
@@ -253,7 +251,7 @@ Failed: 0 items
 
 Synced: 2 items
 Failed: 1 item
-```
+
 
 **Result:**
 - `firecrawl` and `playwright` refreshed
