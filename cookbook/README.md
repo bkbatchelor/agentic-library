@@ -1,8 +1,8 @@
 # Add and Install Examples
 
-Worked examples for the `/library add` and `/library install` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/add.md](add.md) and [cookbook/install.md](install.md) first — these examples follow them.
+Worked examples for the `/library add`, `/library install`, and `/library remove` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/add.md](add.md), [cookbook/install.md](install.md), and [cookbook/remove.md](remove.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration.
 
 ## Table of Contents
 
@@ -12,6 +12,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [Add a Prompt](#add-a-prompt)
 - [Add an MCP Server](#add-an-mcp-server)
 - [Combining Types in One Request](#combining-types-in-one-request)
+- [Remove an Entry from the Catalog](#remove-an-entry-from-the-catalog)
 
 ## Install on a New Device
 
@@ -249,3 +250,54 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 ```
 
 > **Note:** If a dependency is not already in the catalog, add it to `library.yaml` first (recursively checking its dependencies), then add the entry that references it.
+
+## Remove an Entry from the Catalog
+
+> **Note:** Only owners and maintainers with direct push access can run `remove` directly on the catalog repo. Contributors must submit a pull request / merge request instead.
+
+### Example: Remove a skill and its local copy
+
+**User says:**
+> Remove the diagram-kroki skill
+
+**Steps:**
+1. Library repo synced: `git pull` before modifying
+2. Entry found: `diagram-kroki` in `library.skills`, type `skill`
+3. Confirmed with user: "Remove diagram-kroki from the library catalog?" and "Also delete the local copy at `~/.agents/skills/diagram-kroki`?"
+4. Dependency check: no other entries list `skill:diagram-kroki` in `requires` — safe to remove
+5. Entry removed from `library.skills`
+6. Local copy deleted (user confirmed): `rm -rf ~/.agents/skills/diagram-kroki`
+
+**YAML before:**
+
+```yaml
+- name: diagram-kroki
+  description: Generate diagrams via Kroki HTTP API supporting 28+ languages
+  source: https://github.com/someones-org/private-skills/blob/main/skills/diagram-kroki/SKILL.md
+  requires: [skill:firecrawl]
+```
+
+**YAML after:** the `diagram-kroki` entry is gone from `library.skills`; `firecrawl` (its dependency) remains.
+
+**Result:**
+- Entry removed from the catalog
+- Local copy deleted
+- Change committed (`library: removed skill diagram-kroki`) and pushed after asking for permission
+
+### Example: Remove an MCP server and unregister it from the harness
+
+**User says:**
+> Remove the github MCP server
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Entry found: `github` in `library.mcp`, type `mcp`
+3. Confirmed with user
+4. Dependency check: no other entries reference `mcp:github`
+5. Entry removed from `library.mcp`
+6. Unregistered from the harness: deleted the `mcp.github` key from `~/.config/opencode/opencode.json` (it was a global install)
+7. User restarts the harness for the removal to take effect
+
+**Result:**
+- Entry removed from the catalog
+- Server unregistered from the harness (restart required to take effect)
