@@ -30,6 +30,12 @@
       <feComposite in="color" in2="blur" operator="in" result="glow"/>
       <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="roseGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#F43F5E" flood-opacity="0.25" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <!-- ============================================================ -->
@@ -93,7 +99,7 @@
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0" dur="3.8s" begin="11s" repeatCount="indefinite"/>
   </g>
 
-  <!-- Agent Skills (purple) — create-readme, diagram, browser -->
+  <!-- Agent Skills (purple) — create-readme, diagram, + MCP: playwright-mcp -->
   <!-- create-readme -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="2.8s" fill="freeze"/>
@@ -108,11 +114,11 @@
     <text x="400" y="217" font-size="12" font-weight="600" fill="#8B5CF6" text-anchor="middle">diagram</text>
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0" dur="4.2s" begin="10.7s" repeatCount="indefinite"/>
   </g>
-  <!-- browser -->
+  <!-- Agent MCP (rose) — playwright-mcp -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" dur="0.6s" begin="3.6s" fill="freeze"/>
-    <rect x="350" y="236" width="100" height="28" rx="14" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.2" filter="url(#purpleGlow)"/>
-    <text x="400" y="255" font-size="12" font-weight="600" fill="#8B5CF6" text-anchor="middle">browser</text>
+    <rect x="345" y="236" width="110" height="28" rx="14" fill="#0F172A" stroke="#F43F5E" stroke-width="1.2" filter="url(#roseGlow)"/>
+    <text x="400" y="255" font-size="12" font-weight="600" fill="#FDA4AF" text-anchor="middle">playwright-mcp</text>
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0" dur="3.9s" begin="11.2s" repeatCount="indefinite"/>
   </g>
 
@@ -226,13 +232,13 @@
 
   <!-- Subtitle -->
   <text x="400" y="448" font-size="12" fill="#9CA3AF" text-anchor="middle" opacity="0">
-    Each engineer hoards skills &#x2014; no shared distribution system
+    Each engineer hoards skills and MCP servers &#x2014; no shared distribution system
     <animate attributeName="opacity" from="0" to="0.8" dur="0.6s" begin="8.8s" fill="freeze"/>
   </text>
 
   <!-- Bottom stat line -->
   <text x="400" y="540" font-size="15" font-weight="600" fill="#EF4444" text-anchor="middle" opacity="0">
-    9 skills, 3 devs, zero shared access
+    9 agentics, 3 devs, zero shared access
     <animate attributeName="opacity" from="0" to="0.9" dur="0.6s" begin="9.2s" fill="freeze"/>
   </text>
 

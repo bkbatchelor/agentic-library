@@ -161,6 +161,20 @@
     <text x="26" y="22" text-anchor="middle" class="mono" font-size="8" fill="#67E8F9">debug.md</text>
   </g>
 
+  <!-- File 15: mcp.json at (150, 480) tilted -->
+  <g opacity="0" transform="translate(150, 480) rotate(-6)">
+    <animate attributeName="opacity" from="0" to="1" begin="2.5s" dur="0.3s" fill="freeze"/>
+    <rect x="0" y="0" width="52" height="35" rx="3" fill="#0F172A" stroke="#F43F5E" stroke-width="1.2"/>
+    <text x="26" y="22" text-anchor="middle" class="mono" font-size="8" fill="#FDA4AF">mcp.json</text>
+  </g>
+
+  <!-- File 16: mcp.json DUPLICATE at (540, 470) grayed -->
+  <g opacity="0" transform="translate(540, 470) rotate(7)">
+    <animate attributeName="opacity" from="0" to="1" begin="3.0s" dur="0.3s" fill="freeze"/>
+    <rect x="0" y="0" width="52" height="35" rx="3" fill="#0F172A" stroke="#4B5563" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="26" y="22" text-anchor="middle" class="mono" font-size="8" fill="#6B7280">mcp.json</text>
+  </g>
+
   <!-- ============================================ -->
   <!-- DIRECTORY LABELS (3-5s)                       -->
   <!-- Scattered to show chaos                       -->
@@ -199,6 +213,13 @@
     <animate attributeName="opacity" from="0" to="1" begin="4.6s" dur="0.6s" fill="freeze"/>
     <rect x="380" y="395" width="82" height="18" rx="3" fill="#1E293B" stroke="#374151" stroke-width="0.8"/>
     <text x="421" y="408" text-anchor="middle" class="mono" font-size="8" fill="#9CA3AF">~/old-tools/</text>
+  </g>
+
+  <!-- .agents/mcp/ -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="4.8s" dur="0.6s" fill="freeze"/>
+    <rect x="125" y="445" width="82" height="18" rx="3" fill="#1E293B" stroke="#374151" stroke-width="0.8"/>
+    <text x="166" y="458" text-anchor="middle" class="mono" font-size="8" fill="#9CA3AF">.agents/mcp/</text>
   </g>
 
   <!-- ============================================ -->
@@ -240,6 +261,13 @@
     <text x="401" y="54" text-anchor="middle" font-size="8" font-weight="700" fill="#FCA5A5">duplicate!</text>
   </g>
 
+  <!-- "duplicate!" on mcp.json copy -->
+  <g opacity="0" filter="url(#glow-red)">
+    <animate attributeName="opacity" from="0" to="1" begin="6.8s" dur="0.5s" fill="freeze"/>
+    <rect x="530" y="505" width="62" height="16" rx="3" fill="#7F1D1D" stroke="#EF4444" stroke-width="0.8"/>
+    <text x="561" y="517" text-anchor="middle" font-size="8" font-weight="700" fill="#FCA5A5">duplicate!</text>
+  </g>
+
   <!-- ============================================ -->
   <!-- LARGE "?" ABOVE DEVELOPER (7-8s)              -->
   <!-- ============================================ -->
@@ -263,7 +291,7 @@
   <!-- Subtitle -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="8.8s" dur="1s" fill="freeze"/>
-    <text x="400" y="560" text-anchor="middle" font-size="11" fill="#9CA3AF">Skills scattered across directories, devices, and projects</text>
+    <text x="400" y="560" text-anchor="middle" font-size="11" fill="#9CA3AF">Skills, agents, and MCP servers scattered across directories, devices, and projects</text>
     <text x="400" y="578" text-anchor="middle" font-size="11" fill="#9CA3AF">no central catalog, no sync, no lifecycle</text>
   </g>
 
@@ -286,6 +314,11 @@
   <!-- tts.md duplicate pulse -->
   <rect x="450" y="420" width="45" height="35" rx="3" fill="none" stroke="#EF4444" stroke-width="1.5" opacity="0" transform="rotate(8, 472, 437)">
     <animate attributeName="opacity" values="0;0.6;0" dur="1.8s" begin="10.6s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- mcp.json duplicate pulse -->
+  <rect x="540" y="470" width="52" height="35" rx="3" fill="none" stroke="#EF4444" stroke-width="1.5" opacity="0" transform="rotate(7, 566, 487)">
+    <animate attributeName="opacity" values="0;0.6;0" dur="1.9s" begin="10.5s" repeatCount="indefinite"/>
   </rect>
 
   <!-- lint.md outdated pulse -->
@@ -324,6 +357,9 @@
   </text>
   <text x="471" y="467" text-anchor="middle" font-size="8" font-weight="700" fill="#EF4444" opacity="0">which version?
     <animate attributeName="opacity" values="0;0.7;0" dur="1.8s" begin="10.6s" repeatCount="indefinite"/>
+  </text>
+  <text x="561" y="517" text-anchor="middle" font-size="8" font-weight="700" fill="#EF4444" opacity="0">duplicate!
+    <animate attributeName="opacity" values="0;0.8;0" dur="1.9s" begin="10.5s" repeatCount="indefinite"/>
   </text>
 
 </svg>

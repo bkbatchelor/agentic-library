@@ -17,7 +17,7 @@ git pull
 
 ### 2. Read the Catalog
 - Read `library.yaml`
-- Parse all entries from `library.skills`, `library.agents`, and `library.prompts`
+- Parse all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
 
 ### 3. Search
 - Match the keyword (case-insensitive) against:
@@ -37,6 +37,7 @@ If matches found, format as:
 |------|------|-------------|--------|
 | skill | matching-skill | description... | source... |
 | agent | matching-agent | description... | source... |
+| mcp | matching-mcp | description... | source... |
 ```
 
 If no matches:

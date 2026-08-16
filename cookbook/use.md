@@ -1,7 +1,7 @@
-# Use a Skill from the Library
+# Use an Item from the Library
 
 ## Context
-Pull a skill, agent, or prompt from the catalog into the local environment. If already installed locally, overwrite with the latest from the source (refresh).
+Pull a skill, agent, prompt, or MCP server from the catalog into the local environment. If already installed locally, overwrite with the latest from the source (refresh).
 
 ## Input
 The user provides a skill name or description.
@@ -17,14 +17,14 @@ git pull
 
 ### 2. Find the Entry
 - Read `library.yaml`
-- Search across `library.skills`, `library.agents`, and `library.prompts`
+- Search across `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
 - Match by name (exact) or description (fuzzy/keyword match)
 - If multiple matches, show them and ask the user to pick one
 - If no match, tell the user and suggest `/library search`
 
 ### 3. Resolve Dependencies
 If the entry has a `requires` field:
-- For each typed reference (`skill:name`, `agent:name`, `prompt:name`):
+- For each typed reference (`skill:name`, `agent:name`, `prompt:name`, `mcp:name`):
   - Look it up in `library.yaml`
   - If found, recursively run the `use` workflow for that dependency first
   - If not found, warn the user: "Dependency <ref> not found in library catalog"
@@ -35,14 +35,14 @@ If the entry has a `requires` field:
 - If user said "global" or "globally" → use the `global` path
 - If user specified a custom path → use that path
 - Otherwise → use the `default` path
-- Select the correct section based on type (skills/agents/prompts)
+- Select the correct section based on type (skills/agents/prompts/mcp)
 
 ### 5. Fetch from Source
 
 **If source is a local path** (starts with `/` or `~`):
 - Resolve `~` to the home directory
 - Get the parent directory of the referenced file
-- For skills: copy the entire parent directory to the target:
+- For skills and mcp: copy the entire parent directory to the target:
   ```bash
   cp -R <parent_directory>/ <target_directory>/<name>/
   ```
@@ -83,11 +83,20 @@ If the entry has a `requires` field:
 
 ### 6. Verify Installation
 - Confirm the target directory exists
-- Confirm the main file (SKILL.md, AGENT.md, or prompt file) exists in it
+- Confirm the main file (SKILL.md, AGENT.md, prompt file, or mcp.json) exists in it
 - Report success with the installed path
 
-### 7. Confirm
+### 7. Register MCP with the Harness
+If the type is `mcp`, register the server with the active agent harness so it is actually loaded:
+- Read the installed `mcp.json` — it holds the server definition in the harness's native shape (opencode: `{"type": "local", "command": [...], ...}`)
+- **Global install** → merge it into `~/.config/opencode/opencode.json` under `mcp.<name>`, preserving existing keys
+- **Default (project) install** → merge it into `./opencode.json` (create the file if it doesn't exist), preserving existing keys
+- If the harness is not opencode, skip the merge and tell the user how to register the server manually
+- Tell the user to **restart the harness** for the new MCP server to load
+
+### 8. Confirm
 Tell the user:
 - What was installed and where
 - Any dependencies that were also installed
 - If this was a refresh (overwrite), mention that
+- For MCP entries, that the server was registered with the harness (and to restart)

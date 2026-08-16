@@ -51,5 +51,5 @@ If already cloned (e.g., user cloned the template first), just update the remote
 Tell the user:
 - Agentic Library is now globally available
 - `/library list` will show the catalog (empty by default)
-- `/library add` to start adding skills, agents, and prompts
+- `/library add` to start adding skills, agents, prompts, and MCP servers
 - The `justfile` in the library directory has shorthand commands

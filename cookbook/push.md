@@ -1,13 +1,13 @@
-# Push a Skill to the Library Source
+# Push an Item to the Library Source
 
 ## Context
-The user has improved a skill locally and wants to push changes back to the source.
+The user has improved a skill, agent, prompt, or MCP server locally and wants to push changes back to the source.
 
 ## Permissions & Requirements
 > **Note:** Only owners and maintainers with direct write permissions are allowed to push changes directly to the source repository. Contributors without direct write access must submit a pull request / merge request to the source repository.
 
 ## Input
-The user provides a skill name or description.
+The user provides an item name or description.
 
 ## Steps
 

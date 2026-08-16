@@ -80,7 +80,7 @@
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="0.6s" dur="0.6s" fill="freeze"/>
     <rect x="18" y="197" width="124" height="22" rx="6" fill="#1E293B" stroke="#6366F1" stroke-width="0.8"/>
-    <text x="80" y="212" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;skill&gt;</text>
+    <text x="80" y="212" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;item&gt;</text>
   </g>
 
   <!-- Agent Node -->
@@ -109,7 +109,7 @@
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="1.0s" dur="0.6s" fill="freeze"/>
     <rect x="18" y="312" width="124" height="22" rx="6" fill="#1E293B" stroke="#6366F1" stroke-width="0.8"/>
-    <text x="80" y="327" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;skill&gt;</text>
+    <text x="80" y="327" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;item&gt;</text>
   </g>
 
   <!-- Coworker Node -->
@@ -135,7 +135,7 @@
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="1.4s" dur="0.6s" fill="freeze"/>
     <rect x="18" y="427" width="124" height="22" rx="6" fill="#1E293B" stroke="#6366F1" stroke-width="0.8"/>
-    <text x="80" y="442" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;skill&gt;</text>
+    <text x="80" y="442" text-anchor="middle" class="mono" font-size="8.5" fill="#A5B4FC">/library use &lt;item&gt;</text>
   </g>
 
   <!-- ============================================ -->
@@ -164,33 +164,41 @@
     <g opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="2.8s" dur="0.6s" fill="freeze"/>
       <!-- Row 1 -->
-      <circle cx="310" cy="275" r="3" fill="#10B981"/>
-      <text x="320" y="278" class="mono" font-size="8" fill="#E0E0E0">commit-changes</text>
-      <text x="435" y="278" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
+      <circle cx="310" cy="268" r="3" fill="#10B981"/>
+      <text x="320" y="271" class="mono" font-size="8" fill="#E0E0E0">commit-changes</text>
+      <text x="435" y="271" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
     </g>
 
     <g opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="3.0s" dur="0.6s" fill="freeze"/>
       <!-- Row 2 -->
-      <circle cx="310" cy="295" r="3" fill="#F59E0B"/>
-      <text x="320" y="298" class="mono" font-size="8" fill="#E0E0E0">create-readme</text>
-      <text x="435" y="298" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
+      <circle cx="310" cy="283" r="3" fill="#F59E0B"/>
+      <text x="320" y="286" class="mono" font-size="8" fill="#E0E0E0">create-readme</text>
+      <text x="435" y="286" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
     </g>
 
     <g opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="3.2s" dur="0.6s" fill="freeze"/>
       <!-- Row 3 -->
-      <circle cx="310" cy="315" r="3" fill="#8B5CF6"/>
-      <text x="320" y="318" class="mono" font-size="8" fill="#E0E0E0">coverage-scan</text>
-      <text x="435" y="318" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
+      <circle cx="310" cy="298" r="3" fill="#8B5CF6"/>
+      <text x="320" y="301" class="mono" font-size="8" fill="#E0E0E0">coverage-scan</text>
+      <text x="435" y="301" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
     </g>
 
     <g opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="3.4s" dur="0.6s" fill="freeze"/>
       <!-- Row 4 -->
-      <circle cx="310" cy="335" r="3" fill="#06B6D4"/>
-      <text x="320" y="338" class="mono" font-size="8" fill="#E0E0E0">vulnerability-scan</text>
-      <text x="435" y="338" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
+      <circle cx="310" cy="313" r="3" fill="#06B6D4"/>
+      <text x="320" y="316" class="mono" font-size="8" fill="#E0E0E0">vulnerability-scan</text>
+      <text x="435" y="316" class="mono" font-size="8" fill="#6B7280" text-anchor="end">github</text>
+    </g>
+
+    <g opacity="0">
+      <animate attributeName="opacity" from="0" to="1" begin="3.6s" dur="0.6s" fill="freeze"/>
+      <!-- Row 5 (MCP) -->
+      <circle cx="310" cy="328" r="3" fill="#F43F5E"/>
+      <text x="320" y="331" class="mono" font-size="8" fill="#E0E0E0">mcp-playwright</text>
+      <text x="435" y="331" class="mono" font-size="8" fill="#6B7280" text-anchor="end">local</text>
     </g>
   </g>
 
@@ -270,8 +278,8 @@
     <!-- Folder icon -->
     <path d="M602,414 L602,424 L618,424 L618,412 L612,412 L610,410 L604,410 L602,412 Z" fill="none" stroke="#8B5CF6" stroke-width="1"/>
 
-    <text x="672" y="418" text-anchor="middle" fill="#E0E0E0" font-size="12" font-weight="700">Local Path</text>
-    <text x="665" y="436" text-anchor="middle" class="mono" font-size="8" fill="#9CA3AF">~/skills/tts.md</text>
+    <text x="672" y="418" text-anchor="middle" fill="#E0E0E0" font-size="12" font-weight="700">Local Path (MCP)</text>
+    <text x="665" y="436" text-anchor="middle" class="mono" font-size="8" fill="#9CA3AF">~/mcp/playwright.json</text>
   </g>
 
   <!-- ============================================ -->
@@ -376,7 +384,7 @@
   <!-- Subtitle -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="9.3s" dur="0.7s" fill="freeze"/>
-    <text x="400" y="525" text-anchor="middle" class="mono" font-size="12" fill="#6366F1">/library use &lt;skill&gt;</text>
+    <text x="400" y="525" text-anchor="middle" class="mono" font-size="12" fill="#6366F1">/library use &lt;item&gt;</text>
   </g>
 
   <!-- ============================================ -->

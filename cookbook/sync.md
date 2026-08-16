@@ -1,7 +1,7 @@
 # Sync All Installed Items
 
 ## Context
-Refresh every locally installed skill, agent, and prompt by re-pulling from its source. A fast, lazy "make sure everything is up to date" command.
+Refresh every locally installed skill, agent, prompt, and MCP server by re-pulling from its source. A fast, lazy "make sure everything is up to date" command.
 
 ## Steps
 
@@ -14,11 +14,11 @@ git pull
 
 ### 2. Read the Catalog
 - Read `library.yaml`
-- Parse all entries from `library.skills`, `library.agents`, and `library.prompts`
+- Parse all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
 
 ### 3. Find All Installed Items
 For each entry in the catalog:
-- Determine the type (skill, agent, prompt) and corresponding directories from `default_dirs`
+- Determine the type (skill, agent, prompt, mcp) and corresponding directories from `default_dirs`
 - Check if a directory or file matching the entry name exists in the **default** directory
 - Check if a directory or file matching the entry name exists in the **global** directory
 - Search recursively for name matches
@@ -31,7 +31,7 @@ For each installed entry, fetch the latest from its source:
 **If source is a local path** (starts with `/` or `~`):
 - Resolve `~` to the home directory
 - Get the parent directory of the referenced file
-- For skills: copy the entire parent directory to the target:
+- For skills and mcp: copy the entire parent directory to the target:
   ```bash
   cp -R <parent_directory>/ <target_directory>/<name>/
   ```
@@ -85,10 +85,13 @@ Display a summary table:
 |------|------|--------|
 | skill | skill-name | refreshed |
 | agent | agent-name | refreshed |
+| mcp | mcp-name | refreshed |
 | skill | other-skill | failed: <reason> |
 
 Synced: X items
 Failed: Y items
 ```
+
+**Note:** Re-pulling an MCP entry only refreshes the files in `.agents/mcp/<name>/`. The server stays registered in the harness config — no changes needed there.
 
 If any items failed (e.g., network error, missing source), list them with the reason so the user can fix individually.

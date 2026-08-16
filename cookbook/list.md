@@ -1,4 +1,4 @@
-# List Available Skills
+# List Available Items
 
 ## Context
 Show the full library catalog with install status.
@@ -14,7 +14,7 @@ git pull
 
 ### 2. Read the Catalog
 - Read `library.yaml`
-- Parse all entries from `library.skills`, `library.agents`, and `library.prompts`
+- Parse all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
 
 ### 3. Check Install Status
 For each entry:
@@ -44,6 +44,11 @@ Format the output as a table grouped by type:
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
 | prompt-name | prompt-description | github.com/... | not installed |
+
+## MCP Servers
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| mcp-name | mcp-description | github.com/... | installed (global) |
 ```
 
 If a section is empty, show: `No <type> in catalog.`

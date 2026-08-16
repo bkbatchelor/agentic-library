@@ -1,7 +1,7 @@
 # Remove an Entry from the Library
 
 ## Context
-The user wants to remove a skill, agent, or prompt from the library catalog and optionally delete the local copy.
+The user wants to remove a skill, agent, prompt, or MCP server from the library catalog and optionally delete the local copy.
 
 ## Permissions & Requirements
 > **Note:** Only owners and maintainers of the Git repository are allowed to execute `remove` commands directly on the catalog repository. Contributors without direct write access must submit a pull request / merge request.
@@ -21,7 +21,7 @@ git pull
 ### 2. Find the Entry
 - Read `library.yaml`
 - Search across all sections for the matching entry
-- Determine the type (skill, agent, or prompt)
+- Determine the type (skill, agent, prompt, or mcp)
 - If no match, tell the user the item wasn't found in the catalog
 
 ### 3. Confirm with User
@@ -30,7 +30,7 @@ Show the entry details and ask:
 - If installed locally, also ask: "Also delete the local copy at `<path>`?"
 
 ### 4. Remove from library.yaml
-- Remove the entry from the appropriate section (`library.skills`, `library.agents`, or `library.prompts`)
+- Remove the entry from the appropriate section (`library.skills`, `library.agents`, `library.prompts`, or `library.mcp`)
 - If other entries depend on this one (via `requires`), warn the user before proceeding
 
 ### 5. Delete Local Copy (if requested)
@@ -42,7 +42,14 @@ If the user confirmed local deletion:
   rm -rf <target_directory>/<name>
   ```
 
-### 6. Commit and Push (or Submit Merge Request)
+### 6. Unregister MCP from the Harness
+If the type is `mcp`, also remove the server from the active agent harness config:
+- Delete the `mcp.<name>` key from `~/.config/opencode/opencode.json` (if it was a global install)
+- Delete the `mcp.<name>` key from `./opencode.json` (if it was a project install)
+- If the harness is not opencode, skip this step and tell the user to remove the server manually
+- Tell the user to **restart the harness** for the removal to take effect
+
+### 7. Commit and Push (or Submit Merge Request)
 If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
@@ -56,8 +63,9 @@ git push
 If you do not have direct push permissions:
 - Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
 
-### 7. Confirm
+### 8. Confirm
 Tell the user:
 - The entry has been removed from the catalog
 - Whether the local copy was also deleted
+- For MCP entries, that the server was unregistered from the harness (and to restart)
 - If other entries depended on it, remind them to update those entries

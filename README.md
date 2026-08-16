@@ -1,12 +1,12 @@
 # Agentic Library
 
-A meta-skill for private-first distribution of agentics (skills, agents, and prompts) across agents, devices, and teams.
+A meta-skill for private-first distribution of agentics (skills, agents, prompts, and MCP servers) across agents, devices, and teams.
 
 ![Agentic Library](images/10_meta_skill.svg)
 
 ## Who This Is For
 
-If you're an engineer working on 10+ codebases with agents and you're building specialized private skills, agents, and prompts — this was made for you.
+If you're an engineer working on 10+ codebases with agents and you're building specialized private skills, agents, prompts, and MCP servers — this was made for you.
 
 If you work in one or two repos, you don't need this. If you install skills from the public internet without reviewing them, this isn't for you either.
 
@@ -16,7 +16,7 @@ Agentic Library solves a specific problem: you've built powerful agentics scatte
 
 Agentic Library is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
 
-Think of it as a `package.json` for agent capabilities — but instead of packages, you're managing skills, agents, and prompts. Instead of a registry, you're pointing at your own private GitHub repos and local paths.
+Think of it as a `package.json` for agent capabilities — but instead of packages, you're managing skills, agents, prompts, and MCP servers. Instead of a registry, you're pointing at your own private GitHub repos and local paths.
 
 **This is a pure agent application.** There are no scripts, no CLIs, no dependencies, no build tools. The entire application is encoded in `SKILL.md` and a set of cookbook instructions that teach the agent exactly what to do. The agent IS the runtime. This matters because:
 
@@ -29,7 +29,7 @@ Think of it as a `package.json` for agent capabilities — but instead of packag
 
 ![The Problem: Skill Sprawl](images/26_problem_skill_sprawl.svg)
 
-As you build with AI agents, you accumulate skills, custom agents, and prompts — potentially hundreds of them. You need to:
+As you build with AI agents, you accumulate skills, custom agents, prompts, and MCP servers — potentially hundreds of them. You need to:
 
 - **Reuse** them across projects without copy-pasting
 - **Distribute** them to your agents running on other devices (Mac mini, remote servers, cloud sandboxes)
@@ -60,6 +60,9 @@ default_dirs:
   prompts:
     - default: .agents/commands/
     - global: ~/.agents/commands/
+  mcp:
+    - default: .agents/mcp/
+    - global: ~/.agents/mcp/
 
 library:
   skills:
@@ -72,6 +75,10 @@ library:
       source: https://github.com/myorg/private-skills/blob/main/skills/remote-skill/SKILL.md
   agents: []
   prompts: []
+  mcp:
+    - name: my-mcp
+      description: What this MCP server does
+      source: /Users/me/projects/tools/mcp/my-mcp/mcp.json
 ```
 
 The catalog stores pointers, not copies. Skills live in their source repos. You pull on demand.
@@ -84,16 +91,18 @@ The catalog stores pointers, not copies. Skills live in their source repos. You 
 | GitHub browser URL | `https://github.com/org/repo/blob/main/path/to/SKILL.md`           |
 | GitHub raw URL     | `https://raw.githubusercontent.com/org/repo/main/path/to/SKILL.md` |
 
-The source points to a specific file. The system pulls the entire parent directory (skills include scripts, references, assets — not just the markdown file).
+The source points to a specific file (`SKILL.md`, `AGENT.md`, a prompt file, or `mcp.json`). The system pulls the entire parent directory (skills include scripts, references, assets — not just the markdown file).
 
 For private repos, authentication uses SSH keys or `GITHUB_TOKEN` automatically.
+
+**MCP servers are also registered with the harness.** Installing an MCP entry merges its `mcp.json` into the active harness config (`~/.config/opencode/opencode.json` for global installs, `./opencode.json` for project installs) in the background, so the server is ready after a restart. Removing an MCP entry unregisters it.
 
 ### Typed Dependencies
 
 Dependencies use typed references to avoid name collisions:
 
 ```yaml
-requires: [skill:base-utils, agent:reviewer, prompt:task-router]
+requires: [skill:base-utils, agent:reviewer, prompt:task-router, mcp:playwright]
 ```
 
 Dependencies are resolved and pulled first, recursively.
@@ -241,6 +250,7 @@ Pull the latest version of all installed items:
 | **Skills**      | Raw capabilities — what an agent can do        |
 | **Agents**      | Scale + parallelism + specialization           |
 | **Prompts**     | Orchestration — coordinate skills and agents   |
+| **MCP Servers** | External tools and connections for the harness |
 | **Agentic Library** | Distribution across devices, teams, and agents |
 
 ## Master Agentic Coding

@@ -8,6 +8,9 @@ default_dirs:
   prompts:
     - default: .agents/commands/
     - global: ~/.agents/commands/
+  mcp:
+    - default: .agents/mcp/
+    - global: ~/.agents/mcp/
 
 library:
   skills:
@@ -16,3 +19,4 @@ library:
       source: https://github.com/bkbatchelor/agentic-skills/blob/main/commit-changes/SKILL.md
   agents: []
   prompts: []
+  mcp: []
