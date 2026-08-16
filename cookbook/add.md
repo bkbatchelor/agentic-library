@@ -76,4 +76,4 @@ If you do not have direct push permissions:
 - Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
 
 ### 7. Confirm
-Tell the user the entry has been added and is now available for others to use via `/library use <name>`.
+Tell the user the entry has been added and is now available for others to use via `/agentic-library use <name>`.

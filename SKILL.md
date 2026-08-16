@@ -1,6 +1,6 @@
 ---
 name: agentic-library
-description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private library catalog. Triggers on /library commands or mentions of library, skill distribution, agentic management, or MCP servers.
+description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private library catalog. Triggers on /agentic-library commands or mentions of library, skill distribution, agentic management, or MCP servers.
 argument-hint: [command or prompt] [name or details]
 ---
 
@@ -20,7 +20,7 @@ A meta-skill for private-first distribution of agentics (skills, agents, prompts
 
 Agentic Library is a catalog of references to your agentics. The `library.yaml` file points to where skills, agents, prompts, and MCP servers live (local filesystem or GitHub repos). Nothing is fetched until you ask for it.
 
-**The `library.yaml` is a catalog, not a manifest.** Entries define what's *available* — not what gets installed. You pull specific items on demand with `/library use <name>`.
+**The `library.yaml` is a catalog, not a manifest.** Entries define what's *available* — not what gets installed. You pull specific items on demand with `/agentic-library use <name>`.
 
 ## Commands
 
@@ -28,14 +28,14 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 
 | Command                     | Purpose                                  |
 | --------------------------- | ---------------------------------------- |
-| `/library install`          | First-time setup: fork, clone, configure |
-| `/library add <details>`    | Register a new entry in the catalog (Owner/Maintainer or Merge Request) |
-| `/library use <name>`       | Pull from source (install or refresh)    |
-| `/library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
-| `/library remove <name>`    | Remove from catalog and optionally local (Owner/Maintainer or Merge Request) |
-| `/library list`             | Show full catalog with install status    |
-| `/library sync`             | Re-pull all installed items from source   |
-| `/library search <keyword>` | Find entries by keyword                  |
+| `/agentic-library install`          | First-time setup: fork, clone, configure |
+| `/agentic-library add <details>`    | Register a new entry in the catalog (Owner/Maintainer or Merge Request) |
+| `/agentic-library use <name>`       | Pull from source (install or refresh)    |
+| `/agentic-library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
+| `/agentic-library remove <name>`    | Remove from catalog and optionally local (Owner/Maintainer or Merge Request) |
+| `/agentic-library list`             | Show full catalog with install status    |
+| `/agentic-library sync`             | Re-pull all installed items from source   |
+| `/agentic-library search <keyword>` | Find entries by keyword                  |
 
 ## Cookbook
 
@@ -53,7 +53,7 @@ Each command has a detailed step-by-step guide. **Read the relevant cookbook fil
 | sync    | [cookbook/sync.md](cookbook/sync.md)       | User wants to refresh all installed items at once            |
 | search  | [cookbook/search.md](cookbook/search.md)   | User is looking for an item but doesn't know the exact name  |
 
-**When a user invokes a `/library` command, read the matching cookbook file first, then execute the steps.**
+**When a user invokes a `/agentic-library` command, read the matching cookbook file first, then execute the steps.**
 
 ## Source Format
 
@@ -136,7 +136,7 @@ default_dirs:
 
 MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. The library agent does this in the background as part of the normal workflow.
 
-When you run `/library use <mcp-name>`, after copying the entry to `.agents/mcp/<name>/`:
+When you run `/agentic-library use <mcp-name>`, after copying the entry to `.agents/mcp/<name>/`:
 
 1. Read the contents of `.agents/mcp/<name>/mcp.json`. The file holds the server definition in the harness's native format (for opencode: the object under `mcp.<name>` — `{"type": "local", "command": [...], ...}`).
 2. **Global install** → merge the server into `~/.config/opencode/opencode.json` under `mcp.<name>`.
@@ -144,7 +144,7 @@ When you run `/library use <mcp-name>`, after copying the entry to `.agents/mcp/
 4. If the harness is not opencode, skip the merge and tell the user how to register the server manually.
 5. Tell the user to **restart the harness** for the new MCP server to load.
 
-When you run `/library remove <mcp-name>`, also delete the `mcp.<name>` key from the same harness config file.
+When you run `/agentic-library remove <mcp-name>`, also delete the `mcp.<name>` key from the same harness config file.
 
 The `mcp.json` file uses the opencode MCP server shape directly so the merge is a 1:1 insert and opencode's strict config validation never rejects it.
 

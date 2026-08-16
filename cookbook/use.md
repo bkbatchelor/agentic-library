@@ -20,7 +20,7 @@ git pull
 - Search across `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
 - Match by name (exact) or description (fuzzy/keyword match)
 - If multiple matches, show them and ask the user to pick one
-- If no match, tell the user and suggest `/library search`
+- If no match, tell the user and suggest `/agentic-library search`
 
 ### 3. Resolve Dependencies
 If the entry has a `requires` field:

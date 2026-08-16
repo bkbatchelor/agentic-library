@@ -44,8 +44,8 @@ If no matches:
 ```
 No results found for "<keyword>".
 
-Tip: Try broader keywords or run `/library list` to see the full catalog.
+Tip: Try broader keywords or run `/agentic-library list` to see the full catalog.
 ```
 
 ### 5. Suggest Next Step
-If matches were found, suggest: `Run /library use <name> to install one of these.`
+If matches were found, suggest: `Run /agentic-library use <name> to install one of these.`

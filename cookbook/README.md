@@ -1,6 +1,6 @@
 # Library Cookbook Examples
 
-Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, `/library search`, `/library list`, and `/library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
+Worked examples for the `/agentic-library install`, `/agentic-library use`, `/agentic-library add`, `/agentic-library remove`, `/agentic-library push`, `/agentic-library search`, `/agentic-library list`, and `/agentic-library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
 
 Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, re-pulling from source, and the summary report.
 
@@ -47,9 +47,9 @@ Each add example covers: type detection, source validation, dependency parsing, 
 
 **Result:**
 - `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
-- The `/library` command is now available
-- `/library list` shows the catalog (empty by default)
-- `/library add` to start adding skills, agents, prompts, and MCP servers
+- The `/agentic-library` command is now available
+- `/agentic-library list` shows the catalog (empty by default)
+- `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
 
 ### Example: Install on another device (already forked)
 
@@ -69,7 +69,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 
 **Result:**
 - `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
-- `/library list` shows the catalog, `/library use <name>` pulls entries on demand
+- `/agentic-library list` shows the catalog, `/agentic-library use <name>` pulls entries on demand
 
 ## List the Catalog
 
@@ -133,7 +133,7 @@ No prompts in catalog.
 
 
 **Result:**
-- Suggested next step: `Run /library use diagram-kroki to install one of these.`
+- Suggested next step: `Run /agentic-library use diagram-kroki to install one of these.`
 
 ### Example: No results
 
@@ -150,11 +150,11 @@ No prompts in catalog.
 ```
 No results found for "quantum computing".
 
-Tip: Try broader keywords or run /library list to see the full catalog.
+Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 ```
 
 **Result:**
-- No matches — user is pointed to `/library list` or broader keywords
+- No matches — user is pointed to `/agentic-library list` or broader keywords
 
 ## Use an Item from the Catalog
 

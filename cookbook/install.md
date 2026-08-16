@@ -45,11 +45,11 @@ If already cloned (e.g., user cloned the template first), just update the remote
 ### 5. Verify Installation
 - Confirm SKILL.md exists at `<LIBRARY_SKILL_DIR>/SKILL.md`
 - Confirm library.yaml exists at `<LIBRARY_SKILL_DIR>/library.yaml`
-- Confirm the `/library` command is now available
+- Confirm the `/agentic-library` command is now available
 
 ### 6. Done
 Tell the user:
 - Agentic Library is now globally available
-- `/library list` will show the catalog (empty by default)
-- `/library add` to start adding skills, agents, prompts, and MCP servers
+- `/agentic-library list` will show the catalog (empty by default)
+- `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
 - The `justfile` in the library directory has shorthand commands

@@ -172,11 +172,11 @@
     </rect>
   </g>
 
-  <!-- /library add command pill -->
+  <!-- /agentic-library add command pill -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="2.2s" dur="0.5s" fill="freeze"/>
-    <rect x="256" y="130" width="98" height="26" rx="13" fill="#1E293B" stroke="#6366F1" stroke-width="1.2"/>
-    <text x="305" y="148" text-anchor="middle" class="mono" font-size="10" font-weight="500" fill="#A5B4FC">/library add</text>
+    <rect x="247" y="130" width="116" height="26" rx="13" fill="#1E293B" stroke="#6366F1" stroke-width="1.2"/>
+    <text x="305" y="148" text-anchor="middle" class="mono" font-size="10" font-weight="500" fill="#A5B4FC">/agentic-library add</text>
   </g>
 
   <!-- Arrow: add to library.yaml -->
@@ -349,11 +349,11 @@
     <text x="720" y="166" text-anchor="middle" font-size="10" font-weight="600" fill="#A5B4FC">Your Agent</text>
   </g>
 
-  <!-- /library use pill for Consumer 1 -->
+  <!-- /agentic-library use pill for Consumer 1 -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="6.8s" dur="0.3s" fill="freeze"/>
     <rect x="650" y="126" width="88" height="16" rx="8" fill="#1E293B" stroke="#10B981" stroke-width="0.8"/>
-    <text x="694" y="137" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/library use</text>
+    <text x="694" y="137" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/agentic-library use</text>
   </g>
 
   <!-- Consumer 2: Team Member -->
@@ -366,11 +366,11 @@
     <text x="720" y="246" text-anchor="middle" font-size="10" font-weight="600" fill="#C4B5FD">Team Member</text>
   </g>
 
-  <!-- /library use pill for Consumer 2 -->
+  <!-- /agentic-library use pill for Consumer 2 -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="7.1s" dur="0.3s" fill="freeze"/>
     <rect x="650" y="206" width="88" height="16" rx="8" fill="#1E293B" stroke="#10B981" stroke-width="0.8"/>
-    <text x="694" y="217" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/library use</text>
+    <text x="694" y="217" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/agentic-library use</text>
   </g>
 
   <!-- Consumer 3: Mac Mini Agent -->
@@ -384,11 +384,11 @@
     <text x="718" y="326" text-anchor="middle" font-size="10" font-weight="600" fill="#67E8F9">Mac Mini Agent</text>
   </g>
 
-  <!-- /library use pill for Consumer 3 -->
+  <!-- /agentic-library use pill for Consumer 3 -->
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" begin="7.2s" dur="0.3s" fill="freeze"/>
     <rect x="650" y="286" width="88" height="16" rx="8" fill="#1E293B" stroke="#10B981" stroke-width="0.8"/>
-    <text x="694" y="297" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/library use</text>
+    <text x="694" y="297" text-anchor="middle" class="mono" font-size="7" fill="#6EE7B7">/agentic-library use</text>
   </g>
 
   <!-- Arrows from sources to consumers -->

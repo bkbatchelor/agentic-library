@@ -116,7 +116,7 @@ Dependencies are resolved and pulled first, recursively.
 
 ## Installation
 
-Clone **Agentic Library** into your global skills directory, and it becomes a `/library` slash command available in every coding agent session.
+Clone **Agentic Library** into your global skills directory, and it becomes a `/agentic-library` slash command available in every coding agent session.
 
 
 ### 1. Clone to Global Skills Directory
@@ -161,7 +161,7 @@ Here's the typical workflow: **build → catalog → distribute → use**.
 You built a deploy skill in one of your repos. Register it:
 
 ```
-/library add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
+/agentic-library add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
 ```
 
 This adds a reference to `library.yaml` and pushes the update to your fork.
@@ -171,7 +171,7 @@ This adds a reference to `library.yaml` and pushes the update to your fork.
 On another device, repo, or agent:
 
 ```
-/library use deploy
+/agentic-library use deploy
 ```
 
 This pulls the skill from the source repo into `.agents/skills/deploy/`.
@@ -179,7 +179,7 @@ This pulls the skill from the source repo into `.agents/skills/deploy/`.
 Want it globally available on this machine?
 
 ```
-/library use deploy install globally
+/agentic-library use deploy install globally
 ```
 
 ### Push changes back
@@ -187,17 +187,17 @@ Want it globally available on this machine?
 You improved the skill locally. Push the update to the source repo:
 
 ```
-/library push deploy
+/agentic-library push deploy
 ```
 
-Now every device that runs `/library sync` gets the latest version.
+Now every device that runs `/agentic-library sync` gets the latest version.
 
 ### Sync everything
 
 Pull the latest version of all installed items:
 
 ```
-/library sync
+/agentic-library sync
 ```
 
 ## Commands
@@ -206,14 +206,14 @@ Pull the latest version of all installed items:
 
 | Command                     | What It Does                                               | Permissions |
 | --------------------------- | ---------------------------------------------------------- | ----------- |
-| `/library install`          | First-time setup — fork, clone, configure                  | All users   |
-| `/library add <details>`    | Register a new entry in the catalog                        | Owner / Maintainer (or Merge Request) |
-| `/library use <name>`       | Pull from source into local directory (install or refresh) | All users   |
-| `/library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
-| `/library remove <name>`    | Remove from catalog and optionally delete local copy       | Owner / Maintainer (or Merge Request) |
-| `/library list`             | Show full catalog with install status                      | All users   |
-| `/library sync`             | Re-pull all installed items from source                    | All users   |
-| `/library search <keyword>` | Find entries by name or description                        | All users   |
+| `/agentic-library install`          | First-time setup — fork, clone, configure                  | All users   |
+| `/agentic-library add <details>`    | Register a new entry in the catalog                        | Owner / Maintainer (or Merge Request) |
+| `/agentic-library use <name>`       | Pull from source into local directory (install or refresh) | All users   |
+| `/agentic-library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
+| `/agentic-library remove <name>`    | Remove from catalog and optionally delete local copy       | Owner / Maintainer (or Merge Request) |
+| `/agentic-library list`             | Show full catalog with install status                      | All users   |
+| `/agentic-library sync`             | Re-pull all installed items from source                    | All users   |
+| `/agentic-library search <keyword>` | Find entries by name or description                        | All users   |
 
 ## Architecture
 
