@@ -45,7 +45,7 @@ Each command has a detailed step-by-step guide. **Read the relevant cookbook fil
 | ------- | --------------------------------------- | ----------------------------------------------------------- |
 | install | [cookbook/install.md](cookbook/install.md) | First-time setup on a new device                            |
 | add     | [cookbook/add.md](cookbook/add.md)         | User wants to register a new skill/agent/prompt/mcp in catalog |
-| add     | [cookbook/README.md](cookbook/README.md)   | Worked examples for adding skills, agents, prompts, and MCP servers |
+| add     | [cookbook/README.md](cookbook/README.md)   | Worked examples for adding items and installing the library |
 | use     | [cookbook/use.md](cookbook/use.md)         | User wants to pull or refresh an item from the catalog       |
 | push    | [cookbook/push.md](cookbook/push.md)       | User improved a skill locally and wants to update the source |
 | remove  | [cookbook/remove.md](cookbook/remove.md)   | User wants to remove an entry from the catalog               |

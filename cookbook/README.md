@@ -1,8 +1,69 @@
-# Add Examples
+# Add and Install Examples
 
-Worked examples for the `/library add` command. These show the full flow from user request to the resulting `library.yaml` entry. For the step-by-step procedure, read [cookbook/add.md](add.md) first — these examples follow it.
+Worked examples for the `/library add` and `/library install` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/add.md](add.md) and [cookbook/install.md](install.md) first — these examples follow them.
 
-Each example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup.
+
+## Table of Contents
+
+- [Install on a New Device](#install-on-a-new-device)
+- [Add a Skill](#add-a-skill)
+- [Add an Agent](#add-an-agent)
+- [Add a Prompt](#add-a-prompt)
+- [Add an MCP Server](#add-an-mcp-server)
+- [Combining Types in One Request](#combining-types-in-one-request)
+
+## Install on a New Device
+
+### Example: First install from the template repo
+
+**User says:**
+> Install Agentic Library on my new machine
+
+**Steps:**
+1. Prerequisites: `git --version` succeeds, global skills directory `~/.agents/skills/` exists (or is created)
+2. Fork status: user is on the template repo (hasn't forked) — instruct them to create a private fork on GitHub, then update the remote:
+   ```bash
+   cd ~/.agents/skills/library
+   git remote set-url origin <fork_url>
+   git remote -v
+   ```
+3. Clone to the global skills directory:
+   ```bash
+   mkdir -p ~/.agents/skills/library
+   cd ~/.agents/skills/library
+   git clone <fork_url> .
+   ```
+4. Update the `## Variables` section in `SKILL.md`:
+   - `LIBRARY_REPO_URL` → the user's fork URL
+   - `LIBRARY_YAML_PATH` → confirm path
+   - `LIBRARY_SKILL_DIR` → confirm path
+
+**Result:**
+- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
+- The `/library` command is now available
+- `/library list` shows the catalog (empty by default)
+- `/library add` to start adding skills, agents, prompts, and MCP servers
+
+### Example: Install on another device (already forked)
+
+**User says:**
+> Set up the library on my Mac mini
+
+**Steps:**
+1. Prerequisites: `git --version` succeeds, `~/.agents/skills/` exists (or is created)
+2. Fork status: already forked — the remote already points to their fork, skip the remote update
+3. Clone to the global skills directory:
+   ```bash
+   mkdir -p ~/.agents/skills/library
+   cd ~/.agents/skills/library
+   git clone <fork_url> .
+   ```
+4. Update the `## Variables` section in `SKILL.md` (same as the first install example)
+
+**Result:**
+- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
+- `/library list` shows the catalog, `/library use <name>` pulls entries on demand
 
 ## Add a Skill
 
