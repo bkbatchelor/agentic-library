@@ -1,8 +1,8 @@
 # Add and Install Examples
 
-Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, and `/library push` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), and [cookbook/push.md](push.md) first — these examples follow them.
+Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, and `/library search` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), and [cookbook/search.md](search.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed.
 
 ## Table of Contents
 
@@ -15,6 +15,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [Combining Types in One Request](#combining-types-in-one-request)
 - [Remove an Entry from the Catalog](#remove-an-entry-from-the-catalog)
 - [Push Changes to the Source](#push-changes-to-the-source)
+- [Search the Catalog](#search-the-catalog)
 
 ## Install on a New Device
 
@@ -392,3 +393,51 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 **Result:**
 - Local copy pushed to `/Users/me/projects/tools/agents/video-processor/AGENT.md`
+
+## Search the Catalog
+
+### Example: Find entries by keyword
+
+**User says:**
+> Search for something to make diagrams
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Keyword `diagrams` matched case-insensitively against entry `name` and `description` fields (substring match)
+4. Matches collected across all types
+
+**Displayed to the user:**
+
+```
+## Search Results for "diagrams"
+
+| Type | Name | Description | Source |
+|------|------|-------------|--------|
+| skill | diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | https://github.com/... |
+| agent | diagram-architect | Designs architecture diagrams from requirements | https://github.com/... |
+```
+
+**Result:**
+- Suggested next step: `Run /library use diagram-kroki to install one of these.`
+
+### Example: No results
+
+**User says:**
+> Search the library for "quantum computing"
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed
+3. Keyword `quantum computing` matched no names or descriptions
+
+**Displayed to the user:**
+
+```
+No results found for "quantum computing".
+
+Tip: Try broader keywords or run /library list to see the full catalog.
+```
+
+**Result:**
+- No matches — user is pointed to `/library list` or broader keywords
