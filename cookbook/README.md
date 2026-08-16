@@ -1,8 +1,8 @@
 # Add and Install Examples
 
-Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, and `/library search` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), and [cookbook/search.md](search.md) first — these examples follow them.
+Worked examples for the `/library install`, `/library use`, `/library add`, `/library remove`, `/library push`, `/library search`, and `/library list` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), and [cookbook/list.md](list.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output.
 
 ## Table of Contents
 
@@ -16,6 +16,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [Remove an Entry from the Catalog](#remove-an-entry-from-the-catalog)
 - [Push Changes to the Source](#push-changes-to-the-source)
 - [Search the Catalog](#search-the-catalog)
+- [List the Catalog](#list-the-catalog)
 
 ## Install on a New Device
 
@@ -441,3 +442,42 @@ Tip: Try broader keywords or run /library list to see the full catalog.
 
 **Result:**
 - No matches — user is pointed to `/library list` or broader keywords
+
+## List the Catalog
+
+### Example: Show the full catalog with install status
+
+**User says:**
+> List what's in the library
+
+**Steps:**
+1. Library repo synced: `git pull`
+2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+3. Install status checked per entry: looked for the entry name in the default and global directories from `default_dirs`, marked `installed (default)`, `installed (global)`, or `not installed`
+
+**Displayed to the user (grouped by type):**
+
+```
+## Skills
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (default) |
+| diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | github.com/... | not installed |
+
+## Agents
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (default) |
+
+## Prompts
+No prompts in catalog.
+
+## MCP Servers
+| Name | Description | Source | Status |
+|------|-------------|--------|--------|
+| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (default) |
+| github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
+```
+
+**Summary:**
+- 5 total entries in catalog, 4 installed locally, 1 not installed
