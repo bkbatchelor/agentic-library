@@ -121,7 +121,7 @@ Clone **Agentic Library** into your global skills directory, and it becomes a `/
 
 ### 1. Clone to Global Skills Directory
 
-Clone into `~/.agents/skills/agentic-library`. This path is what makes `/agentic-library` available as a global skill.
+Clone into `~/.agents/skills/agentic-library`. This path is what makes `/agentic-library` available as a global slash command in Claude Code.
 
 ```bash
 # Using git
@@ -130,31 +130,6 @@ git clone <your-fork-url> ~/.agents/skills/agentic-library
 
 # Or using GitHub CLI
 gh repo clone <yourname>/agentic-library ~/.agents/skills/agentic-library
-```
-
-### 2. Configure OpenCode (Optional)
-
-If you are using **OpenCode**, register the skill path in `~/.config/opencode/opencode.json`:
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "skills": {
-    "paths": ["~/.agents/skills"]
-  }
-}
-```
-
-To enable the `/agentic-library` slash command in OpenCode's command palette, create a command template at `~/.config/opencode/commands/agentic-library.md` (or `.opencode/commands/agentic-library.md` for project scope):
-
-```markdown
----
-description: Manage skills, agents, prompts, and MCP servers via agentic-library
----
-
-Execute the agentic-library workflow for: $ARGUMENTS
-
-Follow the instructions in the `agentic-library` skill and refer to the appropriate cookbook file under `cookbook/` for the requested command (install, add, use, push, remove, list, sync, or search).
 ```
 
 ### 3. Configure
