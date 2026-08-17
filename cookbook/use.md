@@ -17,7 +17,7 @@ git pull
 
 ### 2. Find the Entry
 - Read `library.yaml`
-- Search across `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+- Search across `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 - Match by name (exact) or description (fuzzy/keyword match)
 - If multiple matches, show them and ask the user to pick one
 - If no match, tell the user and suggest `/agentic-library search`
@@ -27,7 +27,7 @@ If the entry has a `requires` field:
 - For each typed reference (`skill:name`, `agent:name`, `prompt:name`, `mcp:name`):
   - Look it up in `library.yaml`
   - If found, recursively run the `use` workflow for that dependency first
-  - If not found, warn the user: "Dependency <ref> not found in library catalog"
+  - If not found, warn the user: "Dependency <ref> not found in agentic-library catalog"
 - Process all dependencies before the requested item
 
 ### 4. Determine Target Directory

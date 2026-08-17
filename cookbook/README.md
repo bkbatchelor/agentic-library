@@ -30,14 +30,14 @@ Each add example covers: type detection, source validation, dependency parsing, 
 1. Prerequisites: `git --version` succeeds, global skills directory `~/.agents/skills/` exists (or is created)
 2. Fork status: user is on the template repo (hasn't forked) — instruct them to create a private fork on GitHub, then update the remote:
    ```bash
-   cd ~/.agents/skills/library
+   cd ~/.agents/skills/agentic-library
    git remote set-url origin <fork_url>
    git remote -v
    ```
 3. Clone to the global skills directory:
    ```bash
-   mkdir -p ~/.agents/skills/library
-   cd ~/.agents/skills/library
+   mkdir -p ~/.agents/skills/agentic-library
+   cd ~/.agents/skills/agentic-library
    git clone <fork_url> .
    ```
 4. Update the `## Variables` section in `SKILL.md`:
@@ -46,7 +46,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
    - `LIBRARY_SKILL_DIR` → confirm path
 
 **Result:**
-- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
+- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/agentic-library/`
 - The `/agentic-library` command is now available
 - `/agentic-library list` shows the catalog (empty by default)
 - `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
@@ -54,21 +54,21 @@ Each add example covers: type detection, source validation, dependency parsing, 
 ### Example: Install on another device (already forked)
 
 **User says:**
-> Set up the library on my Mac mini
+> Set up the agentic-library on my Mac mini
 
 **Steps:**
 1. Prerequisites: `git --version` succeeds, `~/.agents/skills/` exists (or is created)
 2. Fork status: already forked — the remote already points to their fork, skip the remote update
 3. Clone to the global skills directory:
    ```bash
-   mkdir -p ~/.agents/skills/library
-   cd ~/.agents/skills/library
+   mkdir -p ~/.agents/skills/agentic-library
+   cd ~/.agents/skills/agentic-library
    git clone <fork_url> .
    ```
 4. Update the `## Variables` section in `SKILL.md` (same as the first install example)
 
 **Result:**
-- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/library/`
+- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/agentic-library/`
 - `/agentic-library list` shows the catalog, `/agentic-library use <name>` pulls entries on demand
 
 ## List the Catalog
@@ -76,11 +76,11 @@ Each add example covers: type detection, source validation, dependency parsing, 
 ### Example: Show the full catalog with install status
 
 **User says:**
-> List what's in the library
+> List what's in the agentic-library
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Install status checked per entry: looked for the entry name in the default and global directories from `default_dirs`, marked `installed (default)`, `installed (global)`, or `not installed`
 
 **Displayed to the user (grouped by type):**
@@ -117,7 +117,7 @@ No prompts in catalog.
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Keyword `diagrams` matched case-insensitively against entry `name` and `description` fields (substring match)
 4. Matches collected across all types
 
@@ -138,7 +138,7 @@ No prompts in catalog.
 ### Example: No results
 
 **User says:**
-> Search the library for "quantum computing"
+> Search the agentic-library for "quantum computing"
 
 **Steps:**
 1. Library repo synced: `git pull`
@@ -165,7 +165,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Entry found: `diagram-kroki` in `library.skills`
+2. Entry found: `diagram-kroki` in `agentic-library.skills`
 3. Dependencies resolved: `requires: [skill:firecrawl]` — `firecrawl` found in the catalog, so the `use` workflow runs for it first
 4. Target directory: default → `~/.agents/skills/` for skills
 5. Fetched from GitHub source: temp clone of the repo, copied `skills/diagram-kroki/` → `~/.agents/skills/diagram-kroki/`, temp dir cleaned up
@@ -183,7 +183,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Entry found: `github` in `library.mcp`
+2. Entry found: `github` in `agentic-library.mcp`
 3. Dependencies: none
 4. Target directory: "globally" → `~/.agents/mcp/` for MCP
 5. Fetched from GitHub source: temp clone, copied `mcp/github/` → `~/.agents/mcp/github/`, temp dir cleaned up
@@ -203,7 +203,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Catalog parsed: all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the default/global directories — all four get re-pulled
 4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
 5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
@@ -231,7 +231,7 @@ Failed: 0 items
 ### Example: Sync with a failure
 
 **User says:**
-> Sync the library
+> Sync the agentic-library
 
 **Steps:**
 1. Library repo synced: `git pull`
@@ -269,7 +269,7 @@ Failed: 1 item
 2. Source validated: local path exists
 3. Dependencies: none found in the frontmatter
 
-**YAML added to `library.skills` (kept alphabetically sorted):**
+**YAML added to `agentic-library.skills` (kept alphabetically sorted):**
 
 ```yaml
 - name: firecrawl
@@ -285,9 +285,9 @@ Failed: 1 item
 **Steps:**
 1. Type detected: `skill`
 2. Source validated: well-formed GitHub browser URL
-3. Dependencies parsed: `skill:firecrawl` — verified it already exists in `library.skills`
+3. Dependencies parsed: `skill:firecrawl` — verified it already exists in `agentic-library.skills`
 
-**YAML added to `library.skills`:**
+**YAML added to `agentic-library.skills`:**
 
 ```yaml
 - name: diagram-kroki
@@ -308,7 +308,7 @@ Failed: 1 item
 2. Source validated: local path exists
 3. Dependencies: none
 
-**YAML added to `library.agents`:**
+**YAML added to `agentic-library.agents`:**
 
 ```yaml
 - name: video-processor
@@ -326,7 +326,7 @@ Failed: 1 item
 2. Source validated: well-formed GitHub browser URL (private repos use SSH or `GITHUB_TOKEN`)
 3. Dependencies: none
 
-**YAML added to `library.agents`:**
+**YAML added to `agentic-library.agents`:**
 
 ```yaml
 - name: code-reviewer
@@ -346,7 +346,7 @@ Failed: 1 item
 2. Source validated: local path exists
 3. Dependencies: none
 
-**YAML added to `library.prompts`:**
+**YAML added to `agentic-library.prompts`:**
 
 ```yaml
 - name: caption-style
@@ -364,7 +364,7 @@ Failed: 1 item
 2. Source validated: well-formed GitHub browser URL
 3. Dependencies: none
 
-**YAML added to `library.prompts`:**
+**YAML added to `agentic-library.prompts`:**
 
 ```yaml
 - name: commit-message
@@ -395,7 +395,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 }
 ```
 
-**YAML added to `library.mcp`:**
+**YAML added to `agentic-library.mcp`:**
 
 ```yaml
 - name: playwright
@@ -413,7 +413,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 2. Source validated: well-formed GitHub browser URL
 3. Dependencies: none
 
-**YAML added to `library.mcp`:**
+**YAML added to `agentic-library.mcp`:**
 
 ```yaml
 - name: github
@@ -431,7 +431,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 2. Source validated: well-formed GitHub raw URL
 3. Dependencies parsed: `agent:video-processor`, `prompt:caption-style` — both already exist in the catalog (see the agent and prompt examples above)
 
-**YAML added to `library.skills`:**
+**YAML added to `agentic-library.skills`:**
 
 ```yaml
 - name: green-screen-captions
@@ -453,10 +453,10 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 **Steps:**
 1. Library repo synced: `git pull` before modifying
-2. Entry found: `diagram-kroki` in `library.skills`, type `skill`
-3. Confirmed with user: "Remove diagram-kroki from the library catalog?" and "Also delete the local copy at `~/.agents/skills/diagram-kroki`?"
+2. Entry found: `diagram-kroki` in `agentic-library.skills`, type `skill`
+3. Confirmed with user: "Remove diagram-kroki from the agentic-library catalog?" and "Also delete the local copy at `~/.agents/skills/diagram-kroki`?"
 4. Dependency check: no other entries list `skill:diagram-kroki` in `requires` — safe to remove
-5. Entry removed from `library.skills`
+5. Entry removed from `agentic-library.skills`
 6. Local copy deleted (user confirmed): `rm -rf ~/.agents/skills/diagram-kroki`
 
 **YAML before:**
@@ -468,12 +468,12 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
   requires: [skill:firecrawl]
 ```
 
-**YAML after:** the `diagram-kroki` entry is gone from `library.skills`; `firecrawl` (its dependency) remains.
+**YAML after:** the `diagram-kroki` entry is gone from `agentic-library.skills`; `firecrawl` (its dependency) remains.
 
 **Result:**
 - Entry removed from the catalog
 - Local copy deleted
-- Change committed (`library: removed skill diagram-kroki`) and pushed after asking for permission
+- Change committed (`agentic-library: removed skill diagram-kroki`) and pushed after asking for permission
 
 ### Example: Remove an MCP server and unregister it from the harness
 
@@ -482,10 +482,10 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 **Steps:**
 1. Library repo synced: `git pull`
-2. Entry found: `github` in `library.mcp`, type `mcp`
+2. Entry found: `github` in `agentic-library.mcp`, type `mcp`
 3. Confirmed with user
 4. Dependency check: no other entries reference `mcp:github`
-5. Entry removed from `library.mcp`
+5. Entry removed from `agentic-library.mcp`
 6. Unregistered from the harness: deleted the `mcp.github` key from `~/.config/opencode/opencode.json` (it was a global install)
 7. User restarts the harness for the removal to take effect
 
@@ -503,7 +503,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 > I improved the firecrawl skill locally. Push it back to the source.
 
 **Steps:**
-1. Entry found: `firecrawl` in `library.skills`
+1. Entry found: `firecrawl` in `agentic-library.skills`
 2. Local copy located: `~/.agents/skills/firecrawl/` (only one copy — no need to ask which one)
 3. Conflict check: temp-cloned the source repo and compared `skills/firecrawl/` — the remote has no changes that aren't in the local copy, so no conflict
 4. Applied the changes to the temp clone:
@@ -517,14 +517,14 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
    ```bash
    cd "$tmp_dir"
    git add skills/firecrawl
-   git commit -m "library: updated firecrawl improved retry handling"
+   git commit -m "agentic-library: updated firecrawl improved retry handling"
    ```
 6. Permission asked: commit summary, files changed, and destination repo/branch shown to the user before pushing
 7. Pushed (with user permission) and cleaned up the temp dir
 
 **Result:**
 - Changes pushed to `someones-org/private-skills@main`
-- Commit message used: `library: updated firecrawl improved retry handling`
+- Commit message used: `agentic-library: updated firecrawl improved retry handling`
 
 ### Example: Push to a local path source
 
@@ -532,7 +532,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 > Push the video-processor agent changes back to `/Users/me/projects/tools/agents/video-processor/AGENT.md`
 
 **Steps:**
-1. Entry found: `video-processor` in `library.agents`
+1. Entry found: `video-processor` in `agentic-library.agents`
 2. Local copy located: `~/.agents/agents/video-processor/AGENT.md` (only one copy)
 3. Conflict check: source at `/Users/me/projects/tools/agents/video-processor/` compared — source unchanged since last pull, no conflict
 4. Overwrote the source:

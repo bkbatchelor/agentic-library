@@ -7,7 +7,7 @@ First-time setup of Agentic Library on a new device. The user either has the tem
 
 ### 1. Check Prerequisites
 - Verify `git` is installed: `git --version`
-- Verify the global skills directory exists or can be created: `~/.claude/skills/`
+- Verify the global skills directory exists or can be created: `~/.agent/skills/`
 
 ### 2. Determine Fork Status
 Ask the user: **"Is this the template repo or your own fork?"**
@@ -35,12 +35,12 @@ git clone <fork_url> .
 If already cloned (e.g., user cloned the template first), just update the remote per step 2.
 
 ### 4. Update Variables
-- Open `SKILL.md` in the library directory
+- Open `SKILL.md` in the agentic-library directory
 - Take note of your current working directory.
 - Update the `## Variables` section:
   - **LIBRARY_REPO_URL**: Set to the user's fork URL
-  - **LIBRARY_YAML_PATH**: Confirm path (default: `~/.claude/skills/library/library.yaml`)
-  - **LIBRARY_SKILL_DIR**: Confirm path (default: `~/.claude/skills/library/`)
+  - **LIBRARY_YAML_PATH**: Confirm path (default: `~/.agent/skills/agentic-library/library.yaml`)
+  - **LIBRARY_SKILL_DIR**: Confirm path (default: `~/.agent/skills/agentic-library/`)
 
 ### 5. Verify Installation
 - Confirm SKILL.md exists at `<LIBRARY_SKILL_DIR>/SKILL.md`
@@ -52,4 +52,4 @@ Tell the user:
 - Agentic Library is now globally available
 - `/agentic-library list` will show the catalog (empty by default)
 - `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
-- The `justfile` in the library directory has shorthand commands
+- The `justfile` in the agentic-library directory has shorthand commands

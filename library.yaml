@@ -12,7 +12,7 @@ default_dirs:
     - default: .agents/mcp/
     - global: ~/.agents/mcp/
 
-library:
+agentic-library:
   skills:
     - name: commit-changes
       description: Guidelines and instructions for creating Conventional Commit messages following the standard specification and qoomon's cheatsheet. Use whenever staging git changes, drafting git commits, or generating commit messages.

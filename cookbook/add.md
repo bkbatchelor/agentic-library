@@ -1,7 +1,7 @@
 # Add a New Entry to the Library
 
 ## Context
-Register a new skill, agent, prompt, or MCP server in the library catalog.
+Register a new skill, agent, prompt, or MCP server in the agentic-library catalog.
 
 ## Permissions & Requirements
 > **Note:** Only owners and maintainers of the Git repository are allowed to execute `add` commands directly to the catalog repository. Contributors without direct write permissions must submit a pull request / merge request with proposed changes.
@@ -43,7 +43,7 @@ Detect dependencies by looking through the skill/agent/prompt/mcp files, format 
 Read `library.yaml`, add the new entry under the correct section:
 
 ```yaml
-# Under library.skills, library.agents, library.prompts, or library.mcp
+# Under agentic-library.skills, agentic-library.agents, agentic-library.prompts, or agentic-library.mcp
 - name: <name>
   description: <description>
   source: <source>
@@ -57,7 +57,7 @@ Read `library.yaml`, add the new entry under the correct section:
 - Keep entries alphabetically sorted by name within each section
 - For skills reference the `.../<skill-name>/SKILL.md` file,
 - For agents reference the `.../<agent name>.md` file,
-- For prompts reference the `.../<prompt name>.md` file (installed to `.claude/commands/`),
+- For prompts reference the `.../<prompt name>.md` file (installed to `.agent/commands/`),
 - For mcp reference the `.../<mcp-name>/mcp.json` file,
 - Remember we'll be adding a absolute path or a github url (https or ssh)
 
@@ -66,7 +66,7 @@ If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
-git commit -m "library: added <type> <name>"
+git commit -m "agentic-library: added <type> <name>"
 ```
 **Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
 ```bash

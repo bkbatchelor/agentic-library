@@ -69,7 +69,7 @@ The user provides an item name or description.
   ```
 - Commit with the standard format:
   ```bash
-  git commit -m "library: updated <name> <brief description of what changed>"
+  git commit -m "agentic-library: updated <name> <brief description of what changed>"
   ```
 - **Ask for user permission before pushing:**
   Display the commit summary, files changed, and destination repository/branch. Ask the user for explicit permission to proceed with `git push`.

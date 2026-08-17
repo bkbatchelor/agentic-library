@@ -1,7 +1,7 @@
 # List Available Items
 
 ## Context
-Show the full library catalog with install status.
+Show the full agentic-library catalog with install status.
 
 ## Steps
 
@@ -14,7 +14,7 @@ git pull
 
 ### 2. Read the Catalog
 - Read `library.yaml`
-- Parse all entries from `library.skills`, `library.agents`, `library.prompts`, and `library.mcp`
+- Parse all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 
 ### 3. Check Install Status
 For each entry:

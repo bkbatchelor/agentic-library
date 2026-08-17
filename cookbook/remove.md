@@ -1,7 +1,7 @@
 # Remove an Entry from the Library
 
 ## Context
-The user wants to remove a skill, agent, prompt, or MCP server from the library catalog and optionally delete the local copy.
+The user wants to remove a skill, agent, prompt, or MCP server from the agentic-library catalog and optionally delete the local copy.
 
 ## Permissions & Requirements
 > **Note:** Only owners and maintainers of the Git repository are allowed to execute `remove` commands directly on the catalog repository. Contributors without direct write access must submit a pull request / merge request.
@@ -26,11 +26,11 @@ git pull
 
 ### 3. Confirm with User
 Show the entry details and ask:
-- "Remove **<name>** from the library catalog?"
+- "Remove **<name>** from the agentic-library catalog?"
 - If installed locally, also ask: "Also delete the local copy at `<path>`?"
 
 ### 4. Remove from library.yaml
-- Remove the entry from the appropriate section (`library.skills`, `library.agents`, `library.prompts`, or `library.mcp`)
+- Remove the entry from the appropriate section (`agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, or `agentic-library.mcp`)
 - If other entries depend on this one (via `requires`), warn the user before proceeding
 
 ### 5. Delete Local Copy (if requested)
@@ -54,7 +54,7 @@ If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
-git commit -m "library: removed <type> <name>"
+git commit -m "agentic-library: removed <type> <name>"
 ```
 **Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
 ```bash

@@ -23,7 +23,7 @@ Think of it as a `package.json` for agent capabilities — but instead of packag
 - Any agent harness that reads skill files can run it (Claude Code, Pi, etc.)
 - You can modify behavior by editing markdown, not code
 - The skill can be extended, forked, and adapted instantly
-- An orchestrator agent can chain library commands without any tooling overhead
+- An orchestrator agent can chain agentic-library commands without any tooling overhead
 
 ## Why It Exists
 
@@ -64,7 +64,7 @@ default_dirs:
     - default: .agents/mcp/
     - global: ~/.agents/mcp/
 
-library:
+agentic-library:
   skills:
     - name: my-skill
       description: What this skill does

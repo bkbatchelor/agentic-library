@@ -1,6 +1,6 @@
 ---
 name: agentic-library
-description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private library catalog. Triggers on /agentic-library commands or mentions of library, skill distribution, agentic management, or MCP servers.
+description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private agentic-library catalog. Triggers on /agentic-library commands or mentions of agentic-library, skill distribution, agentic management, or MCP servers.
 argument-hint: [command or prompt] [name or details]
 ---
 
@@ -10,11 +10,11 @@ A meta-skill for private-first distribution of agentics (skills, agents, prompts
 
 ## Variables
 
-> Update these after forking and cloning the library repo.
+> Update these after forking and cloning the agentic-library repo.
 
 - **LIBRARY_REPO_URL**: `<your forked repo url>`
-- **LIBRARY_YAML_PATH**: `~/.agents/skills/library/library.yaml`
-- **LIBRARY_SKILL_DIR**: `~/.agents/skills/library/`
+- **LIBRARY_YAML_PATH**: `~/.agents/skills/agentic-library/library.yaml`
+- **LIBRARY_SKILL_DIR**: `~/.agents/skills/agentic-library/`
 
 ## How It Works
 
@@ -45,7 +45,7 @@ Each command has a detailed step-by-step guide. **Read the relevant cookbook fil
 | ------- | --------------------------------------- | ----------------------------------------------------------- |
 | install | [cookbook/install.md](cookbook/install.md) | First-time setup on a new device                            |
 | add     | [cookbook/add.md](cookbook/add.md)         | User wants to register a new skill/agent/prompt/mcp in catalog |
-| add     | [cookbook/README.md](cookbook/README.md)   | Worked examples for adding items and installing the library |
+| add     | [cookbook/README.md](cookbook/README.md)   | Worked examples for adding items and installing the agentic-library |
 | use     | [cookbook/use.md](cookbook/use.md)         | User wants to pull or refresh an item from the catalog       |
 | push    | [cookbook/push.md](cookbook/push.md)       | User improved a skill locally and wants to update the source |
 | remove  | [cookbook/remove.md](cookbook/remove.md)   | User wants to remove an entry from the catalog               |
@@ -93,7 +93,7 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 1. Clone the repo with `git clone --depth 1 <clone_url>` into a temporary directory
 2. Overwrite the skill directory in the clone with the local version
 3. Stage only the relevant changes: `git add <skill_directory_path>`
-4. Commit with message: `library: updated <skill name> <what changed>`
+4. Commit with message: `agentic-library: updated <skill name> <what changed>`
 5. **Ask for permission before pushing:** Always show the commit diff/summary and explicitly ask the user for permission before running `git push`.
 6. Push to remote (or create a feature branch and submit a merge request if lacking write access)
 7. The temporary directory is cleaned up automatically
@@ -101,10 +101,10 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 ## Typed Dependencies
 
 The `requires` field uses typed references to avoid ambiguity:
-- `skill:name` — references a skill in the library catalog
-- `agent:name` — references an agent in the library catalog
-- `prompt:name` — references a prompt in the library catalog
-- `mcp:name` — references an MCP server in the library catalog
+- `skill:name` — references a skill in the agentic-library catalog
+- `agent:name` — references an agent in the agentic-library catalog
+- `prompt:name` — references a prompt in the agentic-library catalog
+- `mcp:name` — references an MCP server in the agentic-library catalog
 
 When resolving dependencies: look up each reference in `library.yaml`, fetch all dependencies first (recursively), then fetch the requested item.
 
@@ -134,7 +134,7 @@ default_dirs:
 
 ## Harness Configuration Sync
 
-MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. The library agent does this in the background as part of the normal workflow.
+MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. The agentic-library agent does this in the background as part of the normal workflow.
 
 When you run `/agentic-library use <mcp-name>`, after copying the entry to `.agents/mcp/<name>/`:
 
@@ -151,8 +151,8 @@ The `mcp.json` file uses the opencode MCP server shape directly so the merge is 
 ## Library Repo Sync
 
 The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. When running `add` or `remove` (which modifies `library.yaml`), always:
-> **Note:** Only owners and maintainers of the library repo may push changes directly to `main`. Non-maintainers must create a branch and submit a merge request.
-1. `git pull` in the library directory first to get latest
+> **Note:** Only owners and maintainers of the agentic-library repo may push changes directly to `main`. Non-maintainers must create a branch and submit a merge request.
+1. `git pull` in the agentic-library directory first to get latest
 2. Make the changes
 3. Stage and commit: `git add library.yaml && git commit`
 4. **Ask for permission before pushing:** Always confirm with the user before executing `git push`.
@@ -177,7 +177,7 @@ default_dirs:
     - default: .agents/mcp/
     - global: ~/.agents/mcp/
 
-library:
+agentic-library:
   skills:
     - name: firecrawl
       description: Scrape, crawl, and search websites using Firecrawl CLI
