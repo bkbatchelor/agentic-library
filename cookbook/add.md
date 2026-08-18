@@ -66,7 +66,7 @@ If you are an owner or maintainer with direct push permissions:
 ```bash
 cd <LIBRARY_SKILL_DIR>
 git add library.yaml
-git commit -m "agentic-library: added <type> <name>"
+git commit -m "<commit-type>(agentic-library): added <type> <name>"
 ```
 **Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
 ```bash
@@ -74,6 +74,18 @@ git push
 ```
 If you do not have direct push permissions:
 - Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
+
+#### Commit Types
+
+| Commit Type | Description |
+|-------------|-------------|
+| feat | Introduces a new feature |
+| fix | Patches a bug in the codebase |
+| docs | Changes related to documentation |
+| style | Formatting changes (whitespace, formatting, etc.) |
+| refactor | Code changes that neither fix bugs nor add features |
+| perf | Performance improvements |
+| test | Adding or correcting tests |
 
 ### 7. Confirm
 Tell the user the entry has been added and is now available for others to use via `/agentic-library use <name>`.
