@@ -13,7 +13,10 @@ default_dirs:
     - global: ~/.agents/mcp/
 
 agentic-library:
-  skills: []
+  skills:
+    - name: commit-staged-changes
+      description: Commits only staged changes using a specific commit message template. Use when the user wants to commit staged changes without adding untracked files. Never stages new files.
+      source: https://github.com/bkbatchelor/skills/blob/main/commit-staged-changes/SKILL.md
   agents: []
   prompts: []
   mcp: []
