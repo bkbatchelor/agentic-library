@@ -12,7 +12,7 @@ A meta-skill for private-first distribution of agentics (skills, agents, prompts
 
 > Update these after forking and cloning the agentic-library repo.
 
-- **LIBRARY_REPO_URL**: `<your forked repo url>`
+- **LIBRARY_REPO_URL**: `git@github.com:bkbatchelor/agentic-library.git`
 - **LIBRARY_YAML_PATH**: `~/.agents/skills/agentic-library/library.yaml`
 - **LIBRARY_SKILL_DIR**: `~/.agents/skills/agentic-library/`
 
