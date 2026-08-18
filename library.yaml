@@ -17,6 +17,9 @@ agentic-library:
     - name: commit-staged-changes
       description: Commits only staged changes using a specific commit message template. Use when the user wants to commit staged changes without adding untracked files. Never stages new files.
       source: https://github.com/bkbatchelor/skills/blob/main/commit-staged-changes/SKILL.md
+    - name: generate-readme
+      description: Generates and updates README files with configurable fidelity levels. Use when creating or updating project README documentation. Supports BASIC, STANDARD, and ADVANCE levels with mermaid diagrams. Automatically handles existing README backups and respects .gitignore.
+      source: https://github.com/bkbatchelor/skills/blob/main/generate-readme/SKILL.md
   agents: []
   prompts: []
   mcp: []
