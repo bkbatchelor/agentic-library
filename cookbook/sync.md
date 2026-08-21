@@ -59,6 +59,14 @@ For each installed entry, fetch the latest from its source:
   ```bash
   cp -R "$tmp_dir/<parent_path>/" <target_directory>/<name>/
   ```
+**Save Installation Metadata**:
+- Before cleaning up `$tmp_dir` for GitHub URLs, capture the commit hash:
+  ```bash
+  commit_hash=$(git -C "$tmp_dir" rev-parse HEAD)
+  echo "{\"commit\": \"$commit_hash\"}" > <target_directory>/.<name>.agentic-metadata.json
+  ```
+- For Local Paths, capture the last modified timestamp of the source and save it similarly.
+
 - Clean up:
   ```bash
   rm -rf "$tmp_dir"

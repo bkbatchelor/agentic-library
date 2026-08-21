@@ -71,6 +71,14 @@ If the entry has a `requires` field:
   ```bash
   cp -R "$tmp_dir/<parent_path>/" <target_directory>/<name>/
   ```
+**Save Installation Metadata**:
+- For GitHub URLs, capture the commit hash of the pulled version:
+  ```bash
+  commit_hash=$(git -C "$tmp_dir" rev-parse HEAD)
+  echo "{\"commit\": \"$commit_hash\"}" > <target_directory>/.<name>.agentic-metadata.json
+  ```
+- For Local Paths, capture the last modified timestamp of the source and save it similarly.
+
 - Clean up:
   ```bash
   rm -rf "$tmp_dir"

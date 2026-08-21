@@ -25,19 +25,22 @@ The user provides an item name or description.
 ### 3. Check for Conflicts
 
 **If source is a local path:**
-- Compare the local installed copy with the source
-- If the source has been modified since last pull, warn the user:
-  "The source has changes that aren't in your local copy. Pushing will overwrite them. Continue?"
+- Read `.<name>.agentic-metadata.json` in the target directory to get the timestamp of the source when it was pulled.
+- Compare it to the current modified timestamp of the source.
+- If the source has been modified since it was pulled, warn the user:
+  "The source has been modified since your last pull. Pushing will overwrite these newer changes. Continue?"
 
 **If source is a GitHub URL:**
+- Read `.<name>.agentic-metadata.json` in the target directory to get the commit hash of the source when it was pulled.
 - Clone the repo to a temp directory (shallow):
   ```bash
   tmp_dir=$(mktemp -d)
   git clone --depth 1 --branch <branch> <clone_url> "$tmp_dir"
   ```
-- Compare the skill directory in the clone with the local copy
-- If they differ AND the remote has changes not in the local copy, warn about conflict
-- Ask the user to resolve before continuing
+- Compare the saved commit hash with the latest remote commit hash (`git -C "$tmp_dir" rev-parse HEAD`).
+- If the remote commit hash differs from the saved commit hash, the remote has advanced. Warn about the conflict:
+  "The remote source has new commits since your last pull. Pushing will overwrite them."
+- Ask the user to pull the latest changes and resolve the conflict before continuing.
 
 ### 4. Push to Source
 

@@ -505,7 +505,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 **Steps:**
 1. Entry found: `firecrawl` in `agentic-library.skills`
 2. Local copy located: `~/.agents/skills/firecrawl/` (only one copy — no need to ask which one)
-3. Conflict check: temp-cloned the source repo and compared `skills/firecrawl/` — the remote has no changes that aren't in the local copy, so no conflict
+3. Conflict check: read `~/.agents/skills/.firecrawl.agentic-metadata.json`, compared saved commit hash with latest remote commit hash — they match, so no conflict
 4. Applied the changes to the temp clone:
    ```bash
    tmp_dir=$(mktemp -d)
@@ -534,7 +534,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 **Steps:**
 1. Entry found: `video-processor` in `agentic-library.agents`
 2. Local copy located: `~/.agents/agents/video-processor/AGENT.md` (only one copy)
-3. Conflict check: source at `/Users/me/projects/tools/agents/video-processor/` compared — source unchanged since last pull, no conflict
+3. Conflict check: read `~/.agents/agents/.video-processor.agentic-metadata.json`, compared saved timestamp with current source timestamp — unchanged since last pull, no conflict
 4. Overwrote the source:
    ```bash
    cp -R ~/.agents/agents/video-processor/ /Users/me/projects/tools/agents/video-processor/
