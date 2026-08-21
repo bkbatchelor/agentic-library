@@ -1,7 +1,7 @@
 ---
 name: agentic-library
 description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private agentic-library catalog. Triggers on /agentic-library commands or mentions of agentic-library, skill distribution, agentic management, or MCP servers.
-argument-hint: [command or prompt] [name or details]
+argument-hint: <command or prompt> <name or details>
 ---
 
 # Agentic Library
