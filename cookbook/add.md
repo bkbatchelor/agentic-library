@@ -57,7 +57,7 @@ Read `library.yaml`, add the new entry under the correct section:
 - Keep entries alphabetically sorted by name within each section
 - For skills reference the `.../<skill-name>/SKILL.md` file,
 - For agents reference the `.../<agent name>.md` file,
-- For prompts reference the `.../<prompt name>.md` file (installed to `.agent/commands/`),
+- For prompts reference the `.../<prompt name>.md` file (installed to `.agents/commands/`),
 - For mcp reference the `.../<mcp-name>/mcp.json` file,
 - Remember we'll be adding a absolute path or a github url (https or ssh)
 
