@@ -7,7 +7,7 @@ First-time setup of Agentic Library on a new device. The user either has the tem
 
 ### 1. Check Prerequisites
 - Verify `git` is installed: `git --version`
-- Verify the global skills directory exists or can be created: `~/.agent/skills/`
+- Verify the global skills directory exists or can be created: `~/.agents/skills/`
 
 ### 2. Determine Fork Status
 Ask the user: **"Is this the template repo or your own fork?"**
@@ -39,8 +39,8 @@ If already cloned (e.g., user cloned the template first), just update the remote
 - Take note of your current working directory.
 - Update the `## Variables` section:
   - **LIBRARY_REPO_URL**: Set to the user's fork URL
-  - **LIBRARY_YAML_PATH**: Confirm path (default: `~/.agent/skills/agentic-library/library.yaml`)
-  - **LIBRARY_SKILL_DIR**: Confirm path (default: `~/.agent/skills/agentic-library/`)
+  - **LIBRARY_YAML_PATH**: Confirm path (default: `~/.agents/skills/agentic-library/library.yaml`)
+  - **LIBRARY_SKILL_DIR**: Confirm path (default: `~/.agents/skills/agentic-library/`)
 
 ### 5. Verify Installation
 - Confirm SKILL.md exists at `<LIBRARY_SKILL_DIR>/SKILL.md`
