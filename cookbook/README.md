@@ -185,14 +185,14 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 1. Library repo synced: `git pull`
 2. Entry found: `github` in `agentic-library.mcp`
 3. Dependencies: none
-4. Target directory: "globally" → `~/.agents/mcp/` for MCP
-5. Fetched from GitHub source: temp clone, copied `mcp/github/` → `~/.agents/mcp/github/`, temp dir cleaned up
-6. Verified: `~/.agents/mcp/github/mcp.json` exists
-7. Registered with the harness: the installed `mcp.json` (`{"type": "local", "command": [...]}`) was merged into `~/.config/opencode/opencode.json` under `mcp.github`, preserving existing keys
+4. Target directory: "globally" → `~/.claude/mcp/` for MCP
+5. Fetched from GitHub source: temp clone, copied `mcp/github/` → `~/.claude/mcp/github/`, temp dir cleaned up
+6. Verified: `~/.claude/mcp/github/mcp.json` exists
+7. Registered with the harness: the installed `mcp.json` (`{"type": "stdio", "command": "...", "args": [...]}`) was merged into `~/.claude.json` under `mcpServers.github`, preserving existing keys
 
 **Result:**
-- Installed at `~/.agents/mcp/github/`
-- Server registered with opencode — restart the harness for it to load
+- Installed at `~/.claude/mcp/github/`
+- Server registered with Claude Code — restart the harness for it to load
 
 ## Sync All Installed Items
 
@@ -226,7 +226,7 @@ Failed: 0 items
 
 **Result:**
 - All 4 installed items refreshed
-- MCP note: re-pulling only refreshed `.agents/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
+- MCP note: re-pulling only refreshed `.claude/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
 
 ### Example: Sync with a failure
 
@@ -374,7 +374,7 @@ Failed: 1 item
 
 ## Add an MCP Server
 
-MCP entries are validated more strictly than the other types: `mcp.json` must be a well-formed MCP server object in the harness's native format (opencode: `type` is required, `command` is an array of strings).
+MCP entries are validated more strictly than the other types: `mcp.json` must be a single well-formed MCP server object in Claude Code's format (`stdio`: `command` string with optional `args`/`env`; `http`/`sse`: `url` required).
 
 ### Example: Local MCP server
 
@@ -390,8 +390,9 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 ```json
 {
-  "type": "local",
-  "command": ["npx", "@playwright/mcp@latest"]
+  "type": "stdio",
+  "command": "npx",
+  "args": ["@playwright/mcp@latest"]
 }
 ```
 
@@ -486,7 +487,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 3. Confirmed with user
 4. Dependency check: no other entries reference `mcp:github`
 5. Entry removed from `agentic-library.mcp`
-6. Unregistered from the harness: deleted the `mcp.github` key from `~/.config/opencode/opencode.json` (it was a global install)
+6. Unregistered from the harness: deleted the `mcpServers.github` key from `~/.claude.json` (it was a global install)
 7. User restarts the harness for the removal to take effect
 
 **Result:**

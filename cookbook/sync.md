@@ -100,6 +100,6 @@ Synced: X items
 Failed: Y items
 ```
 
-**Note:** Re-pulling an MCP entry only refreshes the files in `.agents/mcp/<name>/`. The server stays registered in the harness config — no changes needed there.
+**Note:** Re-pulling an MCP entry only refreshes the files in `.claude/mcp/<name>/`. The server stays registered in the harness config — no changes needed there.
 
 If any items failed (e.g., network error, missing source), list them with the reason so the user can fix individually.
