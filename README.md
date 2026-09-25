@@ -61,8 +61,8 @@ default_dirs:
     - default: .agents/commands/
     - global: ~/.agents/commands/
   mcp:
-    - default: .agents/mcp/
-    - global: ~/.agents/mcp/
+    - default: .claude/mcp/
+    - global: ~/.claude/mcp/
 
 agentic-library:
   skills:
@@ -95,7 +95,7 @@ The source points to a specific file (`SKILL.md`, `AGENT.md`, a prompt file, or 
 
 For private repos, authentication uses SSH keys or `GITHUB_TOKEN` automatically.
 
-**MCP servers are also registered with the harness.** Installing an MCP entry merges its `mcp.json` into the active harness config (`~/.config/opencode/opencode.json` for global installs, `./opencode.json` for project installs) in the background, so the server is ready after a restart. Removing an MCP entry unregisters it.
+**MCP servers are also registered with the harness.** Installing an MCP entry merges its `mcp.json` into the active harness config — Claude Code by default (`~/.claude.json` for global installs, `./.mcp.json` for project installs, under `mcpServers.<name>`) in the background, so the server is ready after a restart. Removing an MCP entry unregisters it.
 
 ### Typed Dependencies
 

@@ -30,7 +30,9 @@ Figure out the type from the user's prompt or the source path:
 - **Local path**: Verify the file exists at the given path
 - **GitHub URL**: Verify the URL is well-formed (matches browser or raw URL patterns)
 - Confirm the source points to a specific file, not a directory
-- **For mcp**: Confirm `mcp.json` is a well-formed MCP server object in the harness's native format (opencode: `type` is required, `command` is an array of strings)
+- **For mcp**: Confirm `mcp.json` is a single well-formed MCP server object in Claude Code's format (the value that goes under `mcpServers.<name>`):
+  - `stdio` servers: `command` is a string, optional `args` is an array of strings, optional `env` is an object of strings (`type` may be omitted and defaults to `stdio`)
+  - `http` / `sse` servers: `type` is `http` or `sse`, `url` is required, optional `headers` is an object of strings
 
 ### 4. Parse Dependencies
 Detect dependencies by looking through the skill/agent/prompt/mcp files, format them as typed references:

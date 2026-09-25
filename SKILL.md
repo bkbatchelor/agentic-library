@@ -124,8 +124,8 @@ default_dirs:
         - default: .agents/commands/
         - global: ~/.agents/commands/
     mcp:
-        - default: .agents/mcp/
-        - global: ~/.agents/mcp/
+        - default: .claude/mcp/
+        - global: ~/.claude/mcp/
 ```
 
 - If the user says "global" or "globally", use the `global` directory.
@@ -134,19 +134,22 @@ default_dirs:
 
 ## Harness Configuration Sync
 
-MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. The agentic-library agent does this in the background as part of the normal workflow.
+MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. Claude Code is the default harness. The agentic-library agent does this in the background as part of the normal workflow.
 
-When you run `/agentic-library use <mcp-name>`, after copying the entry to `.agents/mcp/<name>/`:
+When you run `/agentic-library use <mcp-name>`, after copying the entry to `<mcp_dir>/<name>/` (`.claude/mcp/` by default):
 
-1. Read the contents of `.agents/mcp/<name>/mcp.json`. The file holds the server definition in the harness's native format (for opencode: the object under `mcp.<name>` — `{"type": "local", "command": [...], ...}`).
-2. **Global install** → merge the server into `~/.config/opencode/opencode.json` under `mcp.<name>`.
-3. **Default (project) install** → merge the server into `./opencode.json` (create the file if it doesn't exist), preserving all existing keys.
-4. If the harness is not opencode, skip the merge and tell the user how to register the server manually.
-5. Tell the user to **restart the harness** for the new MCP server to load.
+1. Read the contents of `<mcp_dir>/<name>/mcp.json`. The file holds a single server definition in Claude Code's format — the object that goes under `mcpServers.<name>` (e.g. `{"type": "stdio", "command": "npx", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`).
+2. **Global install** → merge the server into `~/.claude.json` under `mcpServers.<name>`, preserving all existing keys.
+3. **Default (project) install** → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
+4. If the user targets opencode instead, translate the server and merge it under `mcp.<name>` in `~/.config/opencode/opencode.json` (global) or `./opencode.json` (project):
+   - `stdio` → `{"type": "local", "command": [<command>, ...<args>], "environment": <env>}`
+   - `http` / `sse` → `{"type": "remote", "url": <url>, "headers": <headers>}`
+5. For any other harness, skip the merge and tell the user how to register the server manually.
+6. Tell the user to **restart the harness** for the new MCP server to load.
 
-When you run `/agentic-library remove <mcp-name>`, also delete the `mcp.<name>` key from the same harness config file.
+When you run `/agentic-library remove <mcp-name>`, also delete the server's key (`mcpServers.<name>` for Claude Code, `mcp.<name>` for opencode) from the same harness config file it was registered in.
 
-The `mcp.json` file uses the opencode MCP server shape directly so the merge is a 1:1 insert and opencode's strict config validation never rejects it.
+The `.claude/mcp/<name>/` folder is the library's own copy of the server definition. Claude Code does not read it directly — the server is only loaded once it is registered in `.mcp.json` or `~/.claude.json`.
 
 ## Library Repo Sync
 
@@ -174,8 +177,8 @@ default_dirs:
     - default: .agents/commands/
     - global: ~/.agents/commands/
   mcp:
-    - default: .agents/mcp/
-    - global: ~/.agents/mcp/
+    - default: .claude/mcp/
+    - global: ~/.claude/mcp/
 
 agentic-library:
   skills:

@@ -9,8 +9,8 @@ default_dirs:
     - default: .agents/commands/
     - global: ~/.agents/commands/
   mcp:
-    - default: .agents/mcp/
-    - global: ~/.agents/mcp/
+    - default: .claude/mcp/
+    - global: ~/.claude/mcp/
 
 agentic-library:
   skills:
