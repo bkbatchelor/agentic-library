@@ -132,6 +132,21 @@ default_dirs:
 - If the user specifies a custom path, use that path.
 - Otherwise, use the `project` directory.
 
+### Skill Symlinks for Claude Code
+
+Claude Code only discovers skills in `.claude/skills/` and `~/.claude/skills/`. After installing a skill, `use` keeps `.agents/skills/<name>/` as the one real copy and links it into Claude Code's skills folder:
+
+| Install scope | Real copy | Symlink |
+|---|---|---|
+| Project (default) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` (relative) |
+| Global | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Custom path | `<custom>/<name>/` | None — tell the user how to link it manually |
+
+- The link is created or refreshed with `ln -sfn`, so re-running `use` is idempotent.
+- A real (non-symlink) folder already at `.claude/skills/<name>` is never overwritten — warn and skip the link.
+- `remove` deletes the symlink too, but only if it is a symlink pointing into `.agents/skills/`.
+- Agents, prompts, and MCP servers are not symlinked.
+
 ## Harness Configuration Sync
 
 MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. Claude Code is the default harness. The agentic-library agent does this in the background as part of the normal workflow.

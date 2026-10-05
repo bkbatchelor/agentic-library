@@ -97,6 +97,8 @@ For private repos, authentication uses SSH keys or `GITHUB_TOKEN` automatically.
 
 **MCP servers are also registered with the harness.** Installing an MCP entry merges its `mcp.json` into the active harness config — Claude Code by default (`~/.claude.json` for global installs, `./.mcp.json` for project installs, under `mcpServers.<name>`) in the background, so the server is ready after a restart. Removing an MCP entry unregisters it.
 
+**Skills are linked into Claude Code automatically.** Installed skills live in `.agents/skills/<name>/` (or `~/.agents/skills/<name>/` globally), and `use` creates a symlink at `.claude/skills/<name>` (or `~/.claude/skills/<name>`) pointing to that copy, so Claude Code lists the skill as `/<name>` after a restart. An existing real folder at that path is never overwritten, and `remove` deletes the symlink along with the skill. Custom-path installs are not linked.
+
 ### Typed Dependencies
 
 Dependencies use typed references to avoid name collisions:
@@ -190,7 +192,7 @@ On another device, repo, or agent:
 /agentic-library use deploy
 ```
 
-This pulls the skill from the source repo into `.agents/skills/deploy/`.
+This pulls the skill from the source repo into `.agents/skills/deploy/` and links it into `.claude/skills/deploy` so Claude Code picks it up after a restart.
 
 Want it globally available on this machine?
 

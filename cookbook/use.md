@@ -94,7 +94,43 @@ If the entry has a `requires` field:
 - Confirm the main file (SKILL.md, AGENT.md, prompt file, or mcp.json) exists in it
 - Report success with the installed path
 
-### 7. Register MCP with the Harness
+### 7. Link Skill into Claude Code
+If the type is `skill`, link the installed copy into Claude Code's skills folder so the harness can find it. `.agents/skills/` stays the one real install location; `.claude/skills/<name>` is only a symlink to it. Skip this step for agents, prompts, and MCP servers.
+
+| Install scope | Real copy | Symlink |
+|---|---|---|
+| Project (default) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` |
+| Global | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Custom path | `<custom>/<name>/` | None — tell the user how to link it manually |
+
+- Pick the link folder: `.claude/skills/` (project) or `~/.claude/skills/` (global)
+- **Custom path** → do not create a link. Tell the user Claude Code will not see the skill until they link it, e.g. `ln -sfn <absolute_custom_path>/<name> ~/.claude/skills/<name>`
+- **Never overwrite a real folder.** If `<link_dir>/<name>` exists and is not a symlink, warn the user that a non-symlink folder is already there and skip the link
+- Otherwise create the folder and create or refresh the link with `ln -sfn` (idempotent, so re-running `use` never duplicates it). Use a relative target for project installs so the link survives moving or cloning the repo:
+  ```bash
+  # Project
+  mkdir -p .claude/skills
+  if [ -e .claude/skills/<name> ] && [ ! -L .claude/skills/<name> ]; then
+    echo "WARN: .claude/skills/<name> is a real folder; not linking"
+  else
+    ln -sfn ../../.agents/skills/<name> .claude/skills/<name>
+  fi
+
+  # Global
+  mkdir -p ~/.claude/skills
+  if [ -e ~/.claude/skills/<name> ] && [ ! -L ~/.claude/skills/<name> ]; then
+    echo "WARN: ~/.claude/skills/<name> is a real folder; not linking"
+  else
+    ln -sfn ~/.agents/skills/<name> ~/.claude/skills/<name>
+  fi
+  ```
+- Verify the link resolves to a folder containing `SKILL.md`:
+  ```bash
+  test -f <link_dir>/<name>/SKILL.md && echo "linked"
+  ```
+- Report both the install path and the link path. Tell the user to **restart Claude Code** so it lists the skill as `/<name>`
+
+### 8. Register MCP with the Harness
 If the type is `mcp`, register the server with the active agent harness so it is actually loaded. Claude Code is the default harness:
 - Read the installed `mcp.json` — it holds a single server definition in Claude Code's format (`{"type": "stdio", "command": "...", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`)
 - **Global install** → merge it into `~/.claude.json` under `mcpServers.<name>`, preserving existing keys
@@ -102,9 +138,10 @@ If the type is `mcp`, register the server with the active agent harness so it is
 - For any other harness, skip the merge and tell the user how to register the server manually
 - Tell the user to **restart the harness** for the new MCP server to load
 
-### 8. Confirm
+### 9. Confirm
 Tell the user:
 - What was installed and where
+- For skills, the `.claude/skills/<name>` symlink path (or why it was skipped) and to restart Claude Code
 - Any dependencies that were also installed
 - If this was a refresh (overwrite), mention that
 - For MCP entries, that the server was registered with the harness (and to restart)
