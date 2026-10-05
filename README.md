@@ -40,7 +40,7 @@ As you build with AI agents, you accumulate skills, custom agents, prompts, and 
 ![The Problem: Siloed Teams](images/32_problem_team_sharing.svg)
 
 Existing solutions don't fit:
-- **Global `~/.agents/*`** — exposes everything to every agent. Global is the opposite of specialized.
+- **Dumping everything into global `~/.agents/*` by hand** — every agent sees every agentic, copies drift out of date, and nothing records where they came from. Agentic Library installs globally by default for convenience, but each install is pulled from a tracked source and can be scoped to one project with `-p`.
 - **Single monorepo** — doesn't reflect reality. You build agentics in specific codebases for specific use cases.
 
 ## How It Works
@@ -111,7 +111,7 @@ Dependencies are resolved and pulled first, recursively.
 
 ## Prerequisites
 
-- **Coding Agents** (or a compatible agent harness that reads `.agents/skills/` — e.g., Pi)
+- **Claude Code** (or another agent harness that reads skill files — e.g., Pi)
 - **git** — for cloning sources and syncing the catalog
 - **gh** (optional) — GitHub CLI for forking, cloning, and private repo access. Install: `brew install gh` or see [gh docs](https://cli.github.com)
 - **GitHub SSH key or `GITHUB_TOKEN`** — for accessing private repos (not needed if using `gh auth login`)
@@ -182,7 +182,7 @@ You built a deploy skill in one of your repos. Register it:
 /agentic-library add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
 ```
 
-This adds a reference to `library.yaml` and pushes the update to your fork.
+This adds a reference to `library.yaml`, commits it, and pushes the update to your fork after asking for your permission.
 
 ### Use it in another project
 
@@ -241,7 +241,8 @@ Pull the latest version of all installed items:
 ~/.agents/skills/agentic-library/     # Agentic Library skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
     library.yaml              # Your catalog of references
-    cookbook/                  # Step-by-step guides for each command
+    cookbook/                 # Step-by-step guides for each command
+        README.md             # Worked examples for every command
         install.md
         add.md
         use.md
