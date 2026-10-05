@@ -46,7 +46,6 @@ If the user confirmed local deletion:
 If the type is `mcp`, also remove the server from the harness config it was registered in:
 - Delete the `mcpServers.<name>` key from `~/.claude.json` (if it was a global install)
 - Delete the `mcpServers.<name>` key from `./.mcp.json` (if it was a project install)
-- If it was registered with opencode, delete the `mcp.<name>` key from `~/.config/opencode/opencode.json` (global) or `./opencode.json` (project)
 - For any other harness, skip this step and tell the user to remove the server manually
 - Tell the user to **restart the harness** for the removal to take effect
 

@@ -141,13 +141,10 @@ When you run `/agentic-library use <mcp-name>`, after copying the entry to `<mcp
 1. Read the contents of `<mcp_dir>/<name>/mcp.json`. The file holds a single server definition in Claude Code's format — the object that goes under `mcpServers.<name>` (e.g. `{"type": "stdio", "command": "npx", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`).
 2. **Global install** → merge the server into `~/.claude.json` under `mcpServers.<name>`, preserving all existing keys.
 3. **Project install** → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
-4. If the user targets opencode instead, translate the server and merge it under `mcp.<name>` in `~/.config/opencode/opencode.json` (global) or `./opencode.json` (project):
-   - `stdio` → `{"type": "local", "command": [<command>, ...<args>], "environment": <env>}`
-   - `http` / `sse` → `{"type": "remote", "url": <url>, "headers": <headers>}`
-5. For any other harness, skip the merge and tell the user how to register the server manually.
-6. Tell the user to **restart the harness** for the new MCP server to load.
+4. For any other harness, skip the merge and tell the user how to register the server manually.
+5. Tell the user to **restart the harness** for the new MCP server to load.
 
-When you run `/agentic-library remove <mcp-name>`, also delete the server's key (`mcpServers.<name>` for Claude Code, `mcp.<name>` for opencode) from the same harness config file it was registered in.
+When you run `/agentic-library remove <mcp-name>`, also delete the server's `mcpServers.<name>` key from the same harness config file it was registered in (`~/.claude.json` for global, `./.mcp.json` for project).
 
 The `.claude/mcp/<name>/` folder is the library's own copy of the server definition. Claude Code does not read it directly — the server is only loaded once it is registered in `.mcp.json` or `~/.claude.json`.
 
