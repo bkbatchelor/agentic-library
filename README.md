@@ -97,7 +97,7 @@ For private repos, authentication uses SSH keys or `GITHUB_TOKEN` automatically.
 
 **MCP servers are also registered with the harness.** Installing an MCP entry merges its `mcp.json` into the active harness config — Claude Code by default (`~/.claude.json` for global installs, `./.mcp.json` for project installs, under `mcpServers.<name>`) in the background, so the server is ready after a restart. Removing an MCP entry unregisters it.
 
-**Skills are linked into Claude Code automatically.** Installed skills live in `.agents/skills/<name>/` (or `~/.agents/skills/<name>/` globally), and `use` creates a symlink at `.claude/skills/<name>` (or `~/.claude/skills/<name>`) pointing to that copy, so Claude Code lists the skill as `/<name>` after a restart. An existing real folder at that path is never overwritten, and `remove` deletes the symlink along with the skill. Custom-path installs are not linked.
+**Skills are linked into Claude Code automatically.** Installed skills live in `~/.agents/skills/<name>/` (or `.agents/skills/<name>/` with `--project`), and `use` creates a symlink at `~/.claude/skills/<name>` (or `.claude/skills/<name>`) pointing to that copy, so Claude Code lists the skill as `/<name>` after a restart. An existing real folder at that path is never overwritten, and `remove` deletes the symlink along with the skill. Custom-path installs are not linked.
 
 ### Typed Dependencies
 
@@ -192,13 +192,15 @@ On another device, repo, or agent:
 /agentic-library use deploy
 ```
 
-This pulls the skill from the source repo into `.agents/skills/deploy/` and links it into `.claude/skills/deploy` so Claude Code picks it up after a restart.
+This pulls the skill from the source repo into `~/.agents/skills/deploy/` and links it into `~/.claude/skills/deploy` so Claude Code picks it up after a restart. Installs are **global by default**, so the skill is available to every project on this machine.
 
-Want it globally available on this machine?
+Want it only in the current project instead?
 
 ```
-/agentic-library use deploy install globally
+/agentic-library use deploy -p    # or --project → .agents/skills/deploy/, linked at .claude/skills/deploy
 ```
+
+`-g` / `--global` selects global scope explicitly. Passing both flags is an error, a custom target path overrides either flag, and dependencies are installed in the same scope as the item that requires them. MCP servers follow the same rule: global installs go to `~/.claude/mcp/` and register in `~/.claude.json`; project installs go to `.claude/mcp/` and register in `./.mcp.json`.
 
 ### Push changes back
 
@@ -226,9 +228,9 @@ Pull the latest version of all installed items:
 | --------------------------- | ---------------------------------------------------------- | ----------- |
 | `/agentic-library install`          | First-time setup — fork, clone, configure                  | All users   |
 | `/agentic-library add <details>`    | Register a new entry in the catalog                        | Owner / Maintainer (or Merge Request) |
-| `/agentic-library use <name>`       | Pull from source into local directory (install or refresh) | All users   |
+| `/agentic-library use <name> [-g\|-p]` | Pull from source (install or refresh); global by default, `-p` for project | All users   |
 | `/agentic-library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
-| `/agentic-library remove <name>`    | Remove from catalog and optionally delete local copy       | Owner / Maintainer (or Merge Request) |
+| `/agentic-library remove <name> [-g\|-p]` | Remove from catalog and optionally delete the local copy (global by default) | Owner / Maintainer (or Merge Request) |
 | `/agentic-library list`             | Show full catalog with install status                      | All users   |
 | `/agentic-library sync`             | Re-pull all installed items from source                    | All users   |
 | `/agentic-library search <keyword>` | Find entries by name or description                        | All users   |
@@ -256,7 +258,7 @@ Pull the latest version of all installed items:
 - **Private-first**: Built for your specialized, competitive-edge agentics. Not a public marketplace.
 - **Reference-based**: The catalog stores pointers, not copies. Skills live in their source repos.
 - **Pure agent**: No scripts, no build tools. The SKILL.md teaches the agent everything it needs to know.
-- **Agent-agnostic**: Default target is `.agents/skills/` but supports any directory for any agent harness.
+- **Agent-agnostic**: Default target is `~/.agents/skills/` (global; `-p` for `.agents/skills/`) but supports any directory for any agent harness.
 - **Catalog, not manifest**: Entries define what's available, not what's installed. Pull on demand.
 
 ## The Agentic Stack

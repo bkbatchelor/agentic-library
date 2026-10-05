@@ -167,12 +167,12 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 1. Library repo synced: `git pull`
 2. Entry found: `diagram-kroki` in `agentic-library.skills`
 3. Dependencies resolved: `requires: [skill:firecrawl]` — `firecrawl` found in the catalog, so the `use` workflow runs for it first
-4. Target directory: default → `~/.agents/skills/` for skills
+4. Target directory: no scope flag → global (default) → `~/.agents/skills/` for skills; `firecrawl` uses the same scope
 5. Fetched from GitHub source: temp clone of the repo, copied `skills/diagram-kroki/` → `~/.agents/skills/diagram-kroki/`, temp dir cleaned up
 6. Verified: `~/.agents/skills/diagram-kroki/SKILL.md` exists
 
 **Result:**
-- Installed `~/.agents/skills/diagram-kroki/` (SKILL.md)
+- `Installed diagram-kroki globally → ~/.agents/skills/diagram-kroki`
 - Dependency `firecrawl` was installed first
 - If `diagram-kroki` was already installed, its local copy is overwritten with the latest from source (refresh)
 
@@ -185,13 +185,13 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 1. Library repo synced: `git pull`
 2. Entry found: `github` in `agentic-library.mcp`
 3. Dependencies: none
-4. Target directory: "globally" → `~/.claude/mcp/` for MCP
+4. Target directory: "globally" → `--global` → `~/.claude/mcp/` for MCP
 5. Fetched from GitHub source: temp clone, copied `mcp/github/` → `~/.claude/mcp/github/`, temp dir cleaned up
 6. Verified: `~/.claude/mcp/github/mcp.json` exists
 7. Registered with the harness: the installed `mcp.json` (`{"type": "stdio", "command": "...", "args": [...]}`) was merged into `~/.claude.json` under `mcpServers.github`, preserving existing keys
 
 **Result:**
-- Installed at `~/.claude/mcp/github/`
+- `Installed github globally → ~/.claude/mcp/github`
 - Server registered with Claude Code — restart the harness for it to load
 
 ## Sync All Installed Items
@@ -487,7 +487,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 3. Confirmed with user
 4. Dependency check: no other entries reference `mcp:github`
 5. Entry removed from `agentic-library.mcp`
-6. Unregistered from the harness: deleted the `mcpServers.github` key from `~/.claude.json` (it was a global install)
+6. Unregistered from the harness: no scope flag → global (default), so deleted the `mcpServers.github` key from `~/.claude.json`
 7. User restarts the harness for the removal to take effect
 
 **Result:**

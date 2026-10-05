@@ -30,9 +30,9 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 | --------------------------- | ---------------------------------------- |
 | `/agentic-library install`          | First-time setup: fork, clone, configure |
 | `/agentic-library add <details>`    | Register a new entry in the catalog (Owner/Maintainer or Merge Request) |
-| `/agentic-library use <name>`       | Pull from source (install or refresh)    |
+| `/agentic-library use <name> [-g\|-p]` | Pull from source (install or refresh); global by default |
 | `/agentic-library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
-| `/agentic-library remove <name>`    | Remove from catalog and optionally local (Owner/Maintainer or Merge Request) |
+| `/agentic-library remove <name> [-g\|-p]` | Remove from catalog and optionally local; global by default (Owner/Maintainer or Merge Request) |
 | `/agentic-library list`             | Show full catalog with install status    |
 | `/agentic-library sync`             | Re-pull all installed items from source   |
 | `/agentic-library search <keyword>` | Find entries by keyword                  |
@@ -110,7 +110,7 @@ When resolving dependencies: look up each reference in `library.yaml`, fetch all
 
 ## Target Directories
 
-By default, items are installed to the **default** directory from `library.yaml`:
+By default, items are installed **globally**, using the `global` directory from `library.yaml`:
 
 ```yaml
 default_dirs:
@@ -128,9 +128,20 @@ default_dirs:
         - global: ~/.claude/mcp/
 ```
 
-- If the user says "global" or "globally", use the `global` directory.
-- If the user specifies a custom path, use that path.
-- Otherwise, use the `project` directory.
+| Invocation | Scope | Skills / agents / prompts | MCP install dir | MCP registration |
+| --- | --- | --- | --- | --- |
+| `use <name>` | **Global** (default) | `~/.agents/<type>/` | `~/.claude/mcp/` | `~/.claude.json` |
+| `use <name> --global` / `-g` | Global | `~/.agents/<type>/` | `~/.claude/mcp/` | `~/.claude.json` |
+| `use <name> --project` / `-p` | Project | `.agents/<type>/` | `.claude/mcp/` | `./.mcp.json` |
+
+- Flags can appear anywhere after the item name.
+- Natural-language scope ("install globally", "for this project only") maps to the same flags.
+- Passing both `--global` and `--project` is an error: tell the user and stop without installing anything.
+- A custom target path overrides both flags.
+- Dependencies resolved through `requires` use the same scope as the parent item.
+- The skill symlink and MCP registration follow the resolved scope.
+- `remove` accepts the same flags (default global) to choose which local copy to delete.
+- The success message states the scope, e.g. `Installed <name> globally → ~/.agents/skills/<name>`.
 
 ### Skill Symlinks for Claude Code
 
@@ -138,8 +149,8 @@ Claude Code only discovers skills in `.claude/skills/` and `~/.claude/skills/`. 
 
 | Install scope | Real copy | Symlink |
 |---|---|---|
-| Project (default) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` (relative) |
-| Global | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Global (default, `-g`) | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Project (`-p`) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` (relative) |
 | Custom path | `<custom>/<name>/` | None — tell the user how to link it manually |
 
 - The link is created or refreshed with `ln -sfn`, so re-running `use` is idempotent.
@@ -151,11 +162,11 @@ Claude Code only discovers skills in `.claude/skills/` and `~/.claude/skills/`. 
 
 MCP entries are special: they don't just get installed to disk — they must also be **registered with the active agent harness** so the servers are actually loaded. Claude Code is the default harness. The agentic-library agent does this in the background as part of the normal workflow.
 
-When you run `/agentic-library use <mcp-name>`, after copying the entry to `<mcp_dir>/<name>/` (`.claude/mcp/` by default):
+When you run `/agentic-library use <mcp-name>`, after copying the entry to `<mcp_dir>/<name>/` (`~/.claude/mcp/` by default, `.claude/mcp/` with `--project`):
 
 1. Read the contents of `<mcp_dir>/<name>/mcp.json`. The file holds a single server definition in Claude Code's format — the object that goes under `mcpServers.<name>` (e.g. `{"type": "stdio", "command": "npx", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`).
-2. **Global install** → merge the server into `~/.claude.json` under `mcpServers.<name>`, preserving all existing keys.
-3. **Project install** → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
+2. **Global install** (default) → merge the server into `~/.claude.json` under `mcpServers.<name>`, preserving all existing keys.
+3. **Project install** (`--project` / `-p`) → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
 4. For any other harness, skip the merge and tell the user how to register the server manually.
 5. Tell the user to **restart the harness** for the new MCP server to load.
 
