@@ -1,15 +1,15 @@
 default_dirs:
   skills:
-    - default: .agents/skills/
+    - project: .agents/skills/
     - global: ~/.agents/skills/
   agents:
-    - default: .agents/agents/
+    - project: .agents/agents/
     - global: ~/.agents/agents/
   prompts:
-    - default: .agents/commands/
+    - project: .agents/commands/
     - global: ~/.agents/commands/
   mcp:
-    - default: .claude/mcp/
+    - project: .claude/mcp/
     - global: ~/.claude/mcp/
 
 agentic-library:

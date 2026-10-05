@@ -81,20 +81,20 @@ Each add example covers: type detection, source validation, dependency parsing, 
 **Steps:**
 1. Library repo synced: `git pull`
 2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
-3. Install status checked per entry: looked for the entry name in the default and global directories from `default_dirs`, marked `installed (default)`, `installed (global)`, or `not installed`
+3. Install status checked per entry: looked for the entry name in the project and global directories from `default_dirs`, marked `installed (project)`, `installed (global)`, or `not installed`
 
 **Displayed to the user (grouped by type):**
 
 ## Skills
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (default) |
+| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (project) |
 | diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | github.com/... | not installed |
 
 ## Agents
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (default) |
+| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (project) |
 
 ## Prompts
 No prompts in catalog.
@@ -102,7 +102,7 @@ No prompts in catalog.
 ## MCP Servers
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (default) |
+| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (project) |
 | github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
 
 **Summary:**
@@ -204,7 +204,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 **Steps:**
 1. Library repo synced: `git pull`
 2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
-3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the default/global directories — all four get re-pulled
+3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the project/global directories — all four get re-pulled
 4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
 5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
 

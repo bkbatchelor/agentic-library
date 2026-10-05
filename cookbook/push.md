@@ -17,7 +17,7 @@ The user provides an item name or description.
 - If no match, tell the user the item wasn't found in the catalog
 
 ### 2. Locate the Local Copy
-- Check the default directory for the type (from `default_dirs`)
+- Check the project directory for the type (from `default_dirs`)
 - Check the global directory
 - If found in multiple places, ask which one to push
 - If not found locally, tell the user there's nothing to push

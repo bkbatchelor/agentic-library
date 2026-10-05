@@ -34,7 +34,7 @@ If the entry has a `requires` field:
 - Read `default_dirs` from `library.yaml`
 - If user said "global" or "globally" → use the `global` path
 - If user specified a custom path → use that path
-- Otherwise → use the `default` path
+- Otherwise → use the `project` path
 - Select the correct section based on type (skills/agents/prompts/mcp)
 
 ### 5. Fetch from Source
@@ -98,7 +98,7 @@ If the entry has a `requires` field:
 If the type is `mcp`, register the server with the active agent harness so it is actually loaded. Claude Code is the default harness:
 - Read the installed `mcp.json` — it holds a single server definition in Claude Code's format (`{"type": "stdio", "command": "...", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`)
 - **Global install** → merge it into `~/.claude.json` under `mcpServers.<name>`, preserving existing keys
-- **Default (project) install** → merge it into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving existing keys
+- **Project install** → merge it into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving existing keys
 - If the user targets opencode, translate the server (`stdio` → `{"type": "local", "command": [<command>, ...<args>], "environment": <env>}`; `http`/`sse` → `{"type": "remote", "url": <url>, "headers": <headers>}`) and merge it under `mcp.<name>` in `~/.config/opencode/opencode.json` (global) or `./opencode.json` (project)
 - For any other harness, skip the merge and tell the user how to register the server manually
 - Tell the user to **restart the harness** for the new MCP server to load

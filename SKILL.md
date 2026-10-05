@@ -115,22 +115,22 @@ By default, items are installed to the **default** directory from `library.yaml`
 ```yaml
 default_dirs:
     skills:
-        - default: .agents/skills/
+        - project: .agents/skills/
         - global: ~/.agents/skills/
     agents:
-        - default: .agents/agents/
+        - project: .agents/agents/
         - global: ~/.agents/agents/
     prompts:
-        - default: .agents/commands/
+        - project: .agents/commands/
         - global: ~/.agents/commands/
     mcp:
-        - default: .claude/mcp/
+        - project: .claude/mcp/
         - global: ~/.claude/mcp/
 ```
 
 - If the user says "global" or "globally", use the `global` directory.
 - If the user specifies a custom path, use that path.
-- Otherwise, use the `default` directory.
+- Otherwise, use the `project` directory.
 
 ## Harness Configuration Sync
 
@@ -140,7 +140,7 @@ When you run `/agentic-library use <mcp-name>`, after copying the entry to `<mcp
 
 1. Read the contents of `<mcp_dir>/<name>/mcp.json`. The file holds a single server definition in Claude Code's format — the object that goes under `mcpServers.<name>` (e.g. `{"type": "stdio", "command": "npx", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`).
 2. **Global install** → merge the server into `~/.claude.json` under `mcpServers.<name>`, preserving all existing keys.
-3. **Default (project) install** → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
+3. **Project install** → merge the server into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving all existing keys.
 4. If the user targets opencode instead, translate the server and merge it under `mcp.<name>` in `~/.config/opencode/opencode.json` (global) or `./opencode.json` (project):
    - `stdio` → `{"type": "local", "command": [<command>, ...<args>], "environment": <env>}`
    - `http` / `sse` → `{"type": "remote", "url": <url>, "headers": <headers>}`
@@ -168,16 +168,16 @@ This keeps the catalog in sync across devices.
 ```yaml
 default_dirs:
   skills:
-    - default: .agents/skills/
+    - project: .agents/skills/
     - global: ~/.agents/skills/
   agents:
-    - default: .agents/agents/
+    - project: .agents/agents/
     - global: ~/.agents/agents/
   prompts:
-    - default: .agents/commands/
+    - project: .agents/commands/
     - global: ~/.agents/commands/
   mcp:
-    - default: .claude/mcp/
+    - project: .claude/mcp/
     - global: ~/.claude/mcp/
 
 agentic-library:
