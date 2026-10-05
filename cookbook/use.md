@@ -4,7 +4,12 @@
 Pull a skill, agent, prompt, or MCP server from the catalog into the local environment. If already installed locally, overwrite with the latest from the source (refresh).
 
 ## Input
-The user provides a skill name or description.
+The user provides a skill name or description, optionally followed by a scope flag:
+```bash
+/agentic-library use <name>             # no flag → global install (default)
+/agentic-library use <name> --global    # or -g → global install
+/agentic-library use <name> --project   # or -p → project install
+```
 
 ## Steps
 
@@ -26,16 +31,22 @@ git pull
 If the entry has a `requires` field:
 - For each typed reference (`skill:name`, `agent:name`, `prompt:name`, `mcp:name`):
   - Look it up in `library.yaml`
-  - If found, recursively run the `use` workflow for that dependency first
+  - If found, recursively run the `use` workflow for that dependency first, using the **same scope** as the parent item (resolved in step 4)
   - If not found, warn the user: "Dependency <ref> not found in agentic-library catalog"
 - Process all dependencies before the requested item
 
 ### 4. Determine Target Directory
-- Read `default_dirs` from `library.yaml`
-- If user said "global" or "globally" → use the `global` path
-- If user specified a custom path → use that path
-- Otherwise → use the `project` path
-- Select the correct section based on type (skills/agents/prompts/mcp)
+Resolve the scope **before** installing anything (including dependencies):
+- Parse scope flags anywhere after the item name: `--global` / `-g` and `--project` / `-p`
+- Natural-language scope maps to the same flags: "global", "globally", "for all projects" → `--global`; "project", "this project only", "locally" → `--project`
+- If both global and project are requested → report the conflict (`Conflicting scope: use either --global or --project, not both`) and **stop without installing anything**
+- Scope resolution:
+  - `--project` / `-p` → **project** scope
+  - `--global` / `-g` → **global** scope
+  - No flag → **global** scope (the default)
+- Read `default_dirs` from `library.yaml` and select the `global` or `project` path for the item's type (skills/agents/prompts/mcp)
+- If the user specified a custom path → use that path instead; it overrides both flags (for MCP, the custom path only changes where the files go — registration still follows the resolved scope)
+- Use the resolved scope for every dependency installed in step 3, and for the symlink (step 7) and MCP registration (step 8)
 
 ### 5. Fetch from Source
 
@@ -95,33 +106,33 @@ If the entry has a `requires` field:
 - Report success with the installed path
 
 ### 7. Link Skill into Claude Code
-If the type is `skill`, link the installed copy into Claude Code's skills folder so the harness can find it. `.agents/skills/` stays the one real install location; `.claude/skills/<name>` is only a symlink to it. Skip this step for agents, prompts, and MCP servers.
+If the type is `skill`, link the installed copy into the Claude Code skills folder for the scope resolved in step 4 so the harness can find it. `.agents/skills/` stays the one real install location; `.claude/skills/<name>` is only a symlink to it. Skip this step for agents, prompts, and MCP servers.
 
 | Install scope | Real copy | Symlink |
 |---|---|---|
-| Project (default) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` |
-| Global | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Global (default, `-g`) | `~/.agents/skills/<name>/` | `~/.claude/skills/<name>` → `~/.agents/skills/<name>` |
+| Project (`-p`) | `.agents/skills/<name>/` | `.claude/skills/<name>` → `../../.agents/skills/<name>` |
 | Custom path | `<custom>/<name>/` | None — tell the user how to link it manually |
 
-- Pick the link folder: `.claude/skills/` (project) or `~/.claude/skills/` (global)
+- Pick the link folder: `~/.claude/skills/` (global) or `.claude/skills/` (project)
 - **Custom path** → do not create a link. Tell the user Claude Code will not see the skill until they link it, e.g. `ln -sfn <absolute_custom_path>/<name> ~/.claude/skills/<name>`
 - **Never overwrite a real folder.** If `<link_dir>/<name>` exists and is not a symlink, warn the user that a non-symlink folder is already there and skip the link
 - Otherwise create the folder and create or refresh the link with `ln -sfn` (idempotent, so re-running `use` never duplicates it). Use a relative target for project installs so the link survives moving or cloning the repo:
   ```bash
-  # Project
-  mkdir -p .claude/skills
-  if [ -e .claude/skills/<name> ] && [ ! -L .claude/skills/<name> ]; then
-    echo "WARN: .claude/skills/<name> is a real folder; not linking"
-  else
-    ln -sfn ../../.agents/skills/<name> .claude/skills/<name>
-  fi
-
-  # Global
+  # Global (default)
   mkdir -p ~/.claude/skills
   if [ -e ~/.claude/skills/<name> ] && [ ! -L ~/.claude/skills/<name> ]; then
     echo "WARN: ~/.claude/skills/<name> is a real folder; not linking"
   else
     ln -sfn ~/.agents/skills/<name> ~/.claude/skills/<name>
+  fi
+
+  # Project (--project / -p)
+  mkdir -p .claude/skills
+  if [ -e .claude/skills/<name> ] && [ ! -L .claude/skills/<name> ]; then
+    echo "WARN: .claude/skills/<name> is a real folder; not linking"
+  else
+    ln -sfn ../../.agents/skills/<name> .claude/skills/<name>
   fi
   ```
 - Verify the link resolves to a folder containing `SKILL.md`:
@@ -131,16 +142,16 @@ If the type is `skill`, link the installed copy into Claude Code's skills folder
 - Report both the install path and the link path. Tell the user to **restart Claude Code** so it lists the skill as `/<name>`
 
 ### 8. Register MCP with the Harness
-If the type is `mcp`, register the server with the active agent harness so it is actually loaded. Claude Code is the default harness:
+If the type is `mcp`, register the server with the active agent harness so it is actually loaded, using the scope resolved in step 4. Claude Code is the default harness:
 - Read the installed `mcp.json` — it holds a single server definition in Claude Code's format (`{"type": "stdio", "command": "...", "args": [...], "env": {...}}` or `{"type": "http", "url": "..."}`)
-- **Global install** → merge it into `~/.claude.json` under `mcpServers.<name>`, preserving existing keys
-- **Project install** → merge it into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving existing keys
+- **Global install** (default) → merge it into `~/.claude.json` under `mcpServers.<name>`, preserving existing keys
+- **Project install** (`--project` / `-p`) → merge it into `./.mcp.json` under `mcpServers.<name>` (create the file as `{"mcpServers": {}}` if it doesn't exist), preserving existing keys
 - For any other harness, skip the merge and tell the user how to register the server manually
 - Tell the user to **restart the harness** for the new MCP server to load
 
 ### 9. Confirm
 Tell the user:
-- What was installed and where
+- What was installed, which scope was used, and where — e.g. `Installed <name> globally → ~/.agents/skills/<name>` or `Installed <name> for this project → .agents/skills/<name>`
 - For skills, the `.claude/skills/<name>` symlink path (or why it was skipped) and to restart Claude Code
 - Any dependencies that were also installed
 - If this was a refresh (overwrite), mention that
