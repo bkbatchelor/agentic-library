@@ -19,10 +19,10 @@ git pull
 ### 3. Find All Installed Items
 For each entry in the catalog:
 - Determine the type (skill, agent, prompt, mcp) and corresponding directories from `default_dirs`
-- Check if a directory or file matching the entry name exists in the **default** directory
+- Check if a directory or file matching the entry name exists in the **project** directory
 - Check if a directory or file matching the entry name exists in the **global** directory
 - Search recursively for name matches
-- Collect every entry that is installed locally (either default or global)
+- Collect every entry that is installed locally (either project or global)
 - If nothing is installed, tell the user and exit
 
 ### 4. Re-pull Each Installed Item

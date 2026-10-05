@@ -35,7 +35,7 @@ Show the entry details and ask:
 
 ### 5. Delete Local Copy (if requested)
 If the user confirmed local deletion:
-- Check the default directory for the type (from `default_dirs`)
+- Check the project directory for the type (from `default_dirs`)
 - Check the global directory
 - Remove the directory or file:
   ```bash

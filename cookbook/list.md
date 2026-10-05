@@ -18,11 +18,11 @@ git pull
 
 ### 3. Check Install Status
 For each entry:
-- Determine the type and corresponding default/global directories from `default_dirs`
-- Check if a directory matching the entry name exists in the **default** directory
+- Determine the type and corresponding project/global directories from `default_dirs`
+- Check if a directory matching the entry name exists in the **project** directory
 - Check if a directory matching the entry name exists in the **global** directory
 - Search recursively for name matches
-- Mark as: `installed (default)`, `installed (global)`, or `not installed`
+- Mark as: `installed (project)`, `installed (global)`, or `not installed`
 
 ### 4. Display Results
 
@@ -32,7 +32,7 @@ Format the output as a table grouped by type:
 ## Skills
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| skill-name | skill-description | /local/path/... | installed (default) |
+| skill-name | skill-description | /local/path/... | installed (project) |
 | other-skill | other-description | github.com/... | not installed |
 
 ## Agents
