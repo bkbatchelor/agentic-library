@@ -20,6 +20,9 @@ agentic-library:
     - name: generate-readme
       description: Generates and updates README files with configurable fidelity levels. Use when creating or updating project README documentation. Supports BASIC, STANDARD, and ADVANCE levels with mermaid diagrams. Automatically handles existing README backups and respects .gitignore.
       source: https://github.com/bkbatchelor/skills/blob/main/generate-readme/SKILL.md
+    - name: goal-prompt-generator
+      description: Turns an implementation plan or task description into a bounded, self-contained goal prompt that a fresh agent session can execute autonomously and be checked against — objective, definition of done, repo constraints, verification gates, and stop conditions. Use whenever the user asks to package work for another session/agent, write a goal prompt, hand off a task, prepare a task for autonomous or background execution, write a prompt for a subagent/cloud agent/worktree session, or says things like "turn this plan into something another Claude can run" or "make this a task I can kick off later" — even if they don't say "goal prompt".
+      source: https://github.com/bkbatchelor/skills/blob/main/goal-prompt-generator/SKILL.md
   agents: []
   prompts: []
   mcp: []
