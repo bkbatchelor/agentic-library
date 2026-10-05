@@ -41,6 +41,13 @@ If the user confirmed local deletion:
   ```bash
   rm -rf <target_directory>/<name>
   ```
+- For skills, also delete the matching Claude Code symlink (`.claude/skills/<name>` for project, `~/.claude/skills/<name>` for global), but **only if it is a symlink pointing into `.agents/skills/`**. Leave real folders and links pointing elsewhere alone, and tell the user:
+  ```bash
+  link=.claude/skills/<name>   # or ~/.claude/skills/<name>
+  if [ -L "$link" ] && case "$(readlink "$link")" in *.agents/skills/*) true;; *) false;; esac; then
+    rm "$link"
+  fi
+  ```
 
 ### 6. Unregister MCP from the Harness
 If the type is `mcp`, also remove the server from the harness config it was registered in:
@@ -67,6 +74,6 @@ If you do not have direct push permissions:
 ### 8. Confirm
 Tell the user:
 - The entry has been removed from the catalog
-- Whether the local copy was also deleted
+- Whether the local copy was also deleted (and, for skills, its `.claude/skills/<name>` symlink)
 - For MCP entries, that the server was unregistered from the harness (and to restart)
 - If other entries depended on it, remind them to update those entries
