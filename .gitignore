@@ -3,3 +3,7 @@
 *.tmp
 .agents/
 .archify/
+artifacts/
+logs/
+workflow-source/
+worktrees/
