@@ -8,11 +8,11 @@ The user provides a keyword or description.
 
 ## Steps
 
-### 1. Sync the Library Repo
-Pull the latest catalog before reading:
+### 1. Check the Catalog
+Make sure the local catalog exists (see *The Catalog File* in `SKILL.md`). No `git pull` is needed — `library.yaml` is local to this machine:
 ```bash
 cd <LIBRARY_SKILL_DIR>
-git pull
+[ -f library.yaml ] || { cp library.example.yaml library.yaml && chmod 444 library.yaml; }
 ```
 
 ### 2. Read the Catalog

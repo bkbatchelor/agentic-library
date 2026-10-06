@@ -4,18 +4,18 @@
 Register a new skill, agent, prompt, or MCP server in the agentic-library catalog.
 
 ## Permissions & Requirements
-> **Note:** Only owners and maintainers of the Git repository are allowed to execute `add` commands directly to the catalog repository. Contributors without direct write permissions must submit a pull request / merge request with proposed changes.
+> **Note:** `add` only edits your local `library.yaml`, which is gitignored and read-only. It needs no write access to the agentic-library repo and never commits or pushes.
 
 ## Input
 The user provides: name, description, source, and optionally type and dependencies.
 
 ## Steps
 
-### 1. Sync the Library Repo
-Pull the latest changes before modifying:
+### 1. Check the Catalog
+Make sure the local catalog exists (see *The Catalog File* in `SKILL.md`):
 ```bash
 cd <LIBRARY_SKILL_DIR>
-git pull
+[ -f library.yaml ] || { cp library.example.yaml library.yaml && chmod 444 library.yaml; }
 ```
 
 ### 2. Determine the Type
@@ -42,7 +42,14 @@ Detect dependencies by looking through the skill/agent/prompt/mcp files, format 
   - You can detect these sometimes by looking at the frontmatter, and then in the file content look for `/<prompt|agent|skill|mcp>:name` references. If you're not sure, ask the user the user if they have any dependencies.
 
 ### 5. Add the Entry to library.yaml
-Read `library.yaml`, add the new entry under the correct section:
+`library.yaml` is read-only. Unlock it, add the new entry under the correct section, then lock it again — always relock, even if the edit fails:
+```bash
+chmod u+w <LIBRARY_YAML_PATH>
+# add the entry
+chmod a-w <LIBRARY_YAML_PATH>
+```
+
+The entry:
 
 ```yaml
 # Under agentic-library.skills, agentic-library.agents, agentic-library.prompts, or agentic-library.mcp
@@ -63,31 +70,5 @@ Read `library.yaml`, add the new entry under the correct section:
 - For mcp reference the `.../<mcp-name>/mcp.json` file,
 - Remember we'll be adding a absolute path or a github url (https or ssh)
 
-### 6. Commit and Push (or Submit Merge Request)
-If you are an owner or maintainer with direct push permissions:
-```bash
-cd <LIBRARY_SKILL_DIR>
-git add library.yaml
-git commit -m "<commit-type>(agentic-library): added <type> <name>"
-```
-**Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
-```bash
-git push
-```
-If you do not have direct push permissions:
-- Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
-
-#### Commit Types
-
-| Commit Type | Description |
-|-------------|-------------|
-| feat | Introduces a new feature |
-| fix | Patches a bug in the codebase |
-| docs | Changes related to documentation |
-| style | Formatting changes (whitespace, formatting, etc.) |
-| refactor | Code changes that neither fix bugs nor add features |
-| perf | Performance improvements |
-| test | Adding or correcting tests |
-
-### 7. Confirm
-Tell the user the entry has been added and is now available for others to use via `/agentic-library use <name>`.
+### 6. Confirm
+Tell the user the entry has been added to their local catalog and can be installed with `/agentic-library use <name>`. Do not commit or push `library.yaml` — it is gitignored and stays on this machine; to use the entry on another device, run `add` there.
