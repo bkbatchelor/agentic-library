@@ -22,17 +22,35 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 
 **The `library.yaml` is a catalog, not a manifest.** Entries define what's *available* — not what gets installed. You pull specific items on demand with `/agentic-library use <name>`.
 
+## The Catalog File
+
+`library.yaml` is a **local, per-machine catalog**. It is listed in `.gitignore`, so it is never committed or pushed, and it is kept **read-only** (`chmod 444`) so it is not edited by accident.
+
+- **Template:** the repo tracks `library.example.yaml` (the `default_dirs` block and empty sections). If `library.yaml` is missing, create it before running any command:
+  ```bash
+  cd <LIBRARY_SKILL_DIR>
+  [ -f library.yaml ] || { cp library.example.yaml library.yaml && chmod 444 library.yaml; }
+  ```
+- **Reading** (`list`, `search`, `use`, `sync`, `push`): read `library.yaml` directly. No `git pull` is needed — pulling the repo updates the skill and the template, never your catalog.
+- **Editing** (`add`, `remove`): unlock, edit, relock. Always relock, even if the edit fails:
+  ```bash
+  chmod u+w <LIBRARY_YAML_PATH>
+  # edit library.yaml
+  chmod a-w <LIBRARY_YAML_PATH>
+  ```
+- **No commit or push.** Catalog changes stay on this machine. To use the same entries on another device, run `add` there.
+
 ## Commands
 
-> **Permissions Note:** Only owners and maintainers of the Git repository are allowed to execute `add`, `push`, or `remove` commands directly. All other contributors must submit a merge request (pull request) to propose changes to the catalog or source repositories.
+> **Permissions Note:** `push` writes to an item's source repository, so only owners and maintainers of that repository may push directly; everyone else must submit a merge request (pull request). `add` and `remove` only edit your local `library.yaml`.
 
 | Command                     | Purpose                                  |
 | --------------------------- | ---------------------------------------- |
 | `/agentic-library install`          | First-time setup: fork, clone, configure |
-| `/agentic-library add <details>`    | Register a new entry in the catalog (Owner/Maintainer or Merge Request) |
+| `/agentic-library add <details>`    | Register a new entry in your local catalog |
 | `/agentic-library use <name> [-g\|-p]` | Pull from source (install or refresh); global by default |
 | `/agentic-library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
-| `/agentic-library remove <name> [-g\|-p]` | Remove from catalog and optionally local; global by default (Owner/Maintainer or Merge Request) |
+| `/agentic-library remove <name> [-g\|-p]` | Remove from your local catalog and optionally the installed copy; global by default |
 | `/agentic-library list`             | Show full catalog with install status    |
 | `/agentic-library sync`             | Re-pull all installed items from source   |
 | `/agentic-library search <keyword>` | Find entries by keyword                  |
@@ -176,15 +194,7 @@ The `.claude/mcp/<name>/` folder is the library's own copy of the server definit
 
 ## Library Repo Sync
 
-The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. When running `add` or `remove` (which modifies `library.yaml`), always:
-> **Note:** Only owners and maintainers of the agentic-library repo may push changes directly to `main`. Non-maintainers must create a branch and submit a merge request.
-1. `git pull` in the agentic-library directory first to get latest
-2. Make the changes
-3. Stage and commit: `git add library.yaml && git commit`
-4. **Ask for permission before pushing:** Always confirm with the user before executing `git push`.
-5. `git push` (or submit a merge request if lacking direct push permissions)
-
-This keeps the catalog in sync across devices.
+The library skill itself lives in `<LIBRARY_SKILL_DIR>` as a cloned git repo. `git pull` there updates the skill (`SKILL.md`, the cookbook, `library.example.yaml`) but never touches your catalog, because `library.yaml` is gitignored. `add` and `remove` edit only the local `library.yaml` and never commit or push it — see [The Catalog File](#the-catalog-file).
 
 ## Example Filled Library File
 

@@ -7,3 +7,4 @@ artifacts/
 logs/
 workflow-source/
 worktrees/
+library.yaml

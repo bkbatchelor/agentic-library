@@ -2,7 +2,7 @@
 
 Worked examples for the `/agentic-library install`, `/agentic-library use`, `/agentic-library add`, `/agentic-library remove`, `/agentic-library push`, `/agentic-library search`, `/agentic-library list`, and `/agentic-library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, and variable setup. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: syncing, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, re-pulling from source, and the summary report.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, variable setup, and creating the local catalog. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: checking the catalog, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, re-pulling from source, and the summary report.
 
 ## Table of Contents
 
@@ -44,9 +44,10 @@ Each add example covers: type detection, source validation, dependency parsing, 
    - `LIBRARY_REPO_URL` → the user's fork URL
    - `LIBRARY_YAML_PATH` → confirm path
    - `LIBRARY_SKILL_DIR` → confirm path
+5. Local catalog created from the template: `cp library.example.yaml library.yaml && chmod 444 library.yaml`
 
 **Result:**
-- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/agentic-library/`
+- `SKILL.md` and a read-only, gitignored `library.yaml` exist at `~/.agents/skills/agentic-library/`
 - The `/agentic-library` command is now available
 - `/agentic-library list` shows the catalog (empty by default)
 - `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
@@ -66,9 +67,10 @@ Each add example covers: type detection, source validation, dependency parsing, 
    git clone <fork_url> .
    ```
 4. Update the `## Variables` section in `SKILL.md` (same as the first install example)
+5. Local catalog created from the template (same as the first install example) — it starts empty, because catalogs are per-machine
 
 **Result:**
-- `SKILL.md` and `library.yaml` exist at `~/.agents/skills/agentic-library/`
+- `SKILL.md` and a read-only, gitignored `library.yaml` exist at `~/.agents/skills/agentic-library/`
 - `/agentic-library list` shows the catalog, `/agentic-library use <name>` pulls entries on demand
 
 ## List the Catalog
@@ -79,7 +81,7 @@ Each add example covers: type detection, source validation, dependency parsing, 
 > List what's in the agentic-library
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Install status checked per entry: looked for the entry name in the project and global directories from `default_dirs`, marked `installed (project)`, `installed (global)`, or `not installed`
 
@@ -116,7 +118,7 @@ No prompts in catalog.
 > Search for something to make diagrams
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Keyword `diagrams` matched case-insensitively against entry `name` and `description` fields (substring match)
 4. Matches collected across all types
@@ -141,7 +143,7 @@ No prompts in catalog.
 > Search the agentic-library for "quantum computing"
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Catalog parsed
 3. Keyword `quantum computing` matched no names or descriptions
 
@@ -164,7 +166,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 > Use the diagram-kroki skill
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Entry found: `diagram-kroki` in `agentic-library.skills`
 3. Dependencies resolved: `requires: [skill:firecrawl]` — `firecrawl` found in the catalog, so the `use` workflow runs for it first
 4. Target directory: no scope flag → global (default) → `~/.agents/skills/` for skills; `firecrawl` uses the same scope
@@ -182,7 +184,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 > Use the github MCP server globally
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Entry found: `github` in `agentic-library.mcp`
 3. Dependencies: none
 4. Target directory: "globally" → `--global` → `~/.claude/mcp/` for MCP
@@ -202,7 +204,7 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 > Sync everything
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
 3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the project/global directories — all four get re-pulled
 4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
@@ -234,7 +236,7 @@ Failed: 0 items
 > Sync the agentic-library
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Installed items collected: `firecrawl`, `diagram-kroki`, and `playwright`
 3. Re-pull attempted for each — `diagram-kroki` failed (source repo unreachable / network error)
 
@@ -268,6 +270,7 @@ Failed: 1 item
 1. Type detected: `skill` (source path contains `SKILL.md`)
 2. Source validated: local path exists
 3. Dependencies: none found in the frontmatter
+4. Catalog edited: `chmod u+w library.yaml`, entry added, `chmod a-w library.yaml` — nothing committed or pushed
 
 **YAML added to `agentic-library.skills` (kept alphabetically sorted):**
 
@@ -445,7 +448,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 
 ## Remove an Entry from the Catalog
 
-> **Note:** Only owners and maintainers with direct push access can run `remove` directly on the catalog repo. Contributors must submit a pull request / merge request instead.
+> **Note:** `remove` only edits your local `library.yaml` (unlock, edit, relock); it never commits or pushes.
 
 ### Example: Remove a skill and its local copy
 
@@ -453,11 +456,11 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 > Remove the diagram-kroki skill
 
 **Steps:**
-1. Library repo synced: `git pull` before modifying
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Entry found: `diagram-kroki` in `agentic-library.skills`, type `skill`
 3. Confirmed with user: "Remove diagram-kroki from the agentic-library catalog?" and "Also delete the local copy at `~/.agents/skills/diagram-kroki`?"
 4. Dependency check: no other entries list `skill:diagram-kroki` in `requires` — safe to remove
-5. Entry removed from `agentic-library.skills`
+5. Entry removed from `agentic-library.skills` (catalog unlocked with `chmod u+w`, edited, relocked with `chmod a-w`)
 6. Local copy deleted (user confirmed): `rm -rf ~/.agents/skills/diagram-kroki`
 
 **YAML before:**
@@ -474,7 +477,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 **Result:**
 - Entry removed from the catalog
 - Local copy deleted
-- Change committed (`agentic-library: removed skill diagram-kroki`) and pushed after asking for permission
+- `library.yaml` relocked read-only; nothing committed or pushed
 
 ### Example: Remove an MCP server and unregister it from the harness
 
@@ -482,7 +485,7 @@ MCP entries are validated more strictly than the other types: `mcp.json` must be
 > Remove the github MCP server
 
 **Steps:**
-1. Library repo synced: `git pull`
+1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
 2. Entry found: `github` in `agentic-library.mcp`, type `mcp`
 3. Confirmed with user
 4. Dependency check: no other entries reference `mcp:github`

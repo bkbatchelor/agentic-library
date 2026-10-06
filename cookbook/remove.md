@@ -4,7 +4,7 @@
 The user wants to remove a skill, agent, prompt, or MCP server from the agentic-library catalog and optionally delete the local copy.
 
 ## Permissions & Requirements
-> **Note:** Only owners and maintainers of the Git repository are allowed to execute `remove` commands directly on the catalog repository. Contributors without direct write access must submit a pull request / merge request.
+> **Note:** `remove` only edits your local `library.yaml`, which is gitignored and read-only. It needs no write access to the agentic-library repo and never commits or pushes.
 
 ## Input
 The user provides a skill name or description, optionally followed by a scope flag that selects which local copy to delete:
@@ -17,11 +17,11 @@ Scope is resolved the same way as in [use.md](use.md) step 4: flags may appear a
 
 ## Steps
 
-### 1. Sync the Library Repo
-Pull the latest catalog before modifying:
+### 1. Check the Catalog
+Make sure the local catalog exists (see *The Catalog File* in `SKILL.md`):
 ```bash
 cd <LIBRARY_SKILL_DIR>
-git pull
+[ -f library.yaml ] || { cp library.example.yaml library.yaml && chmod 444 library.yaml; }
 ```
 
 ### 2. Find the Entry
@@ -37,6 +37,12 @@ Show the entry details and ask:
 - If it is only installed in the other scope, mention that and leave it alone unless the user re-runs with that scope's flag
 
 ### 4. Remove from library.yaml
+- `library.yaml` is read-only: unlock it, remove the entry, then lock it again — always relock, even if the edit fails:
+  ```bash
+  chmod u+w <LIBRARY_YAML_PATH>
+  # remove the entry
+  chmod a-w <LIBRARY_YAML_PATH>
+  ```
 - Remove the entry from the appropriate section (`agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, or `agentic-library.mcp`)
 - If other entries depend on this one (via `requires`), warn the user before proceeding
 
@@ -62,23 +68,9 @@ If the type is `mcp`, also remove the server from the harness config for the res
 - For any other harness, skip this step and tell the user to remove the server manually
 - Tell the user to **restart the harness** for the removal to take effect
 
-### 7. Commit and Push (or Submit Merge Request)
-If you are an owner or maintainer with direct push permissions:
-```bash
-cd <LIBRARY_SKILL_DIR>
-git add library.yaml
-git commit -m "agentic-library: removed <type> <name>"
-```
-**Ask for user permission before pushing:** Always show the commit message and target branch, then confirm with the user before running:
-```bash
-git push
-```
-If you do not have direct push permissions:
-- Create a new branch, commit the `library.yaml` change, push the branch, and submit a pull request / merge request.
-
-### 8. Confirm
+### 7. Confirm
 Tell the user:
-- The entry has been removed from the catalog
+- The entry has been removed from the local catalog (nothing is committed or pushed; `library.yaml` stays on this machine)
 - Whether the local copy was also deleted, from which scope (and, for skills, its `.claude/skills/<name>` symlink)
 - For MCP entries, that the server was unregistered from the harness (and to restart)
 - If other entries depended on it, remind them to update those entries

@@ -42,14 +42,24 @@ If already cloned (e.g., user cloned the template first), just update the remote
   - **LIBRARY_YAML_PATH**: Confirm path (default: `~/.agents/skills/agentic-library/library.yaml`)
   - **LIBRARY_SKILL_DIR**: Confirm path (default: `~/.agents/skills/agentic-library/`)
 
-### 5. Verify Installation
+### 5. Create the Local Catalog
+`library.yaml` is gitignored, so a fresh clone does not have one. Create it from the tracked template and make it read-only:
+```bash
+cd <LIBRARY_SKILL_DIR>
+[ -f library.yaml ] || cp library.example.yaml library.yaml
+chmod 444 library.yaml
+```
+The catalog is local to this machine. It is never committed or pushed; `add` and `remove` unlock it, edit it, and lock it again.
+
+### 6. Verify Installation
 - Confirm SKILL.md exists at `<LIBRARY_SKILL_DIR>/SKILL.md`
-- Confirm library.yaml exists at `<LIBRARY_SKILL_DIR>/library.yaml`
+- Confirm library.yaml exists at `<LIBRARY_SKILL_DIR>/library.yaml` and is read-only (`test ! -w library.yaml`)
+- Confirm `git status` does not list `library.yaml` (it is gitignored)
 - Confirm the `/agentic-library` command is now available
 
-### 6. Done
+### 7. Done
 Tell the user:
 - Agentic Library is now globally available
-- `/agentic-library list` will show the catalog (empty by default)
+- `/agentic-library list` will show the catalog (empty by default); `library.yaml` is local to this machine
 - `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
 - The `justfile` in the agentic-library directory has shorthand commands

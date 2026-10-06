@@ -83,6 +83,8 @@ agentic-library:
 
 The catalog stores pointers, not copies. Skills live in their source repos. You pull on demand.
 
+`library.yaml` is local to each machine: it is gitignored and kept read-only. The repo tracks `library.example.yaml` as the starting template, which install copies to `library.yaml` and locks with `chmod 444`. `add` and `remove` unlock the file, edit it, and lock it again; they never commit or push it.
+
 ### Source Formats
 
 | Format             | Example                                                            |
@@ -112,7 +114,7 @@ Dependencies are resolved and pulled first, recursively.
 ## Prerequisites
 
 - **Claude Code** (or another agent harness that reads skill files — e.g., Pi)
-- **git** — for cloning sources and syncing the catalog
+- **git** — for cloning the library and pulling sources
 - **gh** (optional) — GitHub CLI for forking, cloning, and private repo access. Install: `brew install gh` or see [gh docs](https://cli.github.com)
 - **GitHub SSH key or `GITHUB_TOKEN`** — for accessing private repos (not needed if using `gh auth login`)
 
@@ -134,6 +136,16 @@ git clone <your-fork-url> ~/.agents/skills/agentic-library
 gh repo clone <yourname>/agentic-library ~/.agents/skills/agentic-library
 ```
 
+Then create your local catalog from the template and make it read-only:
+
+```bash
+cd ~/.agents/skills/agentic-library
+cp library.example.yaml library.yaml
+chmod 444 library.yaml
+```
+
+`library.yaml` is gitignored, so it stays on this machine.
+
 ### 2. Configure Claude Code
 
 Claude Code loads skills from `~/.claude/skills/` (global) or `.claude/skills/` (project scope). Symlink the cloned skill there:
@@ -152,7 +164,7 @@ Claude Code registers the skill as the `/agentic-library` slash command automati
 
 ### 3. Configure
 
-Open `~/.agents/skills/agentic-library/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
+Open `~/.agents/skills/agentic-library/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime.
 
 ```markdown
 # Before (template defaults)
@@ -182,11 +194,11 @@ You built a deploy skill in one of your repos. Register it:
 /agentic-library add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
 ```
 
-This adds a reference to `library.yaml`, commits it, and pushes the update to your fork after asking for your permission.
+This adds a reference to your local `library.yaml`, unlocking it for the edit and locking it again. The catalog is per-machine and is never committed, so run `add` on each device that should see the entry.
 
 ### Use it in another project
 
-On another device, repo, or agent:
+In any project on a machine whose catalog has the entry:
 
 ```
 /agentic-library use deploy
@@ -222,15 +234,15 @@ Pull the latest version of all installed items:
 
 ## Commands
 
-> **Permissions Note:** Only owners and maintainers of the Git repository are allowed to execute `add`, `push`, or `remove` commands directly. All other contributors must submit a merge request (pull request) to propose changes to the catalog or source repositories.
+> **Permissions Note:** `push` writes to an item's source repository, so only owners and maintainers of that repository may push directly; everyone else must submit a merge request (pull request). `add` and `remove` only edit your local `library.yaml`.
 
 | Command                     | What It Does                                               | Permissions |
 | --------------------------- | ---------------------------------------------------------- | ----------- |
 | `/agentic-library install`          | First-time setup — fork, clone, configure                  | All users   |
-| `/agentic-library add <details>`    | Register a new entry in the catalog                        | Owner / Maintainer (or Merge Request) |
+| `/agentic-library add <details>`    | Register a new entry in your local catalog                 | All users   |
 | `/agentic-library use <name> [-g\|-p]` | Pull from source (install or refresh); global by default, `-p` for project | All users   |
 | `/agentic-library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
-| `/agentic-library remove <name> [-g\|-p]` | Remove from catalog and optionally delete the local copy (global by default) | Owner / Maintainer (or Merge Request) |
+| `/agentic-library remove <name> [-g\|-p]` | Remove from your local catalog and optionally delete the installed copy (global by default) | All users   |
 | `/agentic-library list`             | Show full catalog with install status                      | All users   |
 | `/agentic-library sync`             | Re-pull all installed items from source                    | All users   |
 | `/agentic-library search <keyword>` | Find entries by name or description                        | All users   |
@@ -240,7 +252,8 @@ Pull the latest version of all installed items:
 ```
 ~/.agents/skills/agentic-library/     # Agentic Library skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
-    library.yaml              # Your catalog of references
+    library.example.yaml      # Tracked catalog template
+    library.yaml              # Your local catalog (gitignored, read-only)
     cookbook/                 # Step-by-step guides for each command
         README.md             # Worked examples for every command
         install.md
@@ -261,6 +274,7 @@ Pull the latest version of all installed items:
 - **Pure agent**: No scripts, no build tools. The SKILL.md teaches the agent everything it needs to know.
 - **Agent-agnostic**: Default target is `~/.agents/skills/` (global; `-p` for `.agents/skills/`) but supports any directory for any agent harness.
 - **Catalog, not manifest**: Entries define what's available, not what's installed. Pull on demand.
+- **Local catalog**: `library.yaml` is per-machine, gitignored and read-only; only the `library.example.yaml` template is shared.
 
 ## The Agentic Stack
 
