@@ -26,6 +26,13 @@ For each entry:
 
 ### 4. Display Results
 
+Always render the catalog as Markdown tables, one per type, never as bullet or prose lists. Keep rows on one line:
+- **Name**: the entry name
+- **Description**: truncate to about 60 characters, ending with `...` if cut
+- **Source**: shorten GitHub URLs to `org/repo` plus the path to the skill folder (drop `https://github.com/`, `/blob/<branch>/`, and the trailing `SKILL.md`); shorten local paths to `~/...`
+- **Status**: `installed (project)`, `installed (global)`, or `not installed`
+- Sort rows alphabetically by name
+
 Format the output as a table grouped by type:
 
 ```
@@ -54,7 +61,10 @@ Format the output as a table grouped by type:
 If a section is empty, show: `No <type> in catalog.`
 
 ### 5. Summary
-At the bottom, show:
-- Total entries in catalog
-- Total installed locally
-- Total not installed
+At the bottom, show a one-row table:
+
+```
+| Total | Installed | Not installed |
+|-------|-----------|---------------|
+| 10    | 6         | 4             |
+```

@@ -92,13 +92,13 @@ Each add example covers: type detection, source validation, dependency parsing, 
 ## Skills
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | /Users/me/projects/tools/... | installed (project) |
-| diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | github.com/... | not installed |
+| firecrawl | Scrape, crawl, and search websites using Firecrawl CLI | ~/projects/tools/... | installed (project) |
+| diagram-kroki | Generate diagrams via Kroki HTTP API supporting 28+ languages | org/repo/skills/... | not installed |
 
 ## Agents
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| video-processor | Processes video files with ffmpeg and whisper transcription | /Users/me/projects/tools/... | installed (project) |
+| video-processor | Processes video files with ffmpeg and whisper transcription | ~/projects/tools/... | installed (project) |
 
 ## Prompts
 No prompts in catalog.
@@ -106,11 +106,14 @@ No prompts in catalog.
 ## MCP Servers
 | Name | Description | Source | Status |
 |------|-------------|--------|--------|
-| playwright | Browser automation via the Playwright MCP server | /Users/me/projects/tools/... | installed (project) |
-| github | GitHub API access via the GitHub MCP server | github.com/... | installed (global) |
+| playwright | Browser automation via the Playwright MCP server | ~/projects/tools/... | installed (project) |
+| github | GitHub API access via the GitHub MCP server | org/repo/skills/... | installed (global) |
 
 **Summary:**
-- 5 total entries in catalog, 4 installed locally, 1 not installed
+
+| Total | Installed | Not installed |
+|-------|-----------|---------------|
+| 5     | 4         | 1             |
 
 ## Search the Catalog
 
