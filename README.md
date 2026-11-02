@@ -2,7 +2,7 @@
 
 A meta-skill for private-first distribution of agentics (skills, agents, prompts, and MCP servers) across agents, devices, and teams.
 
-![Agentic Library](images/10_meta_skill.svg)
+![Agentic Library](images/10_meta_skill.png)
 
 ## Who This Is For
 
@@ -27,8 +27,6 @@ Think of it as a `package.json` for agent capabilities — but instead of packag
 
 ## Why It Exists
 
-![The Problem: Skill Sprawl](images/26_problem_skill_sprawl.svg)
-
 As you build with AI agents, you accumulate skills, custom agents, prompts, and MCP servers — potentially hundreds of them. You need to:
 
 - **Reuse** them across projects without copy-pasting
@@ -37,7 +35,7 @@ As you build with AI agents, you accumulate skills, custom agents, prompts, and 
 - **Keep them private** — these are specialized capabilities built for competitive edge
 - **Stay in sync** — one source of truth, not 10 stale copies
 
-![The Problem: Siloed Teams](images/32_problem_team_sharing.svg)
+![The Problem: Siloed Teams](images/32_problem_team_sharing.png)
 
 Existing solutions don't fit:
 - **Dumping everything into global `~/.agents/*` by hand** — every agent sees every agentic, copies drift out of date, and nothing records where they came from. Agentic Library installs globally by default for convenience, but each install is pulled from a tracked source and can be scoped to one project with `-p`.
@@ -45,7 +43,7 @@ Existing solutions don't fit:
 
 ## How It Works
 
-![The Solution: Agentic Library](images/27_solution_library_workflow.svg)
+![The Solution: Agentic Library](images/27_solution_library_workflow.png)
 
 ### The Catalog (`library.yaml`)
 
@@ -182,7 +180,7 @@ Start a new Claude Code session anywhere. `/agentic-library list` should work an
 
 ## Quick Start
 
-![Full Workflow](images/45_solution_full_workflow.svg)
+![Full Workflow](images/45_solution_full_workflow.png)
 
 Here's the typical workflow: **build → catalog → distribute → use**.
 
@@ -291,7 +289,7 @@ Point `add` at a repo (`owner/repo`, a repo URL, or a `tree/` URL). It finds the
 
 ## The Agentic Stack
 
-![The Agentic Stack](images/03_agentic_stack.svg)
+![The Agentic Stack](images/03_agentic_stack.png)
 
 | Layer           | Purpose                                        |
 | --------------- | ---------------------------------------------- |
