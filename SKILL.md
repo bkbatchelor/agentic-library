@@ -1,6 +1,6 @@
 ---
 name: agentic-library
-description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, list, or search for skills, agents, prompts, or MCP servers from their private agentic-library catalog. Triggers on /agentic-library commands or mentions of agentic-library, skill distribution, agentic management, or MCP servers.
+description: Private skill distribution system. Use when the user wants to install, use, add, push, remove, sync, update, list, or search for skills, agents, prompts, or MCP servers from their private agentic-library catalog. Triggers on /agentic-library commands or mentions of agentic-library, skill distribution, agentic management, or MCP servers.
 argument-hint: <command or prompt> <name or details>
 ---
 
@@ -31,7 +31,7 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
   cd <LIBRARY_SKILL_DIR>
   [ -f library.yaml ] || { cp library.example.yaml library.yaml && chmod 444 library.yaml; }
   ```
-- **Reading** (`list`, `search`, `use`, `sync`, `push`): read `library.yaml` directly. No `git pull` is needed — pulling the repo updates the skill and the template, never your catalog.
+- **Reading** (`list`, `search`, `use`, `sync`, `update`, `push`): read `library.yaml` directly. No `git pull` is needed — pulling the repo updates the skill and the template, never your catalog.
 - **Editing** (`add`, `remove`): unlock, edit, relock. Always relock, even if the edit fails:
   ```bash
   chmod u+w <LIBRARY_YAML_PATH>
@@ -52,7 +52,8 @@ Agentic Library is a catalog of references to your agentics. The `library.yaml` 
 | `/agentic-library push <name>`      | Push local changes back to source (Owner/Maintainer or Merge Request) |
 | `/agentic-library remove <name> [-g\|-p]` | Remove from your local catalog and optionally the installed copy; global by default |
 | `/agentic-library list`             | Show full catalog with install status    |
-| `/agentic-library sync`             | Re-pull all installed items from source   |
+| `/agentic-library sync`             | Check installed items for upstream updates (read-only) |
+| `/agentic-library update <name\|--all>` | Pull the newest upstream version of installed items |
 | `/agentic-library search <keyword>` | Find entries by keyword                  |
 
 ## Cookbook
@@ -68,7 +69,8 @@ Each command has a detailed step-by-step guide. **Read the relevant cookbook fil
 | push    | [cookbook/push.md](cookbook/push.md)       | User improved a skill locally and wants to update the source |
 | remove  | [cookbook/remove.md](cookbook/remove.md)   | User wants to remove an entry from the catalog               |
 | list    | [cookbook/list.md](cookbook/list.md)       | User wants to see what's available and what's installed      |
-| sync    | [cookbook/sync.md](cookbook/sync.md)       | User wants to refresh all installed items at once            |
+| sync    | [cookbook/sync.md](cookbook/sync.md)       | User wants to know which installed items are outdated        |
+| update  | [cookbook/update.md](cookbook/update.md)   | User wants the newest upstream version of one or all items   |
 | search  | [cookbook/search.md](cookbook/search.md)   | User is looking for an item but doesn't know the exact name  |
 
 **When a user invokes a `/agentic-library` command, read the matching cookbook file first, then execute the steps.**
@@ -80,7 +82,7 @@ The `source` field in `library.yaml` supports these formats (auto-detected):
 - `/absolute/path/to/SKILL.md` — local filesystem
 - `https://github.com/org/repo/blob/main/path/to/SKILL.md` — GitHub browser URL
 
-Both GitHub URL formats are supported. Parse org, repo, branch, and file path from the URL structure. For private repos, use SSH or `GITHUB_TOKEN` for auth automatically.
+`add` also accepts `owner/repo`, a repo URL, or a `tree/` URL and normalizes it to the browser URL above (see `cookbook/add.md`). Both GitHub URL formats are supported. Parse org, repo, branch, and file path from the URL structure. For private repos, use SSH or `GITHUB_TOKEN` for auth automatically.
 
 **Important:** The source points to a specific file (SKILL.md, AGENT.md, prompt file, or mcp.json). We always pull the entire parent directory, not just the file.
 
@@ -103,7 +105,7 @@ Both GitHub URL formats are supported. Parse org, repo, branch, and file path fr
 **Fetching (use):**
 1. Clone the repo with `git clone --depth 1 <clone_url>` into a temporary directory
 2. Navigate to the parent directory of the referenced file
-3. Copy that entire directory to the target local directory
+3. Copy that entire directory to the target local directory and save `<target>/.<name>.agentic-metadata.json` (`commit`, `repo`, `branch`, `path`) for `sync` and `update`
 4. The temporary directory is cleaned up automatically
 
 **Pushing (push):**

@@ -1,7 +1,7 @@
-# Sync All Installed Items
+# Sync: Check Installed Items for Updates
 
 ## Context
-Refresh every locally installed skill, agent, prompt, and MCP server by re-pulling from its source. A fast, lazy "make sure everything is up to date" command.
+Compare every locally installed skill, agent, prompt, and MCP server against its source and report which ones are outdated. `sync` is **read-only**: it never changes installed files or the catalog. Apply changes with `/agentic-library update`.
 
 ## Steps
 
@@ -22,84 +22,44 @@ For each entry in the catalog:
 - Check if a directory or file matching the entry name exists in the **project** directory
 - Check if a directory or file matching the entry name exists in the **global** directory
 - Search recursively for name matches
-- Collect every entry that is installed locally (either project or global)
+- Collect every entry that is installed locally (either project or global), remembering the scope
 - If nothing is installed, tell the user and exit
 
-### 4. Re-pull Each Installed Item
-For each installed entry, fetch the latest from its source:
+### 4. Compare Against Upstream
+For each installed entry, read `<target_directory>/.<name>.agentic-metadata.json` and decide a status:
 
-**If source is a local path** (starts with `/` or `~`):
-- Resolve `~` to the home directory
-- Get the parent directory of the referenced file
-- For skills and mcp: copy the entire parent directory to the target:
+**GitHub source**:
+- Parse `org`, `repo`, `branch` from the source URL (browser or raw pattern, see `SKILL.md`)
+- Ask the remote for the newest commit without cloning:
   ```bash
-  cp -R <parent_directory>/ <target_directory>/<name>/
+  git ls-remote https://github.com/<org>/<repo>.git refs/heads/<branch>
+  # SSH fallback: git@github.com:<org>/<repo>.git
   ```
-- For agents: copy just the agent file to the target:
-  ```bash
-  cp <agent_file> <target_directory>/<agent_name>.md
-  ```
-- For prompts: copy just the prompt file to the target:
-  ```bash
-  cp <prompt_file> <target_directory>/<prompt_name>.md
-  ```
+- Compare the first column with the `commit` saved in the metadata:
+  - Equal → `up to date`
+  - Different → `outdated`
+  - No metadata file or no `commit` (installed before metadata existed) → `unknown`
+  - `git ls-remote` fails → `failed: <reason>`
 
-**If source is a GitHub URL**:
-- Parse the URL to extract: `org`, `repo`, `branch`, `file_path`
-  - Browser URL pattern: `https://github.com/<org>/<repo>/blob/<branch>/<path>`
-  - Raw URL pattern: `https://raw.githubusercontent.com/<org>/<repo>/<branch>/<path>`
-- Determine the clone URL: `https://github.com/<org>/<repo>.git`
-- Determine the parent directory path within the repo (everything before the filename)
-- Clone into a temporary directory:
-  ```bash
-  tmp_dir=$(mktemp -d)
-  git clone --depth 1 --branch <branch> https://github.com/<org>/<repo>.git "$tmp_dir"
-  ```
-- Copy the parent directory of the file to the target:
-  ```bash
-  cp -R "$tmp_dir/<parent_path>/" <target_directory>/<name>/
-  ```
-**Save Installation Metadata**:
-- Before cleaning up `$tmp_dir` for GitHub URLs, capture the commit hash:
-  ```bash
-  commit_hash=$(git -C "$tmp_dir" rev-parse HEAD)
-  echo "{\"commit\": \"$commit_hash\"}" > <target_directory>/.<name>.agentic-metadata.json
-  ```
-- For Local Paths, capture the last modified timestamp of the source and save it similarly.
+**Local path source**:
+- Compare the source file's modified time with the timestamp in the metadata → `up to date` or `outdated`; missing metadata → `unknown`. Show these as type `local`.
 
-- Clean up:
-  ```bash
-  rm -rf "$tmp_dir"
-  ```
-
-**If clone fails (private repo)**, try SSH:
-  ```bash
-  git clone --depth 1 --branch <branch> git@github.com:<org>/<repo>.git "$tmp_dir"
-  ```
-
-### 5. Resolve Dependencies
-For each installed entry that has a `requires` field:
-- Check if each dependency is also installed
-- If a dependency is not installed, pull it as well
-- Process dependencies before the items that require them
-
-### 6. Report Results
-Display a summary table:
+### 5. Report Results
+Display a summary table. Do not modify anything.
 
 ```
-## Sync Complete
+## Sync Check
 
-| Type | Name | Status |
-|------|------|--------|
-| skill | skill-name | refreshed |
-| agent | agent-name | refreshed |
-| mcp | mcp-name | refreshed |
-| skill | other-skill | failed: <reason> |
+| Type | Name | Scope | Status |
+|------|------|-------|--------|
+| skill | grill-me | global | outdated |
+| skill | adhd | global | up to date |
+| agent | agent-name | project | unknown (no metadata) |
+| mcp | mcp-name | global | failed: network error |
 
-Synced: X items
-Failed: Y items
+Up to date: X   Outdated: Y   Unknown: Z   Failed: W
 ```
 
-**Note:** Re-pulling an MCP entry only refreshes the files in `.claude/mcp/<name>/`. The server stays registered in the harness config — no changes needed there.
-
-If any items failed (e.g., network error, missing source), list them with the reason so the user can fix individually.
+End with next steps:
+- `outdated` → `/agentic-library update <name>` (or `/agentic-library update --all`)
+- `unknown` → `/agentic-library update <name>` also works; it re-pulls and records the metadata so later checks are accurate

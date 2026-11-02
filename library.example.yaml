@@ -13,6 +13,11 @@ default_dirs:
     - global: ~/.claude/mcp/
 
 agentic-library:
+  # Skills from other GitHub repos are normal entries, e.g.:
+  #   - name: grill-me
+  #     description: <from the SKILL.md frontmatter>
+  #     source: https://github.com/<org>/<repo>/blob/main/grill-me/SKILL.md
+  # Add them with `/agentic-library add <owner/repo>`.
   skills: []
   agents: []
   prompts: []

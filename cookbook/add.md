@@ -28,8 +28,23 @@ Figure out the type from the user's prompt or the source path:
 
 ### 3. Validate the Source
 - **Local path**: Verify the file exists at the given path
-- **GitHub URL**: Verify the URL is well-formed (matches browser or raw URL patterns)
+- **GitHub URL**: Verify the URL is well-formed (matches browser or raw URL patterns), then verify the file really exists in the repo (see *External GitHub Repos* below)
 - Confirm the source points to a specific file, not a directory
+
+#### External GitHub Repos
+The user may point at someone else's repo instead of a file: `owner/repo`, `https://github.com/<org>/<repo>`, or `https://github.com/<org>/<repo>/tree/<branch>/<path>`. Resolve it to one or more `SKILL.md` files first:
+```bash
+tmp_dir=$(mktemp -d)
+git clone --depth 1 [--branch <branch>] https://github.com/<org>/<repo>.git "$tmp_dir"   # SSH fallback if it fails
+branch=$(git -C "$tmp_dir" rev-parse --abbrev-ref HEAD)
+# candidates: repo root, then <path>/ for a tree URL, otherwise any SKILL.md up to 3 levels deep
+find "$tmp_dir" -maxdepth 3 -name SKILL.md -not -path '*/.git/*'
+```
+- One `SKILL.md` found → use it. Several → list them and ask which to add (multi-select). None → tell the user and stop.
+- Read `name` and `description` from the `SKILL.md` frontmatter; use them unless the user gave their own.
+- Build the source as the canonical browser URL so `use`, `update` and `push` work unchanged: `https://github.com/<org>/<repo>/blob/<branch>/<path>/SKILL.md` (for a root-level skill, `.../blob/<branch>/SKILL.md`).
+- Clean up with `rm -rf "$tmp_dir"`. Do not install anything in this step.
+- If a non-symlink folder with the same name already exists in `~/.claude/skills/` (or `.claude/skills/`), warn the user: `use` will install to `.agents/skills/` but will not replace that folder.
 - **For mcp**: Confirm `mcp.json` is a single well-formed MCP server object in Claude Code's format (the value that goes under `mcpServers.<name>`):
   - `stdio` servers: `command` is a string, optional `args` is an array of strings, optional `env` is an object of strings (`type` may be omitted and defaults to `stdio`)
   - `http` / `sse` servers: `type` is `http` or `sse`, `url` is required, optional `headers` is an object of strings
@@ -71,4 +86,4 @@ The entry:
 - Remember we'll be adding a absolute path or a github url (https or ssh)
 
 ### 6. Confirm
-Tell the user the entry has been added to their local catalog and can be installed with `/agentic-library use <name>`. Do not commit or push `library.yaml` — it is gitignored and stays on this machine; to use the entry on another device, run `add` there.
+Tell the user the entry has been added to their local catalog and can be installed with `/agentic-library use <name>` (offer to run it now). Later, `/agentic-library sync` shows whether the upstream skill has changed and `/agentic-library update <name>` pulls the newest version. Do not commit or push `library.yaml` — it is gitignored and stays on this machine; to use the entry on another device, run `add` there.

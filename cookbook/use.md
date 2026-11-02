@@ -78,15 +78,18 @@ Resolve the scope **before** installing anything (including dependencies):
   tmp_dir=$(mktemp -d)
   git clone --depth 1 --branch <branch> https://github.com/<org>/<repo>.git "$tmp_dir"
   ```
-- Copy the parent directory of the file to the target:
+- Replace the target with the parent directory of the file. Remove any existing copy first so a refresh never nests `<name>/<name>/` or leaves stale files. If `SKILL.md` is at the repo root, `<parent_path>` is `.` (and skip the `.git` folder):
   ```bash
-  cp -R "$tmp_dir/<parent_path>/" <target_directory>/<name>/
+  rm -rf <target_directory>/<name>
+  mkdir -p <target_directory>/<name>
+  cp -R "$tmp_dir/<parent_path>/." <target_directory>/<name>/
+  rm -rf <target_directory>/<name>/.git
   ```
 **Save Installation Metadata**:
-- For GitHub URLs, capture the commit hash of the pulled version:
+- For GitHub URLs, capture the commit hash of the pulled version plus where it came from (`update` and `sync` use these to check for newer versions):
   ```bash
   commit_hash=$(git -C "$tmp_dir" rev-parse HEAD)
-  echo "{\"commit\": \"$commit_hash\"}" > <target_directory>/.<name>.agentic-metadata.json
+  echo "{\"commit\": \"$commit_hash\", \"repo\": \"<org>/<repo>\", \"branch\": \"<branch>\", \"path\": \"<parent_path>\"}" > <target_directory>/.<name>.agentic-metadata.json
   ```
 - For Local Paths, capture the last modified timestamp of the source and save it similarly.
 
