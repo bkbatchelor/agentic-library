@@ -1,8 +1,8 @@
 # Library Cookbook Examples
 
-Worked examples for the `/agentic-library install`, `/agentic-library use`, `/agentic-library add`, `/agentic-library remove`, `/agentic-library push`, `/agentic-library search`, `/agentic-library list`, and `/agentic-library sync` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md) first — these examples follow them.
+Worked examples for the `/agentic-library install`, `/agentic-library use`, `/agentic-library add`, `/agentic-library remove`, `/agentic-library push`, `/agentic-library search`, `/agentic-library list`, `/agentic-library sync`, and `/agentic-library update` commands. They show the full flow from user request to result. For the step-by-step procedures, read [cookbook/use.md](use.md), [cookbook/add.md](add.md), [cookbook/install.md](install.md), [cookbook/remove.md](remove.md), [cookbook/push.md](push.md), [cookbook/search.md](search.md), [cookbook/list.md](list.md), and [cookbook/sync.md](sync.md), and [cookbook/update.md](update.md) first — these examples follow them.
 
-Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, variable setup, and creating the local catalog. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: checking the catalog, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, re-pulling from source, and the summary report.
+Each add example covers: type detection, source validation, dependency parsing, and the exact YAML entry written to `library.yaml`. Each install example covers: prerequisites, fork status, cloning, variable setup, and creating the local catalog. Each use example covers: dependency resolution, target directory selection, fetching from source, and (for MCP) harness registration. Each remove example covers: checking the catalog, confirmation, dependency checks, and (for MCP) harness unregistration. Each push example covers: locating the local copy, conflict checking, staging only relevant changes, and asking permission before pushing. Each search example covers: keyword matching across names/descriptions and how results are displayed. Each list example covers: install status checking and the grouped catalog output. Each sync example covers: collecting installed items, comparing against upstream, and the read-only report. Each update example covers: fetching the newest version, showing changes, local-edit protection, and the summary report.
 
 ## Table of Contents
 
@@ -10,7 +10,9 @@ Each add example covers: type detection, source validation, dependency parsing, 
 - [List the Catalog](#list-the-catalog)
 - [Search the Catalog](#search-the-catalog)
 - [Use an Item from the Catalog](#use-an-item-from-the-catalog)
-- [Sync All Installed Items](#sync-all-installed-items)
+- [Add a Skill from Another GitHub Repo](#add-a-skill-from-another-github-repo)
+- [Check Installed Items for Updates (sync)](#check-installed-items-for-updates-sync)
+- [Update Installed Items](#update-installed-items)
 - [Add a Skill](#add-a-skill)
 - [Add an Agent](#add-an-agent)
 - [Add a Prompt](#add-a-prompt)
@@ -196,68 +198,89 @@ Tip: Try broader keywords or run /agentic-library list to see the full catalog.
 - `Installed github globally → ~/.claude/mcp/github`
 - Server registered with Claude Code — restart the harness for it to load
 
-## Sync All Installed Items
+## Add a Skill from Another GitHub Repo
 
-### Example: Refresh everything installed
+### Example: Add `grill-me` from a third-party repo
 
 **User says:**
-> Sync everything
+> Add the grill-me skill from github.com/example/skills
 
 **Steps:**
-1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
-2. Catalog parsed: all entries from `agentic-library.skills`, `agentic-library.agents`, `agentic-library.prompts`, and `agentic-library.mcp`
-3. Installed items collected: `firecrawl`, `video-processor`, `playwright`, and `github` found in the project/global directories — all four get re-pulled
-4. Each installed item re-fetched from its source (local path: `cp -R` from the source parent dir; GitHub: shallow temp clone + `cp -R` of the parent path, then cleanup)
-5. Dependencies resolved: `diagram-kroki` isn't installed, so nothing extra to pull; `firecrawl`'s dependencies were already present
+1. Catalog checked: local `library.yaml` exists
+2. Repo resolved: shallow temp clone of `example/skills`, `find` locates `grill-me/SKILL.md` (only one match, so no prompt)
+3. `name` and `description` read from the `SKILL.md` frontmatter; branch detected as `main`
+4. Source normalized to `https://github.com/example/skills/blob/main/grill-me/SKILL.md`; temp clone removed
+5. Warning shown: a real folder `~/.claude/skills/grill-me` already exists, so linking will be skipped on install
+6. Entry inserted alphabetically into `library.yaml` (unlock, edit, relock)
+
+**Result:**
+- `Added grill-me to your local catalog` and an offer to run `/agentic-library use grill-me`
+
+## Check Installed Items for Updates (sync)
+
+### Example: See what is outdated
+
+**User says:**
+> Sync
+
+**Steps:**
+1. Catalog checked and parsed; installed items collected: `firecrawl`, `grill-me`, `video-processor`
+2. For GitHub sources, `git ls-remote` returns the newest commit on the branch, compared with the `commit` in `.<name>.agentic-metadata.json`
+3. For the local-path source (`video-processor`), the source file's modified time is compared with the saved timestamp
+4. Nothing is changed
 
 **Displayed to the user:**
 
+## Sync Check
 
-## Sync Complete
+| Type | Name | Scope | Status |
+|------|------|-------|--------|
+| skill | firecrawl | global | up to date |
+| skill | grill-me | global | outdated |
+| agent | video-processor | project | unknown (no metadata) |
 
-| Type | Name | Status |
-|------|------|--------|
-| skill | firecrawl | refreshed |
-| agent | video-processor | refreshed |
-| mcp | playwright | refreshed |
-| mcp | github | refreshed |
-
-Synced: 4 items
-Failed: 0 items
-
+Up to date: 1   Outdated: 1   Unknown: 1   Failed: 0
 
 **Result:**
-- All 4 installed items refreshed
-- MCP note: re-pulling only refreshed `.claude/mcp/<name>/` files — the servers stayed registered in the harness config, no changes needed there
+- Next steps suggested: `/agentic-library update grill-me`
 
-### Example: Sync with a failure
+## Update Installed Items
+
+### Example: Update one skill
 
 **User says:**
-> Sync the agentic-library
+> Update grill-me
 
 **Steps:**
-1. Catalog checked: local `library.yaml` exists (no `git pull` needed)
-2. Installed items collected: `firecrawl`, `diagram-kroki`, and `playwright`
-3. Re-pull attempted for each — `diagram-kroki` failed (source repo unreachable / network error)
+1. `grill-me` found installed globally; status `outdated`
+2. Shallow clone of the source; file list compared with the installed copy (2 modified, 1 added)
+3. No local edits detected (installed copy matches the recorded commit)
+4. Installed folder replaced, metadata rewritten with the new commit and `repo`/`branch`/`path`; symlink re-verified
 
 **Displayed to the user:**
 
-
-## Sync Complete
+## Update Complete
 
 | Type | Name | Status |
 |------|------|--------|
-| skill | firecrawl | refreshed |
-| skill | diagram-kroki | failed: could not clone source repo |
-| mcp | playwright | refreshed |
+| skill | grill-me | updated (a1b2c3d -> e4f5a6b) |
 
-Synced: 2 items
-Failed: 1 item
-
+Updated: 1   Current: 0   Skipped: 0   Failed: 0
 
 **Result:**
-- `firecrawl` and `playwright` refreshed
-- `diagram-kroki` listed with the failure reason so the user can fix it individually
+- `grill-me` is on the newest version; restart Claude Code to pick it up
+
+### Example: Update everything
+
+**User says:**
+> Update all my skills
+
+**Steps:**
+1. `update --all` runs the sync check, then updates only `outdated`/`unknown` items
+2. `firecrawl` is already current and skipped; `grill-me` has local edits, so the user is asked to overwrite, skip, or back up to `grill-me.bak`; they choose skip
+
+**Result:**
+- Summary table lists `firecrawl` as already up to date and `grill-me` as skipped (local edits)
 
 ## Add a Skill
 

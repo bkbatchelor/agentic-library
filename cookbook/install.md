@@ -62,4 +62,3 @@ Tell the user:
 - Agentic Library is now globally available
 - `/agentic-library list` will show the catalog (empty by default); `library.yaml` is local to this machine
 - `/agentic-library add` to start adding skills, agents, prompts, and MCP servers
-- The `justfile` in the agentic-library directory has shorthand commands

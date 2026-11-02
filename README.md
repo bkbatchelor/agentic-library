@@ -222,14 +222,25 @@ You improved the skill locally. Push the update to the source repo:
 /agentic-library push deploy
 ```
 
-Now every device that runs `/agentic-library sync` gets the latest version.
+Now every device that runs `/agentic-library update` gets the latest version.
 
-### Sync everything
+### Add a skill from someone else's GitHub repo
 
-Pull the latest version of all installed items:
+Point `add` at a repo (`owner/repo`, a repo URL, or a `tree/` URL). It finds the `SKILL.md`, reads the name and description, and records the entry:
+
+```
+/agentic-library add example/skills
+/agentic-library use grill-me
+```
+
+### Check for and apply updates
+
+`sync` compares what is installed with upstream and changes nothing; `update` pulls the newest version (warning first if you edited the installed copy):
 
 ```
 /agentic-library sync
+/agentic-library update grill-me
+/agentic-library update --all
 ```
 
 ## Commands
@@ -244,7 +255,8 @@ Pull the latest version of all installed items:
 | `/agentic-library push <name>`      | Push local changes back to the source                      | Owner / Maintainer (or Merge Request) |
 | `/agentic-library remove <name> [-g\|-p]` | Remove from your local catalog and optionally delete the installed copy (global by default) | All users   |
 | `/agentic-library list`             | Show full catalog with install status                      | All users   |
-| `/agentic-library sync`             | Re-pull all installed items from source                    | All users   |
+| `/agentic-library sync`             | Check installed items for upstream updates (read-only)     | All users   |
+| `/agentic-library update <name\|--all>` | Pull the newest upstream version of installed items     | All users   |
 | `/agentic-library search <keyword>` | Find entries by name or description                        | All users   |
 
 ## Architecture
@@ -263,6 +275,7 @@ Pull the latest version of all installed items:
         remove.md
         list.md
         sync.md
+        update.md
         search.md
     README.md                 # This file
 ```
